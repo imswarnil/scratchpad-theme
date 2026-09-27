@@ -33,10 +33,11 @@
     "thumbs": "node tools/thumbs.mjs",
     "new": "node tools/new.mjs",
     "doctor": "node tools/doctor.mjs",
-    "check": "node tools/doctor.mjs && bin/build",
+    "check": "node tools/doctor.mjs && bin/build && node tools/ds-build.mjs",
     "test": "node tools/test.mjs",
     "create": "node tools/create/index.mjs",
-    "icons": "node tools/icons/build.mjs"
+    "icons": "node tools/icons/build.mjs",
+    "ds:build": "node tools/ds-build.mjs"
   },
   "dependencies": {},
   "devDependencies": {},

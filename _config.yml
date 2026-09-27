@@ -1116,5 +1116,6 @@ exclude:
   - tools
   - vendor
   - docs/decisions
+  - design/README.md
   - docs/nextjs-rebuild-prompt.md
   - "*.gemspec"

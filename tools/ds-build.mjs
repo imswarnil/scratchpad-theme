@@ -28,7 +28,6 @@ const built = path.join(root, '_site', 'assets', 'styles.css');
 const dist = path.join(root, 'design', 'dist');
 
 const pkg = JSON.parse(fs.readFileSync(path.join(root, 'package.json'), 'utf8'));
-const git = (...a) => { try { return execFileSync('git', a, { cwd: root }).toString().trim(); } catch { return null; } };
 
 if (process.argv.includes('--build') || !fs.existsSync(built)) {
   console.log('  building the site first…');
@@ -38,7 +37,6 @@ if (process.argv.includes('--build') || !fs.existsSync(built)) {
 const css = fs.readFileSync(built, 'utf8');
 
 /* ── the banner ───────────────────────────────────────────────────────── */
-const commit = git('rev-parse', '--short', 'HEAD');
 /* The banner carries no commit and no date on purpose: either one would make
  * dist/ differ on every build and fill the history with diffs that mean
  * nothing. manifest.json records both, which is where a consumer should look. */
@@ -133,10 +131,11 @@ const manifest = {
   name: 'scratchpad-css',
   version: pkg.version,
   license: 'MIT',
-  /* The commit, and nothing more time-varying than that. A date or a dirty
-   * flag here would change on every build and dirty the tree just by looking
-   * at it, which is how a generated file starts lying. */
-  commit,
+  /* No commit, no date, no build stamp. A generated file that is committed
+   * cannot record which commit produced it — the commit it names is always the
+   * one before the commit it lands in — so every build would rewrite it and
+   * `npm run check` would dirty a clean tree. Git already knows: ask
+   * `git log -1 design/dist/`. */
   source: '_sass/scratchpad/',
   bytes: { css: plain.length, min: min.length },
   rules: countOpen(css),

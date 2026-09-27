@@ -1,0 +1,76 @@
+// ======================================================================
+// im/abstracts/_mixins.scss — the interactions, written once
+// ----------------------------------------------------------------------
+// The Im Design System has exactly two interactions, and this file is the
+// only place either of them is defined. If a component needs a third,
+// the answer is almost always that it does not.
+//
+//   HOVER   the thing FILLS. Nothing sharpens a border, nothing grows 3%,
+//           nothing lifts four pixels. A raised surface lifts ONE pixel
+//           and casts a hairline — the same one pixel a filled button
+//           lifts, so a card and a button feel like the same material.
+//   CURRENT "you are here": a light fill and a bolder label. One look, on
+//           every kind of navigation in the theme, so a reader learns it
+//           once.
+//
+// The FILL happens everywhere, because filling is harmless on a touch
+// screen. The one pixel of MOVEMENT is wrapped in `@media (hover: hover)`,
+// because there `:hover` sticks after the tap and the thing would stay
+// raised until you touched something else.
+// ======================================================================
+
+/// A raised surface — a card, a tile, a panel that is also a link.
+///
+/// It FILLS, one surface deeper than wherever it already sits, which is
+/// what --sp-hover-bg says. Nothing sharpens a border: that is a second
+/// idea competing with the fill for the same moment, and a feed of twenty
+/// of them is a page that twitches. The lift is one pixel and the shadow
+/// is one hairline — the same pair a filled button makes — never the float
+/// shadow, which belongs to things that genuinely hover over the page.
+@mixin sp-hover-card($shadow: true) {
+  transition: background-color var(--sp-duration-fast) var(--sp-ease-out);
+
+  &:is(:hover, :focus-within) { background: var(--sp-hover-bg); }
+
+  @media (hover: hover) and (prefers-reduced-motion: no-preference) {
+    transition:
+      background-color var(--sp-duration-fast) var(--sp-ease-out),
+      translate var(--sp-duration-fast) var(--sp-ease-out),
+      box-shadow var(--sp-duration-fast) var(--sp-ease-out);
+
+    &:hover {
+      translate: 0 -1px;
+      @if $shadow { box-shadow: var(--sp-card-hover-shadow); }
+    }
+  }
+  &:active { translate: 0; }
+}
+
+/// A row, a chip, a menu item — something flat that answers by filling.
+@mixin sp-hover-fill {
+  transition:
+    background-color var(--sp-duration-instant) var(--sp-ease-out),
+    color var(--sp-duration-instant) var(--sp-ease-out),
+    border-color var(--sp-duration-instant) var(--sp-ease-out);
+
+  &:hover,
+  &:focus-visible {
+    background: var(--sp-hover-bg);
+    color: var(--sp-ink);
+  }
+}
+
+/// "You are here."
+@mixin sp-current {
+  background: var(--sp-current-bg);
+  color: var(--sp-current-fg);
+  font-weight: var(--sp-current-weight);
+}
+
+/// The hue of whatever collection this element belongs to, as a tint over
+/// the current canvas. Used for chips, rules and icon plates so a
+/// collection reads as one colour everywhere it appears.
+@mixin sp-collection-tint($strength: 12%) {
+  background: color-mix(in oklab, var(--sp-c-this, var(--sp-accent)) #{$strength}, var(--sp-canvas));
+  color: color-mix(in oklab, var(--sp-c-this, var(--sp-accent)) 70%, var(--sp-ink));
+}

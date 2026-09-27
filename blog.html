@@ -9,10 +9,10 @@ pagination:
   collection: posts
 ---
 {%- assign coll = site.collections | where: "label", "posts" | first -%}
-<section class="im-collection im-page is-posts" style="--im-c-current: var(--im-c-posts, var(--im-accent));">
+<section class="sp-collection sp-page is-posts" style="--sp-c-current: var(--sp-c-posts, var(--sp-accent));">
   {% include collection/hero.html coll=coll docs=site.posts title=page.title views=true tags=true %}
 
-  <ul class="im-cards" id="feed" data-view="{{ coll.view | default: 'card' }}">
+  <ul class="sp-cards" id="feed" data-view="{{ coll.view | default: 'card' }}">
     {%- for it in paginator.posts -%}
     <li>{% include utility/card.html item=it %}</li>
     {%- endfor -%}

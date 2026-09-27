@@ -1,12 +1,12 @@
 /* view.js — the card / grid / list / simple switch on a collection.
  *
- *     <div class="im-btn-group" role="group" data-im-view="#feed">
+ *     <div class="sp-btn-group" role="group" data-sp-view="#feed">
  *       <button value="card" aria-pressed="true">…</button>
  *       …
  *     </div>
- *     <ul class="im-cards" id="feed" data-view="card"> … </ul>
+ *     <ul class="sp-cards" id="feed" data-view="card"> … </ul>
  *
- * The group's data-im-view is a selector for the thing it dresses.
+ * The group's data-sp-view is a selector for the thing it dresses.
  * Pressing a button sets data-view on that element and remembers the
  * choice, so a reader who prefers a list gets one on every collection.
  *
@@ -17,7 +17,7 @@
 (function () {
   "use strict";
 
-  var KEY = "im-view";
+  var KEY = "sp-view";
 
   function remembered() {
     try { return localStorage.getItem(KEY); } catch (e) { return null; }
@@ -27,7 +27,7 @@
   }
 
   function setup(group) {
-    var target = document.querySelector(group.getAttribute("data-im-view"));
+    var target = document.querySelector(group.getAttribute("data-sp-view"));
     if (!target) return;
 
     var buttons = [].slice.call(group.querySelectorAll("button[value]"));
@@ -52,5 +52,5 @@
     if (saved) apply(saved, false);
   }
 
-  document.querySelectorAll("[data-im-view]").forEach(setup);
+  document.querySelectorAll("[data-sp-view]").forEach(setup);
 })();

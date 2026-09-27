@@ -1,0 +1,48 @@
+// ======================================================================
+// scratchpad/_index.scss — Scratchpad CSS Framework entry point
+// ----------------------------------------------------------------------
+// Files are organised into folders for readability:
+//   abstracts/   build-time SCSS only (maps, breakpoints, mixins)
+//   tokens/      runtime --sp-* custom properties (light + dark)
+//   base/        reset, element typography, motion/background patterns
+//   layout/      containers, navbar, hero, content shell, footer
+//   components/  buttons, cards, collections, post, home, search, …
+//   utilities/   spacing / text / flex helpers
+//
+// This uses @import (one shared global scope), so ORDER still matters:
+// abstracts first (every layer reads its mixins), tokens next, utilities
+// last (their !important helpers win). The sequence below is unchanged
+// from the original flat layout — only the paths moved.
+// ======================================================================
+
+@import "base/fonts";                     // the typefaces, served from this repo
+@import "base/icons";                     // the icon set (generated; npm run icons)
+@import "abstracts/config";              // build-time maps / breakpoints / colour ramp
+@import "abstracts/mixins";              // the two interactions, written once
+@import "tokens/tokens";                  // canonical scales + :root light theme
+@import "tokens/dark-mode";               // [data-color-scheme] dark overrides
+@import "base/elements";                  // reset + element typography
+@import "layout/navbar";                  // site header / navigation
+@import "layout/containers";              // sp-container / sp-row / sp-col / sp-section
+@import "layout/hero";                    // sp-hero
+@import "components/components";           // sp-btn / sp-card / sp-badge / sp-alert
+@import "components/thumb";                // generated SVG cover art (utility/thumb.html)
+@import "components/content-components";   // unprefixed shortcode components (card, badge…)
+@import "components/collection";           // collection list pages + compact heads
+@import "components/collection-hero";      // the landing-page hero + grid/list toggle
+@import "components/cards";               // per-collection cards + filter sidebar
+@import "components/post";                 // single post / page article + toc
+@import "components/single";               // the parts a single entry is composed from
+@import "components/collections-extra";    // series, episodes, courses, podcast, issues, trips, gear
+@import "layout/shell";                    // content shell + sidebar + toc + ad rails/units
+@import "components/search";               // command palette + search page
+@import "components/home";                 // homepage composition
+@import "components/pages";                // homepage sections + about / contact / now
+@import "layout/footer";                   // site footer
+@import "components/resume";               // /resume/ page
+@import "components/sitetree";             // /sitemap/ page
+@import "components/timeline-page";        // /timeline/ page
+@import "components/tags-page";            // /tags/ page
+@import "components/design-doc";           // /design/ style guide page
+@import "base/motion";                     // background patterns, scroll-reveal, transitions
+@import "utilities/utilities";             // spacing / text / flex helpers (stays last)

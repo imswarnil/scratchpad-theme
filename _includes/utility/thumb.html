@@ -21,14 +21,14 @@
 {%- endcomment -%}
 {%- assign it = include.item -%}
 {%- assign label = it.collection | default: "pages" -%}
-<svg class="im-thumb" viewBox="0 0 1200 675" role="img"
+<svg class="sp-thumb" viewBox="0 0 1200 675" role="img"
      aria-label="{{ it.title | escape }}" preserveAspectRatio="xMidYMid slice"
-     style="--im-c-this: var(--im-c-{{ label }}, var(--im-accent));">
+     style="--sp-c-this: var(--sp-c-{{ label }}, var(--sp-accent));">
 
-  <rect class="im-thumb-bg" width="1200" height="675"/>
+  <rect class="sp-thumb-bg" width="1200" height="675"/>
 
   {%- comment -%} The mark, centred, on a 24-unit grid scaled to 240. {%- endcomment -%}
-  <g class="im-thumb-icon" transform="translate(480 218) scale(10)">
+  <g class="sp-thumb-icon" transform="translate(480 218) scale(10)">
     {% include utility/mark.html collection=label %}
   </g>
 </svg>

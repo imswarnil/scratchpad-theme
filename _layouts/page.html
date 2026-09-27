@@ -5,7 +5,7 @@ layout: default
   {%- assign coll = site.collections | where: "label", page.list_collection | first -%}
   {%- assign docs = coll.docs | sort: "date" | reverse -%}
   {%- assign latest = docs | first -%}
-  <section class="im-collection im-page is-{{ page.list_collection }}" style="--im-c-current: var(--im-c-{{ page.list_collection }}, var(--im-accent));">
+  <section class="sp-collection sp-page is-{{ page.list_collection }}" style="--sp-c-current: var(--sp-c-{{ page.list_collection }}, var(--sp-accent));">
     {%- comment -%}
       A landing page opens on the collection hero unless the collection
       says otherwise (`hero: false`), in which case it gets the compact
@@ -30,23 +30,23 @@ layout: default
       {%- assign show_tags = true -%}{% if do_filter %}{% assign show_tags = false %}{% endif %}
       {%- include collection/hero.html coll=coll docs=docs title=page.title views=show_views tags=show_tags filters=do_filter -%}
     {%- endif -%}
-    {%- if page.content != "" -%}<div class="im-prose im-margin-bottom-5">{{ content }}</div>{%- endif -%}
+    {%- if page.content != "" -%}<div class="sp-prose sp-margin-bottom-5">{{ content }}</div>{%- endif -%}
 
     {%- if page.list_collection == "portfolio" -%}
       {%- comment -%}
         The filter moved into the hero's foot bar — see collection/hero.html.
         What is left here is the feed itself, at the full width the work
-        deserves, with `data-im-filter-grid` for the script to act on and
+        deserves, with `data-sp-filter-grid` for the script to act on and
         the per-card `data-kind` / `data-tags` it reads.
       {%- endcomment -%}
-      <ul class="im-cards" id="feed" data-view="{{ coll.view | default: 'card' }}" data-im-filter-grid>
+      <ul class="sp-cards" id="feed" data-view="{{ coll.view | default: 'card' }}" data-sp-filter-grid>
         {%- for d in docs -%}
         <li data-kind="{{ d.kind | default: 'project' }}" data-tags="{%- for t in d.tags -%}{{ t | slugify }} {% endfor -%}{%- for t in d.stack -%}{{ t | slugify }} {% endfor -%}">
           {% include utility/card.html item=d %}
         </li>
         {%- endfor -%}
       </ul>
-      <p class="im-feed-empty" data-im-filter-empty hidden>Nothing matches those filters. <button class="im-btn im-btn-sm" type="button" data-im-filter-clear>Clear them</button></p>
+      <p class="sp-feed-empty" data-sp-filter-empty hidden>Nothing matches those filters. <button class="sp-btn sp-btn-sm" type="button" data-sp-filter-clear>Clear them</button></p>
     {%- else -%}
       {% include utility/collection-list.html collection=page.list_collection %}
     {%- endif -%}
@@ -62,29 +62,29 @@ layout: default
   {%- if page.sidebar %}{% assign has_sidebar = true %}{% endif -%}
   {%- assign single = site.layout.single -%}
 
-  <div class="im-shell{% if has_sidebar %} has-sidebar{% else %} is-reading{% endif %} im-page">
-    <div class="im-shell-main">
-      <article class="im-article">
-        <nav class="im-breadcrumb" aria-label="Breadcrumb">
+  <div class="sp-shell{% if has_sidebar %} has-sidebar{% else %} is-reading{% endif %} sp-page">
+    <div class="sp-shell-main">
+      <article class="sp-article">
+        <nav class="sp-breadcrumb" aria-label="Breadcrumb">
           <a href="{{ '/' | relative_url }}">Home</a><span aria-hidden="true">/</span><span>{{ page.title }}</span>
         </nav>
-        <h1 class="im-post-title">{{ page.title }}</h1>
+        <h1 class="sp-post-title">{{ page.title }}</h1>
 
         {%- if has_sidebar -%}
-        <details class="im-toc-mobile" id="im-toc-mobile" hidden>
+        <details class="sp-toc-mobile" id="sp-toc-mobile" hidden>
           <summary><i class="ph-bold ph-list-bullets" aria-hidden="true"></i> On this page</summary>
-          <nav class="im-toc" aria-label="Table of contents"><ul id="im-toc-mobile-list"></ul></nav>
+          <nav class="sp-toc" aria-label="Table of contents"><ul id="sp-toc-mobile-list"></ul></nav>
         </details>
         {%- endif -%}
 
-        <div class="im-prose">
+        <div class="sp-prose">
           {{ content }}
         </div>
       </article>
     </div>
 
     {%- if has_sidebar -%}
-    <aside class="im-sidebar" aria-label="Sidebar">{% include sidebar.html %}</aside>
+    <aside class="sp-sidebar" aria-label="Sidebar">{% include sidebar.html %}</aside>
     {%- endif -%}
   </div>
   {%- if has_sidebar %}{% include toc-script.html %}{% endif -%}

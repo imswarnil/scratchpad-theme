@@ -11,40 +11,40 @@
 {%- assign trail = paginator.page_trail -%}
 {%- assign first_shown = trail | first -%}
 {%- assign last_shown = trail | last -%}
-<nav class="im-pagination" aria-label="Pagination">
+<nav class="sp-pagination" aria-label="Pagination">
   {%- if paginator.previous_page -%}
-    <a class="im-page-btn" rel="prev" href="{{ paginator.previous_page_path | relative_url }}"><i class="ph-bold ph-arrow-left" aria-hidden="true"></i> <span>Newer</span></a>
+    <a class="sp-page-btn" rel="prev" href="{{ paginator.previous_page_path | relative_url }}"><i class="ph-bold ph-arrow-left" aria-hidden="true"></i> <span>Newer</span></a>
   {%- else -%}
-    <span class="im-page-btn is-disabled"><i class="ph-bold ph-arrow-left" aria-hidden="true"></i> <span>Newer</span></span>
+    <span class="sp-page-btn is-disabled"><i class="ph-bold ph-arrow-left" aria-hidden="true"></i> <span>Newer</span></span>
   {%- endif -%}
 
-  <ol class="im-page-nums">
+  <ol class="sp-page-nums">
     {%- if first_shown.num > 1 -%}
-    <li><a class="im-page-num" href="{{ paginator.first_page_path | relative_url }}">1</a></li>
-    {%- if first_shown.num > 2 %}<li><span class="im-page-gap" aria-hidden="true">…</span></li>{% endif -%}
+    <li><a class="sp-page-num" href="{{ paginator.first_page_path | relative_url }}">1</a></li>
+    {%- if first_shown.num > 2 %}<li><span class="sp-page-gap" aria-hidden="true">…</span></li>{% endif -%}
     {%- endif -%}
 
     {%- for t in trail -%}
     <li>
       {%- if t.num == paginator.page -%}
-        <span class="im-page-num" aria-current="page">{{ t.num }}</span>
+        <span class="sp-page-num" aria-current="page">{{ t.num }}</span>
       {%- else -%}
-        <a class="im-page-num" href="{{ t.path | relative_url }}" title="{{ t.title }}">{{ t.num }}</a>
+        <a class="sp-page-num" href="{{ t.path | relative_url }}" title="{{ t.title }}">{{ t.num }}</a>
       {%- endif -%}
     </li>
     {%- endfor -%}
 
     {%- if last_shown.num < paginator.total_pages -%}
     {%- assign gap = paginator.total_pages | minus: 1 -%}
-    {%- if last_shown.num < gap %}<li><span class="im-page-gap" aria-hidden="true">…</span></li>{% endif -%}
-    <li><a class="im-page-num" href="{{ paginator.last_page_path | relative_url }}">{{ paginator.total_pages }}</a></li>
+    {%- if last_shown.num < gap %}<li><span class="sp-page-gap" aria-hidden="true">…</span></li>{% endif -%}
+    <li><a class="sp-page-num" href="{{ paginator.last_page_path | relative_url }}">{{ paginator.total_pages }}</a></li>
     {%- endif -%}
   </ol>
 
   {%- if paginator.next_page -%}
-    <a class="im-page-btn" rel="next" href="{{ paginator.next_page_path | relative_url }}"><span>Older</span> <i class="ph-bold ph-arrow-right" aria-hidden="true"></i></a>
+    <a class="sp-page-btn" rel="next" href="{{ paginator.next_page_path | relative_url }}"><span>Older</span> <i class="ph-bold ph-arrow-right" aria-hidden="true"></i></a>
   {%- else -%}
-    <span class="im-page-btn is-disabled"><span>Older</span> <i class="ph-bold ph-arrow-right" aria-hidden="true"></i></span>
+    <span class="sp-page-btn is-disabled"><span>Older</span> <i class="ph-bold ph-arrow-right" aria-hidden="true"></i></span>
   {%- endif -%}
 </nav>
 {%- endif -%}

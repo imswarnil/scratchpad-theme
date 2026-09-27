@@ -9,48 +9,48 @@ layout: default
   Icons are decorative only; every label is real text. Dates are
   "Mon YYYY – Mon YYYY" as written in _config.yml.
 {%- endcomment -%}
-<div class="im-resume im-home im-page">
+<div class="sp-resume sp-home sp-page">
 
   {% include resume/hero.html %}
   {% include resume/bar.html %}
 
   {%- comment -%} ── Identity block (also the printed header) ── {%- endcomment -%}
-  <header class="im-resume-head im-print-only im-reveal">
-    <img class="im-resume-avatar im-no-print" src="{{ r.avatar | relative_url }}" alt="{{ r.name }}" width="96" height="96">
-    <div class="im-resume-head-body">
-      <h1 class="im-resume-name">{{ r.name }}</h1>
-      <p class="im-resume-tagline">{{ r.tagline }}</p>
-      <ul class="im-resume-contact">
+  <header class="sp-resume-head sp-print-only sp-reveal">
+    <img class="sp-resume-avatar sp-no-print" src="{{ r.avatar | relative_url }}" alt="{{ r.name }}" width="96" height="96">
+    <div class="sp-resume-head-body">
+      <h1 class="sp-resume-name">{{ r.name }}</h1>
+      <p class="sp-resume-tagline">{{ r.tagline }}</p>
+      <ul class="sp-resume-contact">
         {%- if r.contact.location %}<li><i class="ph-bold ph-map-pin" aria-hidden="true"></i> {{ r.contact.location }}</li>{% endif -%}
         {%- if r.contact.email %}<li><a href="mailto:{{ r.contact.email }}"><i class="ph-bold ph-envelope" aria-hidden="true"></i> {{ r.contact.email }}</a></li>{% endif -%}
         {%- if r.contact.site %}<li><a href="https://{{ r.contact.site }}"><i class="ph-bold ph-globe" aria-hidden="true"></i> {{ r.contact.site }}</a></li>{% endif -%}
         {%- if r.contact.linkedin %}<li><a href="https://linkedin.com{{ r.contact.linkedin }}"><i class="ph-bold ph-linkedin-logo" aria-hidden="true"></i> linkedin.com{{ r.contact.linkedin }}</a></li>{% endif -%}
         {%- if r.contact.github %}<li><a href="https://github.com/{{ r.contact.github }}"><i class="ph-bold ph-github-logo" aria-hidden="true"></i> github.com/{{ r.contact.github }}</a></li>{% endif -%}
       </ul>
-      {%- if r.open_to -%}<p class="im-resume-open"><strong>Open to:</strong> {{ r.open_to }}</p>{%- endif -%}
+      {%- if r.open_to -%}<p class="sp-resume-open"><strong>Open to:</strong> {{ r.open_to }}</p>{%- endif -%}
     </div>
   </header>
 
-  <div class="im-grid-12 im-resume-layout">
+  <div class="sp-grid-12 sp-resume-layout">
 
     {%- comment -%} ══ Main column ══ {%- endcomment -%}
-    <div class="im-span-12 im-span-lg-8 im-resume-main">
+    <div class="sp-span-12 sp-span-lg-8 sp-resume-main">
 
       {%- if r.summary -%}
-      <section class="im-resume-section im-reveal">
-        <h2 class="im-resume-heading"><i class="ph-bold ph-user" aria-hidden="true"></i> Summary</h2>
-        <p class="im-resume-summary">{{ r.summary | strip }}</p>
+      <section class="sp-resume-section sp-reveal">
+        <h2 class="sp-resume-heading"><i class="ph-bold ph-user" aria-hidden="true"></i> Summary</h2>
+        <p class="sp-resume-summary">{{ r.summary | strip }}</p>
       </section>
       {%- endif -%}
 
       {%- if r.core_skills.size > 0 -%}
-      <section class="im-resume-section im-reveal">
-        <h2 class="im-resume-heading"><i class="ph-bold ph-stack" aria-hidden="true"></i> Core Skills</h2>
-        <dl class="im-resume-skillgroups">
+      <section class="sp-resume-section sp-reveal">
+        <h2 class="sp-resume-heading"><i class="ph-bold ph-stack" aria-hidden="true"></i> Core Skills</h2>
+        <dl class="sp-resume-skillgroups">
           {%- for g in r.core_skills -%}
-          <div class="im-resume-skillgroup">
+          <div class="sp-resume-skillgroup">
             <dt>{{ g.group }}</dt>
-            <dd>{%- for s in g.items -%}<span class="im-resume-chip">{{ s }}</span>{%- endfor -%}</dd>
+            <dd>{%- for s in g.items -%}<span class="sp-resume-chip">{{ s }}</span>{%- endfor -%}</dd>
           </div>
           {%- endfor -%}
         </dl>
@@ -58,22 +58,22 @@ layout: default
       {%- endif -%}
 
       {%- if r.experience.size > 0 -%}
-      <section class="im-resume-section im-reveal">
-        <h2 class="im-resume-heading"><i class="ph-bold ph-briefcase" aria-hidden="true"></i> Experience</h2>
-        <ol class="im-resume-entries">
+      <section class="sp-resume-section sp-reveal">
+        <h2 class="sp-resume-heading"><i class="ph-bold ph-briefcase" aria-hidden="true"></i> Experience</h2>
+        <ol class="sp-resume-entries">
           {%- for e in r.experience -%}
-          <li class="im-resume-entry">
-            <div class="im-resume-entry-head">
-              <h3 class="im-resume-entry-title">{{ e.role }}</h3>
-              <p class="im-resume-entry-org">{{ e.org }}{% if e.where %} · {{ e.where }}{% endif %}</p>
-              <p class="im-resume-entry-when">{{ e.when }}</p>
+          <li class="sp-resume-entry">
+            <div class="sp-resume-entry-head">
+              <h3 class="sp-resume-entry-title">{{ e.role }}</h3>
+              <p class="sp-resume-entry-org">{{ e.org }}{% if e.where %} · {{ e.where }}{% endif %}</p>
+              <p class="sp-resume-entry-when">{{ e.when }}</p>
             </div>
-            {%- if e.body %}<p class="im-resume-entry-body">{{ e.body | strip }}</p>{% endif -%}
+            {%- if e.body %}<p class="sp-resume-entry-body">{{ e.body | strip }}</p>{% endif -%}
             {%- if e.points.size > 0 -%}
-            <ul class="im-resume-points">{%- for p in e.points -%}<li>{{ p }}</li>{%- endfor -%}</ul>
+            <ul class="sp-resume-points">{%- for p in e.points -%}<li>{{ p }}</li>{%- endfor -%}</ul>
             {%- endif -%}
             {%- if e.tags.size > 0 -%}
-            <p class="im-resume-tags">{%- for t in e.tags -%}<span class="im-resume-chip">{{ t }}</span>{%- endfor -%}</p>
+            <p class="sp-resume-tags">{%- for t in e.tags -%}<span class="sp-resume-chip">{{ t }}</span>{%- endfor -%}</p>
             {%- endif -%}
           </li>
           {%- endfor -%}
@@ -82,22 +82,22 @@ layout: default
       {%- endif -%}
 
       {%- if r.projects.size > 0 -%}
-      <section class="im-resume-section im-reveal">
-        <h2 class="im-resume-heading"><i class="ph-bold ph-rocket-launch" aria-hidden="true"></i> Projects</h2>
-        <ul class="im-resume-projects">
+      <section class="sp-resume-section sp-reveal">
+        <h2 class="sp-resume-heading"><i class="ph-bold ph-rocket-launch" aria-hidden="true"></i> Projects</h2>
+        <ul class="sp-resume-projects">
           {%- for p in r.projects -%}
-          <li class="im-resume-project">
-            <div class="im-resume-entry-head">
-              <h3 class="im-resume-entry-title">{{ p.title }}</h3>
-              {%- if p.meta %}<p class="im-resume-entry-org">{{ p.meta }}</p>{% endif -%}
-              {%- if p.time %}<p class="im-resume-entry-when">{{ p.time }}</p>{% endif -%}
+          <li class="sp-resume-project">
+            <div class="sp-resume-entry-head">
+              <h3 class="sp-resume-entry-title">{{ p.title }}</h3>
+              {%- if p.meta %}<p class="sp-resume-entry-org">{{ p.meta }}</p>{% endif -%}
+              {%- if p.time %}<p class="sp-resume-entry-when">{{ p.time }}</p>{% endif -%}
             </div>
-            <p class="im-resume-entry-body">{{ p.desc }}</p>
+            <p class="sp-resume-entry-body">{{ p.desc }}</p>
             {%- if p.tags.size > 0 or p.demo or p.repo -%}
-            <p class="im-resume-tags">
-              {%- for t in p.tags -%}<span class="im-resume-chip">{{ t }}</span>{%- endfor -%}
-              {%- if p.demo %}<a class="im-resume-chip im-resume-chip-link" href="{{ p.demo }}">Live site</a>{% endif -%}
-              {%- if p.repo %}<a class="im-resume-chip im-resume-chip-link" href="{{ p.repo }}">Source code</a>{% endif -%}
+            <p class="sp-resume-tags">
+              {%- for t in p.tags -%}<span class="sp-resume-chip">{{ t }}</span>{%- endfor -%}
+              {%- if p.demo %}<a class="sp-resume-chip sp-resume-chip-link" href="{{ p.demo }}">Live site</a>{% endif -%}
+              {%- if p.repo %}<a class="sp-resume-chip sp-resume-chip-link" href="{{ p.repo }}">Source code</a>{% endif -%}
             </p>
             {%- endif -%}
           </li>
@@ -107,17 +107,17 @@ layout: default
       {%- endif -%}
 
       {%- if r.education.size > 0 -%}
-      <section class="im-resume-section im-reveal">
-        <h2 class="im-resume-heading"><i class="ph-bold ph-graduation-cap" aria-hidden="true"></i> Education</h2>
-        <ol class="im-resume-entries">
+      <section class="sp-resume-section sp-reveal">
+        <h2 class="sp-resume-heading"><i class="ph-bold ph-graduation-cap" aria-hidden="true"></i> Education</h2>
+        <ol class="sp-resume-entries">
           {%- for ed in r.education -%}
-          <li class="im-resume-entry">
-            <div class="im-resume-entry-head">
-              <h3 class="im-resume-entry-title">{{ ed.degree }}</h3>
-              <p class="im-resume-entry-org">{{ ed.school }}{% if ed.where %} · {{ ed.where }}{% endif %}</p>
-              <p class="im-resume-entry-when">{{ ed.when }}</p>
+          <li class="sp-resume-entry">
+            <div class="sp-resume-entry-head">
+              <h3 class="sp-resume-entry-title">{{ ed.degree }}</h3>
+              <p class="sp-resume-entry-org">{{ ed.school }}{% if ed.where %} · {{ ed.where }}{% endif %}</p>
+              <p class="sp-resume-entry-when">{{ ed.when }}</p>
             </div>
-            {%- if ed.body %}<p class="im-resume-entry-body">{{ ed.body | strip }}</p>{% endif -%}
+            {%- if ed.body %}<p class="sp-resume-entry-body">{{ ed.body | strip }}</p>{% endif -%}
           </li>
           {%- endfor -%}
         </ol>
@@ -125,44 +125,44 @@ layout: default
       {%- endif -%}
 
       {%- if r.certifications.size > 0 -%}
-      <section class="im-resume-section im-reveal">
-        <h2 class="im-resume-heading"><i class="ph-bold ph-certificate" aria-hidden="true"></i> Certifications</h2>
-        <ul class="im-resume-certs">
+      <section class="sp-resume-section sp-reveal">
+        <h2 class="sp-resume-heading"><i class="ph-bold ph-certificate" aria-hidden="true"></i> Certifications</h2>
+        <ul class="sp-resume-certs">
           {%- for c in r.certifications -%}
-          <li><span class="im-resume-cert-title">{{ c.title }}</span><span class="im-resume-cert-meta">{{ c.org }}{% if c.when %} · {{ c.when }}{% endif %}</span></li>
+          <li><span class="sp-resume-cert-title">{{ c.title }}</span><span class="sp-resume-cert-meta">{{ c.org }}{% if c.when %} · {{ c.when }}{% endif %}</span></li>
           {%- endfor -%}
         </ul>
       </section>
       {%- endif -%}
 
       {%- if r.awards.size > 0 -%}
-      <section class="im-resume-section im-reveal">
-        <h2 class="im-resume-heading"><i class="ph-bold ph-trophy" aria-hidden="true"></i> Awards</h2>
-        <ul class="im-resume-certs">
+      <section class="sp-resume-section sp-reveal">
+        <h2 class="sp-resume-heading"><i class="ph-bold ph-trophy" aria-hidden="true"></i> Awards</h2>
+        <ul class="sp-resume-certs">
           {%- for a in r.awards -%}
-          <li><span class="im-resume-cert-title">{{ a.title }}</span><span class="im-resume-cert-meta">{{ a.meta }}</span></li>
+          <li><span class="sp-resume-cert-title">{{ a.title }}</span><span class="sp-resume-cert-meta">{{ a.meta }}</span></li>
           {%- endfor -%}
         </ul>
       </section>
       {%- endif -%}
 
       {%- if r.languages.size > 0 -%}
-      <section class="im-resume-section im-reveal">
-        <h2 class="im-resume-heading"><i class="ph-bold ph-translate" aria-hidden="true"></i> Languages</h2>
-        <ul class="im-resume-certs">
+      <section class="sp-resume-section sp-reveal">
+        <h2 class="sp-resume-heading"><i class="ph-bold ph-translate" aria-hidden="true"></i> Languages</h2>
+        <ul class="sp-resume-certs">
           {%- for l in r.languages -%}
-          <li><span class="im-resume-cert-title">{{ l.name }}</span><span class="im-resume-cert-meta">{{ l.level }}</span></li>
+          <li><span class="sp-resume-cert-title">{{ l.name }}</span><span class="sp-resume-cert-meta">{{ l.level }}</span></li>
           {%- endfor -%}
         </ul>
       </section>
       {%- endif -%}
 
       {%- if r.links.size > 0 -%}
-      <section class="im-resume-section im-reveal">
-        <h2 class="im-resume-heading"><i class="ph-bold ph-link" aria-hidden="true"></i> Links</h2>
-        <ul class="im-resume-certs">
+      <section class="sp-resume-section sp-reveal">
+        <h2 class="sp-resume-heading"><i class="ph-bold ph-link" aria-hidden="true"></i> Links</h2>
+        <ul class="sp-resume-certs">
           {%- for l in r.links -%}
-          <li><span class="im-resume-cert-title">{{ l.label }}</span><a class="im-resume-cert-meta" href="{{ l.href }}">{{ l.href | remove: "https://" }}</a></li>
+          <li><span class="sp-resume-cert-title">{{ l.label }}</span><a class="sp-resume-cert-meta" href="{{ l.href }}">{{ l.href | remove: "https://" }}</a></li>
           {%- endfor -%}
         </ul>
       </section>
@@ -170,45 +170,45 @@ layout: default
     </div>
 
     {%- comment -%} ══ Sidebar ══ {%- endcomment -%}
-    <aside class="im-span-12 im-span-lg-4 im-resume-aside im-no-print">
-      <div class="im-resume-aside-sticky">
+    <aside class="sp-span-12 sp-span-lg-4 sp-resume-aside sp-no-print">
+      <div class="sp-resume-aside-sticky">
 
         {%- if r.stats.size > 0 -%}
-        <section class="im-card im-resume-widget">
-          <h2 class="im-resume-widget-title"><i class="ph-bold ph-sparkle" aria-hidden="true"></i> Highlights</h2>
-          <div class="im-resume-tiles">
+        <section class="sp-card sp-resume-widget">
+          <h2 class="sp-resume-widget-title"><i class="ph-bold ph-sparkle" aria-hidden="true"></i> Highlights</h2>
+          <div class="sp-resume-tiles">
             {%- for s in r.stats limit: 3 -%}
-            <div class="im-resume-tile"><i class="ph-bold {{ s.icon }}" aria-hidden="true"></i><strong>{{ s.v }}</strong><span>{{ s.k }}</span></div>
+            <div class="sp-resume-tile"><i class="ph-bold {{ s.icon }}" aria-hidden="true"></i><strong>{{ s.v }}</strong><span>{{ s.k }}</span></div>
             {%- endfor -%}
           </div>
         </section>
         {%- endif -%}
 
         {%- if r.currently -%}
-        <section class="im-card im-resume-widget im-resume-now">
-          <h2 class="im-resume-widget-title"><i class="ph-bold ph-clock" aria-hidden="true"></i> Currently</h2>
+        <section class="sp-card sp-resume-widget sp-resume-now">
+          <h2 class="sp-resume-widget-title"><i class="ph-bold ph-clock" aria-hidden="true"></i> Currently</h2>
           <p>{{ r.currently }}</p>
         </section>
         {%- endif -%}
 
-        <section class="im-card im-resume-widget">
-          <h2 class="im-resume-widget-title"><i class="ph-bold ph-address-book" aria-hidden="true"></i> Contact</h2>
-          <ul class="im-resume-widget-list">
+        <section class="sp-card sp-resume-widget">
+          <h2 class="sp-resume-widget-title"><i class="ph-bold ph-address-book" aria-hidden="true"></i> Contact</h2>
+          <ul class="sp-resume-widget-list">
             {%- if r.contact.email %}<li><i class="ph-bold ph-envelope" aria-hidden="true"></i><a href="mailto:{{ r.contact.email }}">{{ r.contact.email }}</a></li>{% endif -%}
             {%- if r.contact.location %}<li><i class="ph-bold ph-map-pin" aria-hidden="true"></i><span>{{ r.contact.location }}</span></li>{% endif -%}
             {%- if r.contact.site %}<li><i class="ph-bold ph-globe" aria-hidden="true"></i><a href="https://{{ r.contact.site }}">{{ r.contact.site }}</a></li>{% endif -%}
           </ul>
-          <a class="im-btn im-btn-ink im-btn-block im-margin-top-4" href="{{ '/contact/' | relative_url }}"><i class="ph-bold ph-chat-circle" aria-hidden="true"></i> Get in touch</a>
+          <a class="sp-btn sp-btn-ink sp-btn-block sp-margin-top-4" href="{{ '/contact/' | relative_url }}"><i class="ph-bold ph-chat-circle" aria-hidden="true"></i> Get in touch</a>
         </section>
 
         {%- if r.skills.size > 0 -%}
-        <section class="im-card im-resume-widget">
-          <h2 class="im-resume-widget-title"><i class="ph-bold ph-gauge" aria-hidden="true"></i> Skills at a glance</h2>
-          <ul class="im-resume-skills">
+        <section class="sp-card sp-resume-widget">
+          <h2 class="sp-resume-widget-title"><i class="ph-bold ph-gauge" aria-hidden="true"></i> Skills at a glance</h2>
+          <ul class="sp-resume-skills">
             {%- for s in r.skills -%}
             <li>
-              <div class="im-resume-skill-label"><span>{{ s.name }}</span><span>{{ s.level }}</span></div>
-              <div class="im-resume-skill-bar" role="img" aria-label="{{ s.name }}: {{ s.level }}"><span style="width: {{ s.percent }}%"></span></div>
+              <div class="sp-resume-skill-label"><span>{{ s.name }}</span><span>{{ s.level }}</span></div>
+              <div class="sp-resume-skill-bar" role="img" aria-label="{{ s.name }}: {{ s.level }}"><span style="width: {{ s.percent }}%"></span></div>
             </li>
             {%- endfor -%}
           </ul>
@@ -216,9 +216,9 @@ layout: default
         {%- endif -%}
 
         {%- if r.links.size > 0 -%}
-        <section class="im-card im-resume-widget">
-          <h2 class="im-resume-widget-title"><i class="ph-bold ph-link" aria-hidden="true"></i> Elsewhere</h2>
-          <ul class="im-resume-links">
+        <section class="sp-card sp-resume-widget">
+          <h2 class="sp-resume-widget-title"><i class="ph-bold ph-link" aria-hidden="true"></i> Elsewhere</h2>
+          <ul class="sp-resume-links">
             {%- for l in r.links -%}
             <li><a href="{{ l.href }}"><i class="ph-bold {{ l.icon }}" aria-hidden="true"></i> {{ l.label }}</a></li>
             {%- endfor -%}

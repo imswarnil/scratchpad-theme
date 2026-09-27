@@ -7,7 +7,7 @@
   A single entry can override the list with `widgets:` in its front matter.
 {%- endcomment -%}
 {%- assign w_list = page.widgets | default: single.widgets | default: site.layout.single.widgets -%}
-<div class="im-sidebar-sticky">
+<div class="sp-sidebar-sticky">
   {%- for w in w_list -%}
     {%- assign w_file = "widgets/" | append: w | append: ".html" -%}
     {% include {{ w_file }} %}

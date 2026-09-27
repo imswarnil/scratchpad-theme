@@ -4,19 +4,19 @@ title: Archive
 permalink: /archive/
 description: "Everything published, grouped by collection."
 ---
-<section class="im-collection im-page">
-  <header class="im-collection-head">
-    <h1 class="im-collection-title">Archive</h1>
-    <p class="im-collection-desc">Everything published, grouped by collection.</p>
+<section class="sp-collection sp-page">
+  <header class="sp-collection-head">
+    <h1 class="sp-collection-title">Archive</h1>
+    <p class="sp-collection-desc">Everything published, grouped by collection.</p>
   </header>
 
   {%- for c in site.collections -%}
     {%- assign count = c.docs | size -%}
     {%- if count > 0 -%}
-      <div class="im-home-section">
-        <div class="im-home-section-head">
+      <div class="sp-home-section">
+        <div class="sp-home-section-head">
           <h2>{{ c.title | default: c.label }}</h2>
-          <a class="im-home-section-link" href="{{ c.landing | default: c.url | relative_url }}">View all →</a>
+          <a class="sp-home-section-link" href="{{ c.landing | default: c.url | relative_url }}">View all →</a>
         </div>
         {% include utility/collection-list.html collection=c.label %}
       </div>

@@ -1,0 +1,433 @@
+// ======================================================================
+// components/_collection-hero.scss — the head of a listing
+// ----------------------------------------------------------------------
+// The design system's `.sp-collhero`: a band at the page's full width
+// rather than the reading column's, with the collection's pattern on the
+// right, a display title, and along its foot the two things a reader does
+// on a listing — pick a topic, and pick how to look at the list.
+//
+// It BLEEDS out of the page's gutter, and the words line up with the wide
+// measure inside it, so the band is edge to edge while the type still
+// meets the grid everything else sits on.
+// ======================================================================
+
+// An ISLAND, like the top bar it sits under: inset from the page edge,
+// rounded, and standing clear of the bar above it. A band that runs edge
+// to edge fights the navbar for the same line — two full-width surfaces
+// stacked is one surface too many, and the page loses its top corner.
+//
+// `hero: { full: true }` on a collection puts it back to a full-bleed
+// band, for the one case that earns it: a hero with a film behind it,
+// where the picture wants every pixel.
+.sp-collhero {
+  --sp-collhero-pad: clamp(2rem, 5vw, 3.5rem);
+
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  // minmax(0, 1fr): the row of topic chips is as wide as all of them, and
+  // an auto track would grow to fit and push the words off a phone.
+  grid-template-columns: minmax(0, 1fr);
+  gap: clamp(1.5rem, 4vh, 2.5rem);
+  margin-block: var(--sp-space-4) var(--sp-space-7);
+  padding: var(--sp-collhero-pad) var(--sp-collhero-pad) 0;
+  overflow: hidden;
+  border-radius: var(--sp-radius-2xl);
+  background: var(--sp-surface);
+}
+
+// FULL — edge to edge, for a hero whose picture wants every pixel.
+.sp-collhero-full {
+  --sp-collhero-bleed: var(--sp-gutter);
+
+  margin-inline: calc(var(--sp-collhero-bleed) * -1);
+  margin-block: calc(var(--sp-space-5) * -1) var(--sp-space-7);
+  padding: clamp(2.5rem, 8vh, 6rem) var(--sp-collhero-bleed) 0;
+  border-radius: 0;
+}
+
+// ---- What is behind it ------------------------------------------------
+// A pattern in the collection's own hue, on the right, fading out to the
+// left so it never reaches the words. A collection whose subject is moving
+// pictures can run one instead.
+.sp-collhero-art,
+.sp-collhero-film {
+  position: absolute;
+  inset: 0 0 0 auto;
+  z-index: -1;
+  width: min(55%, 44rem);
+  opacity: 0.5;
+  pointer-events: none;
+  mask-image: linear-gradient(to left, #000 20%, transparent);
+  -webkit-mask-image: linear-gradient(to left, #000 20%, transparent);
+}
+.sp-collhero-film {
+  width: 100%;
+  opacity: 0.35;
+  iframe { width: 100%; height: 100%; border: 0; }
+}
+
+// The patterns, all four drawn from one repeating gradient in the
+// collection's hue — rules, columns, hatching, a dot field.
+.sp-pattern-rules   { background-image: repeating-linear-gradient(to bottom, var(--sp-c-this, var(--sp-accent)) 0 1px, transparent 1px 0.75rem); }
+.sp-pattern-columns { background-image: repeating-linear-gradient(to right,  var(--sp-c-this, var(--sp-accent)) 0 1px, transparent 1px 0.75rem); }
+.sp-pattern-lines   { background-image: repeating-linear-gradient(135deg,    var(--sp-c-this, var(--sp-accent)) 0 1px, transparent 1px 0.5rem); }
+.sp-pattern-grid {
+  background-image:
+    repeating-linear-gradient(to bottom, var(--sp-c-this, var(--sp-accent)) 0 1px, transparent 1px 2.5rem),
+    repeating-linear-gradient(to right,  var(--sp-c-this, var(--sp-accent)) 0 1px, transparent 1px 2.5rem);
+}
+.sp-pattern-dots {
+  background-image: radial-gradient(var(--sp-c-this, var(--sp-accent)) 1px, transparent 1px);
+  background-size: 1.375rem 1.375rem;
+}
+.sp-pattern-rings {
+  background-image: repeating-radial-gradient(circle at 70% 30%, var(--sp-c-this, var(--sp-accent)) 0 1px, transparent 1px 2.125rem);
+}
+.sp-pattern-none { display: none; }
+
+// ---- The collection's mark, drawn -------------------------------------
+// Large, on the right, in the collection's own hue — and it DRAWS: the
+// strokes run on as the page loads. It is the same shape the cards and
+// the covers carry, so a listing and the things on it read as one
+// collection before a word has been read.
+//
+// The dash length is one number for every mark rather than a measured
+// path length per icon: these are small, similar drawings, and 260 is
+// comfortably longer than the longest of them, so each one completes.
+.sp-collhero-mark {
+  position: absolute;
+  top: 50%;
+  right: clamp(-2rem, -2vw, 0rem);
+  translate: 0 -50%;
+  z-index: -1;
+  width: clamp(14rem, 30%, 26rem);
+  height: auto;
+  // Some marks fill a shape (a play triangle); on the hero everything is
+  // a line, because a fill cannot be drawn on.
+  fill: none !important;
+  * { fill: none !important; }
+  stroke: var(--sp-c-this, var(--sp-accent));
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  opacity: 0.16;
+  pointer-events: none;
+
+  // Half off the edge: a mark that fits inside the box is an illustration,
+  // one that runs past it is part of the surface.
+  @include mq($bp-md) { right: clamp(-6rem, -4vw, -2rem); }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .sp-collhero-mark * {
+    stroke-dasharray: 260;
+    stroke-dashoffset: 260;
+    animation: sp-draw 1.6s var(--sp-ease-out) forwards;
+  }
+  // Each stroke follows the one before it, so the shape assembles rather
+  // than appearing all at once.
+  .sp-collhero-mark * :nth-child(1) { animation-delay: 0ms; }
+  .sp-collhero-mark > *:nth-child(2) { animation-delay: 160ms; }
+  .sp-collhero-mark > *:nth-child(3) { animation-delay: 320ms; }
+  .sp-collhero-mark > * > *:nth-child(2) { animation-delay: 160ms; }
+  .sp-collhero-mark > * > *:nth-child(3) { animation-delay: 320ms; }
+  .sp-collhero-mark > * > *:nth-child(4) { animation-delay: 480ms; }
+}
+
+@keyframes sp-draw { to { stroke-dashoffset: 0; } }
+
+// ---- The words --------------------------------------------------------
+.sp-collhero-full > :not(.sp-collhero-art):not(.sp-collhero-film) {
+  width: 100%;
+  max-width: var(--sp-container-wide);
+  margin-inline: auto;
+}
+
+.sp-collhero-copy {
+  display: grid;
+  gap: var(--sp-space-4);
+
+  // Seven of the twelve columns — the measure a headline reads well at,
+  // and the one the rest of the page's heroes use.
+  > * { max-width: 58ch; }
+}
+
+// The label over the block: mono, small, upper-case, with the count set
+// in the accent before it.
+.sp-caption {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.625rem;
+  margin: 0;
+  color: var(--sp-muted);
+  font-family: var(--sp-font-mono);
+  font-size: var(--sp-text-xs);
+  font-weight: var(--sp-weight-medium);
+  letter-spacing: var(--sp-tracking-wide);
+  text-transform: uppercase;
+
+  &[data-index]::before {
+    content: attr(data-index);
+    color: var(--sp-c-this, var(--sp-accent));
+  }
+}
+
+.sp-collhero-title {
+  margin: 0;
+  color: var(--sp-ink);
+  font-size: clamp(2.75rem, 1.6rem + 5vw, 5.5rem);
+  font-weight: var(--sp-weight-semibold);
+  line-height: 0.95;
+  letter-spacing: var(--sp-tracking-tighter);
+}
+
+.sp-collhero-text {
+  margin: 0;
+  color: var(--sp-body);
+  font-size: var(--sp-text-lg);
+  line-height: var(--sp-leading-lg);
+  text-wrap: pretty;
+}
+
+// The facts, in the mono face, with a drawn dot between them — the same
+// byline the system uses under a post's title.
+.sp-collhero-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--sp-space-2) var(--sp-space-4);
+  margin: 0;
+  color: var(--sp-muted);
+  font-family: var(--sp-font-mono);
+  font-size: var(--sp-text-xs);
+  letter-spacing: var(--sp-tracking-wide);
+
+  a { color: inherit; text-decoration: none; &:hover { color: var(--sp-ink); } }
+
+  > * + *::before {
+    content: "";
+    display: inline-block;
+    width: 3px;
+    height: 3px;
+    margin-right: var(--sp-space-4);
+    border-radius: var(--sp-radius-full);
+    background: currentColor;
+    opacity: 0.55;
+    vertical-align: middle;
+  }
+}
+
+// ---- The foot: topics left, the view switch right, on a hairline ------
+.sp-collhero-bar {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-space-4);
+  // Out to the island's own edges, so the rule above it reads as the foot
+  // of the surface rather than as a line drawn inside it.
+  margin-inline: calc(var(--sp-collhero-pad, 0px) * -1);
+  padding: var(--sp-space-3) var(--sp-collhero-pad, 0);
+  border-top: 1px solid var(--sp-line);
+}
+.sp-collhero-full .sp-collhero-bar { margin-inline: 0; padding-inline: 0; }
+
+// The chips SCROLL sideways rather than wrapping: a collection with forty
+// topics would otherwise push the first entry below the fold.
+.sp-collbar-filters {
+  display: flex;
+  flex: 1 1 18rem;
+  align-items: center;
+  gap: var(--sp-space-2);
+  min-width: 0;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scrollbar-width: none;
+  mask-image: linear-gradient(to right, #000 calc(100% - 2rem), transparent);
+  -webkit-mask-image: linear-gradient(to right, #000 calc(100% - 2rem), transparent);
+
+  &::-webkit-scrollbar { display: none; }
+  > * { flex: none; }
+}
+
+// A topic chip: the theme's chip, with its count set quietly after it.
+.sp-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  min-height: 1.75rem;
+  padding: 0 var(--sp-space-3);
+  border-radius: var(--sp-radius-full);
+  box-shadow: inset 0 0 0 1px var(--sp-line);
+  background: transparent;
+  color: var(--sp-ink);
+  font-size: var(--sp-text-sm);
+  font-weight: var(--sp-weight-medium);
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background-color var(--sp-duration-instant);
+
+  &:hover { background: var(--sp-hover-bg); color: var(--sp-ink); }
+  &[aria-current="page"] {
+    background: var(--sp-current-bg);
+    color: var(--sp-current-fg);
+    font-weight: var(--sp-current-weight);
+    box-shadow: none;
+  }
+  small { color: var(--sp-faint); font-family: var(--sp-font-mono); font-size: var(--sp-text-xs); }
+}
+
+// ---- The view switch --------------------------------------------------
+.sp-btn-group {
+  display: inline-flex;
+  flex: none;
+  border-radius: var(--sp-radius-full);
+  isolation: isolate;
+
+  > .sp-btn {
+    border-radius: 0;
+    &:first-child { border-start-start-radius: var(--sp-radius-full); border-end-start-radius: var(--sp-radius-full); }
+    &:last-child  { border-start-end-radius: var(--sp-radius-full);   border-end-end-radius: var(--sp-radius-full); }
+    &:focus-visible { z-index: 1; }
+    + .sp-btn { margin-left: 1px; }
+  }
+
+  // The one that is pressed wears the CURRENT state, like every other
+  // "you are here" in the theme.
+  > .sp-btn[aria-pressed="true"] {
+    --sp-btn-bg: var(--sp-ink);
+    --sp-btn-fg: var(--sp-canvas);
+    --sp-btn-bg-hover: var(--sp-ink);
+    --sp-btn-fg-hover: var(--sp-canvas);
+  }
+}
+
+@include mq-down($bp-lg) {
+  .sp-viewswitch .sp-btn span { display: none; }
+}
+@include mq-down($bp-md) {
+  .sp-collhero-bar { flex-wrap: wrap; }
+  .sp-collhero-bar > .sp-collbar-filters { flex-basis: 100%; }
+  .sp-collhero-art { width: 100%; opacity: 0.3; }
+}
+
+// ======================================================================
+// Four views, one attribute
+// ----------------------------------------------------------------------
+// <ul class="sp-cards" id="feed" data-view="card|grid|list|simple">, set
+// by the switch above. The cards never change markup; the FEED decides
+// their shape, so a reader who scans a list of posts does not have to
+// relearn it between one collection and the next.
+//
+//   card    the newest entry leads across the top, the rest in a grid
+//   grid    every card the same          (the default everywhere else)
+//   list    one column, the picture beside the words
+//   simple  one column, a title and a date — an index, not a feed
+// ======================================================================
+
+// CARD. On one column there is no difference to make, so it waits for two.
+@include mq($bp-md) {
+  .sp-cards[data-view="card"] > :first-child { grid-column: 1 / -1; }
+
+  // …and the lead lies down: a 16:10 picture stretched across three
+  // columns is a billboard.
+  .sp-cards[data-view="card"] > :first-child > * {
+    flex-direction: row;
+    align-items: center;
+    gap: clamp(1.25rem, 3vw, 2rem);
+  }
+  .sp-cards[data-view="card"] > :first-child :is(.sp-ecard-media, .sp-vcard-screen, .sp-rcard-media, .sp-coursecard-media, .sp-product-art, .sp-tripcard-art, .sp-poster-art) {
+    flex: 0 0 clamp(14rem, 50%, 34rem);
+    margin: 0;
+    border-radius: var(--sp-card-radius, var(--sp-radius-xl));
+  }
+  .sp-cards[data-view="card"] > :first-child :is(.sp-ecard-title, .sp-vcard-title, .sp-rcard-title) {
+    font-size: var(--sp-text-h2);
+    line-height: var(--sp-leading-h2);
+  }
+}
+
+// LIST and SIMPLE are one column with a rule between the entries — the
+// gap goes, because the rule is what separates them now.
+.sp-cards:is([data-view="list"], [data-view="simple"]) {
+  grid-template-columns: minmax(0, 1fr);
+  gap: 0;
+
+  > * + * { border-top: 1px solid var(--sp-line); }
+}
+
+.sp-cards[data-view="list"] > * { padding-block: var(--sp-grid-gap); }
+
+@include mq($bp-md) {
+  .sp-cards[data-view="list"] > * > * {
+    flex-direction: row;
+    align-items: center;
+    gap: clamp(1rem, 2.5vw, 1.75rem);
+  }
+  .sp-cards[data-view="list"] :is(.sp-ecard-media, .sp-vcard-screen, .sp-rcard-media, .sp-coursecard-media, .sp-product-art, .sp-tripcard-art, .sp-poster-art) {
+    flex: 0 0 clamp(7rem, 30%, 15rem);
+    margin: 0;
+    border-radius: var(--sp-card-radius, var(--sp-radius-lg));
+  }
+}
+
+// SIMPLE: the picture and the sentence go, and the title comes down to
+// body size. What is left is a list of titles and dates — which is what
+// someone looking for one particular entry actually wants.
+.sp-cards[data-view="simple"] > * { padding-block: var(--sp-space-3); }
+.sp-cards[data-view="simple"] :is(
+  .sp-ecard-media, .sp-ecard-excerpt, .sp-ecard-author, .sp-ecard-tags,
+  .sp-vcard-screen, .sp-vcard-excerpt, .sp-vcard-tags,
+  .sp-rcard-media, .sp-rcard-desc, .sp-rcard-topics,
+  .sp-ccard-window, .sp-chcard-window,
+  .sp-poster-art, .sp-poster-text,
+  .sp-coursecard-media, .sp-coursecard-text,
+  .sp-product-art, .sp-product-text,
+  .sp-tripcard-art,
+  .sp-podcard-text, .sp-podcard-audio,
+  .sp-card-cta
+) { display: none; }
+
+.sp-cards[data-view="simple"] :is(.sp-ecard-title, .sp-vcard-title, .sp-rcard-title, .sp-ccard-title, .sp-chcard-title, .sp-coursecard-title, .sp-product-title, .sp-podcard-title) {
+  font-size: var(--sp-text-base);
+  line-height: var(--sp-leading-base);
+}
+
+// A bare card's hover panel bleeds a whole rem; between two rules that
+// reads as a smear rather than as a fill.
+.sp-cards:is([data-view="list"], [data-view="simple"]) [class$="card"] { --sp-card-bleed: 0.5rem; }
+
+// A tag page's title wears its hash the way a chip does — quiet, and in
+// the tag hue rather than the ink.
+.sp-collhero-hash { color: var(--sp-c-this, var(--sp-accent)); }
+
+// A filtering bar carries a count and a clear, so the chips do not have
+// to explain themselves.
+.sp-collbar-count {
+  flex: none;
+  color: var(--sp-muted);
+  font-family: var(--sp-font-mono);
+  font-size: var(--sp-text-xs);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.sp-tag-clear {
+  border: 0;
+  font-family: inherit;
+  cursor: pointer;
+  color: var(--sp-muted);
+}
+button.sp-tag { border: 0; font-family: inherit; cursor: pointer; }
+button.sp-tag[aria-pressed="true"] {
+  background: var(--sp-current-bg);
+  color: var(--sp-current-fg);
+  font-weight: var(--sp-current-weight);
+  box-shadow: none;
+}
+
+.sp-feed-empty {
+  margin: var(--sp-space-6) 0;
+  padding: clamp(2rem, 6vw, 3.5rem) var(--sp-space-5);
+  border-radius: var(--sp-radius-xl);
+  box-shadow: inset 0 0 0 1px var(--sp-line);
+  color: var(--sp-muted);
+  text-align: center;
+}

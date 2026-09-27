@@ -5,9 +5,9 @@
 {%- assign portrait = false -%}
 {%- if page.orientation == "portrait" or page.reel %}{% assign portrait = true %}{% endif -%}
 {%- if page.video_id -%}
-<div class="im-post-media{% if portrait %} is-portrait{% endif %}">
+<div class="sp-post-media{% if portrait %} is-portrait{% endif %}">
   <iframe src="https://www.youtube-nocookie.com/embed/{{ page.video_id }}" title="{{ page.title }}" allowfullscreen loading="lazy"></iframe>
 </div>
 {%- elsif page.video_embed -%}
-<div class="im-post-media{% if portrait %} is-portrait{% endif %}">{{ page.video_embed }}</div>
+<div class="sp-post-media{% if portrait %} is-portrait{% endif %}">{{ page.video_embed }}</div>
 {%- endif -%}

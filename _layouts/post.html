@@ -74,16 +74,16 @@ layout: default
   {%- assign parts_rest = parts | where_exp: "p", "p != 'coursebar'" -%}
 {%- endif -%}
 
-<div class="im-shell is-{{ shell }}{% if has_sidebar %} has-sidebar{% endif %}{% if is_reel %} is-reel{% endif %} im-page is-{{ page.collection }}">
+<div class="sp-shell is-{{ shell }}{% if has_sidebar %} has-sidebar{% endif %}{% if is_reel %} is-reel{% endif %} sp-page is-{{ page.collection }}">
   {%- if shell == "course" -%}
-  <aside class="im-shell-rail" aria-label="Contents">
+  <aside class="sp-shell-rail" aria-label="Contents">
     {%- if page.collection == "docs" -%}{% include single/docsnav.html %}
     {%- else -%}{% include single/coursenav.html %}{%- endif -%}
   </aside>
   {%- endif -%}
 
-  <div class="im-shell-main">
-    <article class="im-article">
+  <div class="sp-shell-main">
+    <article class="sp-article">
       {%- for part in parts_rest -%}
         {%- assign part_file = "single/" | append: part | append: ".html" -%}
         {% include {{ part_file }} %}
@@ -92,7 +92,7 @@ layout: default
   </div>
 
   {%- if has_sidebar -%}
-  <aside class="im-sidebar" aria-label="Sidebar">{% include sidebar.html %}</aside>
+  <aside class="sp-sidebar" aria-label="Sidebar">{% include sidebar.html %}</aside>
   {%- endif -%}
 </div>
 

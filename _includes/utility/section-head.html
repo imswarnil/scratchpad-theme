@@ -3,14 +3,14 @@
   optional link on the right (stacks on mobile).
   Params: title (required), eyebrow, link_url, link_text, id
 {%- endcomment -%}
-<header class="im-sec-head im-grid-12"{% if include.id %} id="{{ include.id }}"{% endif %}>
-  <div class="im-span-12 im-span-md-8">
-    {%- if include.eyebrow %}<span class="im-sec-eyebrow">{{ include.eyebrow }}</span>{% endif -%}
-    <h2 class="im-sec-title">{{ include.title }}</h2>
+<header class="sp-sec-head sp-grid-12"{% if include.id %} id="{{ include.id }}"{% endif %}>
+  <div class="sp-span-12 sp-span-md-8">
+    {%- if include.eyebrow %}<span class="sp-sec-eyebrow">{{ include.eyebrow }}</span>{% endif -%}
+    <h2 class="sp-sec-title">{{ include.title }}</h2>
   </div>
   {%- if include.link_url -%}
-  <div class="im-span-12 im-span-md-4 im-sec-head-link">
-    <a class="im-flink" href="{{ include.link_url | relative_url }}">{{ include.link_text | default: "View all" }} <i class="ph-bold ph-arrow-right" aria-hidden="true"></i></a>
+  <div class="sp-span-12 sp-span-md-4 sp-sec-head-link">
+    <a class="sp-flink" href="{{ include.link_url | relative_url }}">{{ include.link_text | default: "View all" }} <i class="ph-bold ph-arrow-right" aria-hidden="true"></i></a>
   </div>
   {%- endif -%}
 </header>

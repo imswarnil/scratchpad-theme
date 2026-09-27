@@ -4,7 +4,7 @@
   The icon map lives here and nowhere else, so a new network is one line.
 {%- endcomment -%}
 {%- if site.social_links -%}
-<ul class="im-social-row {{ include.class }}"{% if include.label %} aria-label="{{ include.label }}"{% endif %}>
+<ul class="sp-social-row {{ include.class }}"{% if include.label %} aria-label="{{ include.label }}"{% endif %}>
   {%- for s in site.social_links -%}
     {%- assign icon = 'link' -%}
     {%- case s[0] -%}

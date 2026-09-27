@@ -4,27 +4,27 @@
   reader judges it by. `result` in front matter, or `result_image`.
 {%- endcomment -%}
 {%- if page.prompt -%}
-<div class="im-promptbox">
-  <div class="im-promptbox-head">
-    <span class="im-promptbox-label"><i class="ph-bold ph-sparkle" aria-hidden="true"></i> The prompt</span>
-    {%- if page.model %}<span class="im-badge">{{ page.model }}</span>{% endif -%}
-    <button class="im-btn im-btn-sm im-btn-ghost im-promptbox-copy" type="button" data-im-copy="{{ page.prompt | strip_newlines | escape }}"><i class="ph-bold ph-copy" aria-hidden="true"></i> Copy</button>
+<div class="sp-promptbox">
+  <div class="sp-promptbox-head">
+    <span class="sp-promptbox-label"><i class="ph-bold ph-sparkle" aria-hidden="true"></i> The prompt</span>
+    {%- if page.model %}<span class="sp-badge">{{ page.model }}</span>{% endif -%}
+    <button class="sp-btn sp-btn-sm sp-btn-ghost sp-promptbox-copy" type="button" data-sp-copy="{{ page.prompt | strip_newlines | escape }}"><i class="ph-bold ph-copy" aria-hidden="true"></i> Copy</button>
   </div>
-  <pre class="im-promptbox-body"><code>{{ page.prompt | strip_html }}</code></pre>
+  <pre class="sp-promptbox-body"><code>{{ page.prompt | strip_html }}</code></pre>
 </div>
 {%- endif -%}
 
 {%- if page.result or page.result_image -%}
-<div class="im-resultbox">
-  <div class="im-resultbox-head">
-    <span class="im-promptbox-label"><i class="ph-bold ph-arrow-bend-down-right" aria-hidden="true"></i> What it produced</span>
-    {%- if page.result_note %}<span class="im-resultbox-note">{{ page.result_note }}</span>{% endif -%}
+<div class="sp-resultbox">
+  <div class="sp-resultbox-head">
+    <span class="sp-promptbox-label"><i class="ph-bold ph-arrow-bend-down-right" aria-hidden="true"></i> What it produced</span>
+    {%- if page.result_note %}<span class="sp-resultbox-note">{{ page.result_note }}</span>{% endif -%}
   </div>
   {%- if page.result_image -%}
-  <img class="im-resultbox-image" src="{{ page.result_image | relative_url }}" alt="Result of the prompt" loading="lazy">
+  <img class="sp-resultbox-image" src="{{ page.result_image | relative_url }}" alt="Result of the prompt" loading="lazy">
   {%- endif -%}
   {%- if page.result -%}
-  <div class="im-resultbox-body">{{ page.result | markdownify }}</div>
+  <div class="sp-resultbox-body">{{ page.result | markdownify }}</div>
   {%- endif -%}
 </div>
 {%- endif -%}

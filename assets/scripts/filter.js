@@ -1,14 +1,14 @@
 // ======================================================================
 // filter.js — collection listing behaviour (no dependencies)
-// • tag / kind filtering for [data-im-filter] + [data-im-filter-grid]
+// • tag / kind filtering for [data-sp-filter] + [data-sp-filter-grid]
 //   (state mirrored in the URL hash: #kind=project,film&tag=web)
-// • [data-im-copy] clipboard buttons on cards
+// • [data-sp-copy] clipboard buttons on cards
 // ======================================================================
 (function () {
   // ---- Copy buttons ----
-  document.querySelectorAll('[data-im-copy]').forEach(function (b) {
+  document.querySelectorAll('[data-sp-copy]').forEach(function (b) {
     b.addEventListener('click', function () {
-      var v = b.getAttribute('data-im-copy');
+      var v = b.getAttribute('data-sp-copy');
       try { var d = document.createElement('textarea'); d.innerHTML = v; v = d.value; } catch (e) {}
       if (navigator.clipboard) navigator.clipboard.writeText(v);
       var old = b.innerHTML;
@@ -18,16 +18,16 @@
   });
 
   // ---- Filters ----
-  var panel = document.querySelector('[data-im-filter]');
-  var grid = document.querySelector('[data-im-filter-grid]');
+  var panel = document.querySelector('[data-sp-filter]');
+  var grid = document.querySelector('[data-sp-filter-grid]');
   if (!panel || !grid) return;
 
   var buttons = panel.querySelectorAll('[data-filter-key]');
-  var countEl = panel.querySelector('[data-im-filter-count]');
-  var clearBtn = panel.querySelector('[data-im-filter-clear]');
+  var countEl = panel.querySelector('[data-sp-filter-count]');
+  var clearBtn = panel.querySelector('[data-sp-filter-clear]');
   // The "nothing matches" line lives outside the panel, beside the grid.
-  var emptyEl = document.querySelector('[data-im-filter-empty]');
-  var clearAll = document.querySelectorAll('[data-im-filter-clear]');
+  var emptyEl = document.querySelector('[data-sp-filter-empty]');
+  var clearAll = document.querySelectorAll('[data-sp-filter-clear]');
   // The grid's OWN children, not every descendant that happens to carry
   // the attributes — a card's <article> carries them as well, and
   // matching both counted every entry twice.

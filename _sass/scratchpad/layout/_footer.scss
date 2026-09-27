@@ -1,0 +1,271 @@
+// ======================================================================
+// layout/_footer.scss — the band at the foot of the site
+// ----------------------------------------------------------------------
+// One frame, any number of columns, all of them data (`footer.columns` in
+// _config.yml). The lead column — brand, blurb, where to find me — is
+// wider than the link columns beside it; the strip under them lines up
+// with the same measure however wide the window is.
+//
+// Three skins: `line` (a hairline above, on the page's own canvas — the
+// default), `fill` (a surface band) and `ink` (inverted, always the
+// opposite of the page it sits on).
+// ======================================================================
+
+.sp-footer {
+  --sp-footer-columns: 5;
+  --sp-footer-lead: 1.5fr;
+  --sp-footer-gap: clamp(1.75rem, 1rem + 2.4vw, 3.5rem);
+  --sp-footer-pad: clamp(2.5rem, 1.6rem + 3vw, 4.5rem);
+  --sp-footer-width: var(--sp-width-wide);
+
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-footer-gap);
+  margin-top: var(--sp-section-gap);
+  padding: var(--sp-footer-pad) var(--sp-gutter) 1.25rem;
+  color: var(--sp-body);
+  font-size: var(--sp-text-sm);
+}
+
+// Every direct child is centred on the same measure, so the strip lines
+// up with the columns at every width.
+.sp-footer > * {
+  width: 100%;
+  max-width: var(--sp-footer-width);
+  margin-inline: auto;
+}
+
+.sp-footer-line { border-top: 1px solid var(--sp-line); }
+.sp-footer-fill { background: var(--sp-surface); }
+
+// Inverted. It restates the SEMANTIC TOKENS rather than setting colours,
+// so everything inside — a button, a chip, a form field — follows without
+// knowing it is in a dark band. Two blocks, because there is no way to
+// say "the other theme's values" in CSS without a reference cycle.
+.sp-footer-ink {
+  color-scheme: dark;
+
+  --sp-canvas:    var(--sp-gray-950);
+  --sp-surface:   var(--sp-gray-900);
+  --sp-surface-2: var(--sp-gray-800);
+  --sp-surface-3: var(--sp-gray-700);
+  --sp-line:  color-mix(in oklab, var(--sp-gray-400) 26%, transparent);
+  --sp-ink:   var(--sp-white);
+  --sp-body:  var(--sp-gray-400);
+  --sp-muted: var(--sp-gray-500);
+  --sp-faint: var(--sp-gray-600);
+  --sp-hover-bg: var(--sp-surface-2);
+
+  background: var(--sp-canvas);
+  color: var(--sp-body);
+}
+:root[data-color-scheme="dark"] .sp-footer-ink,
+:root[data-color-scheme="system"] .sp-footer-ink {
+  color-scheme: light;
+
+  --sp-canvas:    var(--sp-white);
+  --sp-surface:   var(--sp-gray-100);
+  --sp-surface-2: var(--sp-gray-200);
+  --sp-surface-3: var(--sp-gray-300);
+  --sp-line:  color-mix(in oklab, var(--sp-gray-500) 24%, transparent);
+  --sp-ink:   var(--sp-gray-950);
+  --sp-body:  var(--sp-gray-600);
+  --sp-muted: var(--sp-gray-500);
+  --sp-faint: var(--sp-gray-400);
+}
+
+// ---- The columns ------------------------------------------------------
+.sp-footer-cols {
+  display: grid;
+  gap: var(--sp-footer-gap);
+  align-items: start;
+  grid-template-columns: repeat(var(--sp-footer-columns), minmax(0, 1fr));
+
+  // The lead column is the first cell and takes more than its share; the
+  // rest of the row splits what is left.
+  &:has(> .sp-footer-lead) {
+    grid-template-columns: var(--sp-footer-lead) repeat(calc(var(--sp-footer-columns) - 1), minmax(0, 1fr));
+  }
+
+  // Below lg the lead goes full width and the link columns pair up; on a
+  // phone everything stacks. A five-up footer on a tablet is five columns
+  // of one word each.
+  @include mq-down($bp-xl) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    &:has(> .sp-footer-lead) { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    > .sp-footer-lead { grid-column: 1 / -1; }
+  }
+  @include mq-down($bp-sm) {
+    grid-template-columns: minmax(0, 1fr);
+    &:has(> .sp-footer-lead) { grid-template-columns: minmax(0, 1fr); }
+  }
+}
+
+.sp-footer-col,
+.sp-footer-lead {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-space-3);
+  min-width: 0;
+}
+.sp-footer-lead { gap: var(--sp-space-4); max-width: 32rem; }
+// The newsletter takes a row of its own under the columns rather than a
+// cell among them: at five-up it is either too narrow for the form or it
+// leaves a hole beside the last link column.
+.sp-footer-col-news {
+  grid-column: 1 / -1;
+  padding-top: var(--sp-space-5);
+  border-top: 1px solid var(--sp-line);
+
+  .sp-footer-form { max-width: 26rem; }
+}
+
+.sp-footer-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-space-2);
+  font-size: var(--sp-text-h4);
+  font-weight: var(--sp-weight-semibold);
+  letter-spacing: var(--sp-tracking-tight);
+  color: var(--sp-ink);
+  text-decoration: none;
+
+  img { width: 1.75rem; height: 1.75rem; border-radius: var(--sp-radius-full); object-fit: cover; }
+}
+
+.sp-footer-text { margin: 0; color: var(--sp-muted); line-height: var(--sp-leading-base); text-wrap: pretty; }
+
+.sp-footer-facts {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-space-1);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  color: var(--sp-muted);
+
+  i { margin-right: var(--sp-space-1); color: var(--sp-faint); }
+  a { color: inherit; text-decoration: none; &:hover { color: var(--sp-ink); } }
+}
+
+// A column's heading: mono, small, upper-case — a LABEL, which is what the
+// system sets in the mono face everywhere.
+.sp-footer-title {
+  margin: 0;
+  color: var(--sp-ink);
+  font-family: var(--sp-font-mono);
+  font-size: 0.6875rem;
+  font-weight: var(--sp-weight-medium);
+  letter-spacing: var(--sp-tracking-wide);
+  text-transform: uppercase;
+}
+
+// ---- Link lists -------------------------------------------------------
+.sp-footer-links {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+
+  a {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--sp-space-2);
+    min-height: 1.875rem;
+    color: inherit;
+    text-decoration: none;
+    transition: color var(--sp-duration-instant);
+
+    &:hover, &:focus-visible { color: var(--sp-ink); }
+  }
+
+  // The count after a collection's name: how much is in there, quietly.
+  small {
+    margin-left: auto;
+    padding-left: var(--sp-space-3);
+    color: var(--sp-faint);
+    font-family: var(--sp-font-mono);
+    font-size: var(--sp-text-xs);
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+// ---- Newsletter -------------------------------------------------------
+.sp-footer-form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-space-2);
+
+  input {
+    flex: 1 1 11rem;
+    min-width: 0;
+    width: auto;
+    min-height: 2.5rem;
+    padding: 0 var(--sp-space-4);
+    border: 0;
+    border-radius: var(--sp-radius-full);
+    box-shadow: inset 0 0 0 1px var(--sp-line);
+    background: transparent;
+    color: var(--sp-ink);
+    font-size: var(--sp-text-sm);
+
+    &::placeholder { color: var(--sp-faint); }
+    &:disabled { opacity: var(--sp-opacity-disabled); }
+  }
+}
+.sp-footer-note { margin: 0; color: var(--sp-faint); font-size: var(--sp-text-xs); }
+
+// ---- The strip --------------------------------------------------------
+.sp-footer-strip {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-space-3) var(--sp-space-5);
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--sp-line);
+  color: var(--sp-muted);
+  font-size: var(--sp-text-sm);
+}
+.sp-footer-strip-only { border-top: 0; padding-top: 0; }
+.sp-footer-copy { margin: 0; }
+
+.sp-footer-legal,
+.sp-footer-inlinenav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-space-3) var(--sp-space-4);
+
+  a { color: inherit; text-decoration: none; &:hover { color: var(--sp-ink); } }
+}
+
+.sp-footer-top-link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-space-2);
+  color: inherit;
+  text-decoration: none;
+  transition: color var(--sp-duration-instant);
+
+  i { transition: translate var(--sp-duration-instant) var(--sp-ease-out); }
+  &:hover { color: var(--sp-ink); i { translate: 0 -3px; } }
+}
+
+// The minimal footer is the strip on its own.
+.sp-footer-minimal {
+  .sp-footer-strip-only { justify-content: center; text-align: center; }
+  .sp-footer-social { justify-content: center; }
+}
+
+.sp-visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}

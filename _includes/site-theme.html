@@ -3,7 +3,7 @@
 
   Scratchpad has exactly one brand colour. Everything tinted on the site
   (links, the focus ring, the active nav item, the reading-progress bar,
-  every generated cover, every collection chip) derives from --im-accent,
+  every generated cover, every collection chip) derives from --sp-accent,
   so setting `accent_color:` in _config.yml re-tints the whole site without
   touching a line of SCSS. That is what the setup wizard writes.
 
@@ -16,11 +16,11 @@
   !important and without a second network request.
 {%- endcomment -%}
 {%- capture theme_css -%}
-{%- if site.accent_color -%}--im-accent:{{ site.accent_color }};{%- endif -%}
-{%- if site.theme_radius -%}--im-radius-2:{{ site.theme_radius }};--im-radius-3:{{ site.theme_radius }};{%- endif -%}
-{%- if site.theme_width -%}--im-width-wide:{{ site.theme_width }};{%- endif -%}
+{%- if site.accent_color -%}--sp-accent:{{ site.accent_color }};{%- endif -%}
+{%- if site.theme_radius -%}--sp-radius-2:{{ site.theme_radius }};--sp-radius-3:{{ site.theme_radius }};{%- endif -%}
+{%- if site.theme_width -%}--sp-width-wide:{{ site.theme_width }};{%- endif -%}
 {%- for c in site.collections -%}
-  {%- if c.color -%}--im-c-{{ c.label }}:{{ c.color }};{%- endif -%}
+  {%- if c.color -%}--sp-c-{{ c.label }}:{{ c.color }};{%- endif -%}
 {%- endfor -%}
 {%- endcapture -%}
 {%- assign theme_css = theme_css | strip -%}

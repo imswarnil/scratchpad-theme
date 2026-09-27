@@ -13,18 +13,18 @@
 {%- assign u = page.url | absolute_url -%}
 {%- capture q -%}Read {{ u }} and give me a short brief: what it covers, the key points, and anything I should know before acting on it. Then answer follow-up questions from that page.{%- endcapture -%}
 {%- assign qe = q | uri_escape -%}
-<aside class="im-ask" aria-labelledby="im-ask-title">
-  <div class="im-ask-head">
-    <span class="im-ask-icon" aria-hidden="true"><i class="ph-bold ph-sparkle"></i></span>
+<aside class="sp-ask" aria-labelledby="sp-ask-title">
+  <div class="sp-ask-head">
+    <span class="sp-ask-icon" aria-hidden="true"><i class="ph-bold ph-sparkle"></i></span>
     <div>
-      <p class="im-ask-title" id="im-ask-title">Ask an AI about this page</p>
-      <p class="im-ask-text">Opens your assistant with this URL and a prompt to read it and answer you.</p>
+      <p class="sp-ask-title" id="sp-ask-title">Ask an AI about this page</p>
+      <p class="sp-ask-text">Opens your assistant with this URL and a prompt to read it and answer you.</p>
     </div>
   </div>
-  <div class="im-ask-actions">
-    <a class="im-btn im-btn-sm im-btn-ink" href="https://claude.ai/new?q={{ qe }}" target="_blank" rel="noopener"><i class="ph-bold ph-sparkle" aria-hidden="true"></i> Ask Claude</a>
-    <a class="im-btn im-btn-sm" href="https://chatgpt.com/?q={{ qe }}" target="_blank" rel="noopener">Ask ChatGPT</a>
-    <a class="im-btn im-btn-sm" href="https://www.perplexity.ai/search?q={{ qe }}" target="_blank" rel="noopener">Ask Perplexity</a>
-    <button class="im-btn im-btn-sm im-btn-ghost" type="button" data-im-copy="{{ q | escape }}"><i class="ph-bold ph-copy" aria-hidden="true"></i> Copy prompt</button>
+  <div class="sp-ask-actions">
+    <a class="sp-btn sp-btn-sm sp-btn-ink" href="https://claude.ai/new?q={{ qe }}" target="_blank" rel="noopener"><i class="ph-bold ph-sparkle" aria-hidden="true"></i> Ask Claude</a>
+    <a class="sp-btn sp-btn-sm" href="https://chatgpt.com/?q={{ qe }}" target="_blank" rel="noopener">Ask ChatGPT</a>
+    <a class="sp-btn sp-btn-sm" href="https://www.perplexity.ai/search?q={{ qe }}" target="_blank" rel="noopener">Ask Perplexity</a>
+    <button class="sp-btn sp-btn-sm sp-btn-ghost" type="button" data-sp-copy="{{ q | escape }}"><i class="ph-bold ph-copy" aria-hidden="true"></i> Copy prompt</button>
   </div>
 </aside>

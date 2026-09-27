@@ -14,81 +14,81 @@ ad_rails: false
   link beside it still works — which is the honest fallback.
 {%- endcomment -%}
 {%- assign form_action = site.contact.action | default: "" -%}
-<section class="im-home im-page im-pg">
+<section class="sp-home sp-page sp-pg">
 
-  <header class="im-pg-head im-grid-12 im-reveal">
-    <div class="im-span-12 im-span-lg-8">
-      <span class="im-sec-eyebrow">Contact</span>
-      <h1 class="im-pg-title">Let's talk.</h1>
-      <p class="im-pg-lede">The fastest route is email — I read everything and reply to most things within a couple of days. The form below lands in the same inbox.</p>
+  <header class="sp-pg-head sp-grid-12 sp-reveal">
+    <div class="sp-span-12 sp-span-lg-8">
+      <span class="sp-sec-eyebrow">Contact</span>
+      <h1 class="sp-pg-title">Let's talk.</h1>
+      <p class="sp-pg-lede">The fastest route is email — I read everything and reply to most things within a couple of days. The form below lands in the same inbox.</p>
     </div>
   </header>
 
-  <div class="im-grid-12 im-pg-row im-reveal">
-    <div class="im-span-12 im-span-lg-7">
-      <form class="im-card im-form" action="{% if form_action != '' %}{{ form_action }}{% else %}#{% endif %}" method="post">
-        <div class="im-form-head">
-          <h2 class="im-card-title">Send a message</h2>
-          <a class="im-btn im-btn-sm im-btn-outline" href="mailto:{{ site.email }}"><i class="ph-bold ph-envelope-simple" aria-hidden="true"></i> Or just email</a>
+  <div class="sp-grid-12 sp-pg-row sp-reveal">
+    <div class="sp-span-12 sp-span-lg-7">
+      <form class="sp-card sp-form" action="{% if form_action != '' %}{{ form_action }}{% else %}#{% endif %}" method="post">
+        <div class="sp-form-head">
+          <h2 class="sp-card-title">Send a message</h2>
+          <a class="sp-btn sp-btn-sm sp-btn-outline" href="mailto:{{ site.email }}"><i class="ph-bold ph-envelope-simple" aria-hidden="true"></i> Or just email</a>
         </div>
-        <div class="im-form-grid">
-          <label class="im-field">
-            <span class="im-field-label">Your name</span>
-            <input class="im-input" type="text" name="name" autocomplete="name" placeholder="Jane Doe" required>
+        <div class="sp-form-grid">
+          <label class="sp-field">
+            <span class="sp-field-label">Your name</span>
+            <input class="sp-input" type="text" name="name" autocomplete="name" placeholder="Jane Doe" required>
           </label>
-          <label class="im-field">
-            <span class="im-field-label">Email</span>
-            <input class="im-input" type="email" name="email" autocomplete="email" placeholder="jane@example.com" required>
+          <label class="sp-field">
+            <span class="sp-field-label">Email</span>
+            <input class="sp-input" type="email" name="email" autocomplete="email" placeholder="jane@example.com" required>
           </label>
-          <label class="im-field im-field-full">
-            <span class="im-field-label">What is it about?</span>
-            <select class="im-input" name="topic">
+          <label class="sp-field sp-field-full">
+            <span class="sp-field-label">What is it about?</span>
+            <select class="sp-input" name="topic">
               {%- for t in site.contact.topics -%}<option>{{ t }}</option>{%- endfor -%}
             </select>
           </label>
-          <label class="im-field im-field-full">
-            <span class="im-field-label">Message</span>
-            <textarea class="im-input" name="message" rows="6" placeholder="Scope, timeline, and anything that helps me reply well…" required></textarea>
+          <label class="sp-field sp-field-full">
+            <span class="sp-field-label">Message</span>
+            <textarea class="sp-input" name="message" rows="6" placeholder="Scope, timeline, and anything that helps me reply well…" required></textarea>
           </label>
         </div>
-        <div class="im-form-foot">
-          <button class="im-btn im-btn-lg im-btn-primary" type="submit"
+        <div class="sp-form-foot">
+          <button class="sp-btn sp-btn-lg sp-btn-primary" type="submit"
                   {% if form_action == '' %}disabled title="Set contact.action in _config.yml to enable posting"{% endif %}>
             <i class="ph-bold ph-paper-plane-tilt" aria-hidden="true"></i> Send message
           </button>
           {%- if form_action == '' -%}
-          <span class="im-form-note">
+          <span class="sp-form-note">
             This form has no endpoint yet — set <code>contact.action</code> in
             <code>_config.yml</code>. The email link above works either way.
           </span>
           {%- else -%}
-          <span class="im-form-note">No newsletter, no tracking — this only sends your message.</span>
+          <span class="sp-form-note">No newsletter, no tracking — this only sends your message.</span>
           {%- endif -%}
         </div>
       </form>
     </div>
 
-    <aside class="im-span-12 im-span-lg-5">
-      <div class="im-pg-aside">
-        <div class="im-card">
-          <span class="im-card-icon"><i class="ph-bold ph-envelope-simple" aria-hidden="true"></i></span>
-          <h2 class="im-card-title">Email</h2>
-          <a class="im-flink im-pg-aside-big" href="mailto:{{ site.email }}">{{ site.email }}</a>
-          <p class="im-card-text">Best for anything with a scope, a deadline or an attachment.</p>
+    <aside class="sp-span-12 sp-span-lg-5">
+      <div class="sp-pg-aside">
+        <div class="sp-card">
+          <span class="sp-card-icon"><i class="ph-bold ph-envelope-simple" aria-hidden="true"></i></span>
+          <h2 class="sp-card-title">Email</h2>
+          <a class="sp-flink sp-pg-aside-big" href="mailto:{{ site.email }}">{{ site.email }}</a>
+          <p class="sp-card-text">Best for anything with a scope, a deadline or an attachment.</p>
         </div>
-        <ul class="im-pg-facts im-card im-card-muted">
+        <ul class="sp-pg-facts sp-card sp-card-muted">
           <li><i class="ph-bold ph-map-pin" aria-hidden="true"></i> {{ site.location }} · IST (UTC+5:30)</li>
           <li><i class="ph-bold ph-clock" aria-hidden="true"></i> Usually replies within {{ site.contact.reply_within | default: "a few days" }}</li>
           {%- if site.contact.availability %}<li><i class="ph-bold ph-briefcase" aria-hidden="true"></i> {{ site.contact.availability }}</li>{% endif -%}
         </ul>
-        <div class="im-card">
-          <h2 class="im-card-title">Prefer a call?</h2>
-          <p class="im-card-text">Send two or three slots that work for you (IST or your zone) and I'll confirm one by email.</p>
-          <a class="im-btn im-btn-outline" href="mailto:{{ site.email }}?subject=Call%20request"><i class="ph-bold ph-phone" aria-hidden="true"></i> Request a call</a>
+        <div class="sp-card">
+          <h2 class="sp-card-title">Prefer a call?</h2>
+          <p class="sp-card-text">Send two or three slots that work for you (IST or your zone) and I'll confirm one by email.</p>
+          <a class="sp-btn sp-btn-outline" href="mailto:{{ site.email }}?subject=Call%20request"><i class="ph-bold ph-phone" aria-hidden="true"></i> Request a call</a>
         </div>
         {%- if site.social_links -%}
-        <div class="im-pg-aside-social">
-          <span class="im-sec-eyebrow">Elsewhere</span>
+        <div class="sp-pg-aside-social">
+          <span class="sp-sec-eyebrow">Elsewhere</span>
           {% include footer-social.html %}
         </div>
         {%- endif -%}

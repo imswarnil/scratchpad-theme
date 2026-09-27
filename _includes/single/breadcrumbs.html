@@ -4,7 +4,7 @@
 {%- endcomment -%}
 {%- assign c_title = coll.title | default: page.collection -%}
 {%- assign c_url = coll.landing | default: "/" -%}
-<nav class="im-breadcrumb" aria-label="Breadcrumb">
+<nav class="sp-breadcrumb" aria-label="Breadcrumb">
   <a href="{{ '/' | relative_url }}">Home</a><span aria-hidden="true">/</span>
   <a href="{{ c_url | relative_url }}">{{ c_title }}</a><span aria-hidden="true">/</span>
   <span aria-current="page">{{ page.title | truncate: 48 }}</span>

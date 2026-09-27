@@ -6,19 +6,19 @@
   assets/scripts/resume.js adds `is-stuck`.
 {%- endcomment -%}
 {%- assign r = site.resume -%}
-<div class="im-rbar im-no-print" data-resume-bar>
-  <div class="im-rbar-inner">
-    <a class="im-rbar-back" href="{{ '/' | relative_url }}" aria-label="Back to site"><i class="ph-bold ph-arrow-left" aria-hidden="true"></i></a>
+<div class="sp-rbar sp-no-print" data-resume-bar>
+  <div class="sp-rbar-inner">
+    <a class="sp-rbar-back" href="{{ '/' | relative_url }}" aria-label="Back to site"><i class="ph-bold ph-arrow-left" aria-hidden="true"></i></a>
 
-    <img class="im-rbar-avatar" src="{{ r.avatar | relative_url }}" alt="" width="32" height="32">
-    <span class="im-rbar-name">{{ r.name }}</span>
-    <span class="im-rbar-meta">
+    <img class="sp-rbar-avatar" src="{{ r.avatar | relative_url }}" alt="" width="32" height="32">
+    <span class="sp-rbar-name">{{ r.name }}</span>
+    <span class="sp-rbar-meta">
       {%- if r.contact.location %}<span><i class="ph-bold ph-map-pin" aria-hidden="true"></i> {{ r.contact.location }}</span>{% endif -%}
       {%- if r.contact.email %}<a href="mailto:{{ r.contact.email }}"><i class="ph-bold ph-envelope" aria-hidden="true"></i> {{ r.contact.email }}</a>{% endif -%}
     </span>
 
-    {% include social-row.html class="im-rbar-social" label="Elsewhere" %}
+    {% include social-row.html class="sp-rbar-social" label="Elsewhere" %}
 
-    <button type="button" class="im-btn im-btn-sm im-btn-primary im-rbar-print" data-im-print><i class="ph-bold ph-file-pdf" aria-hidden="true"></i> <span>PDF</span></button>
+    <button type="button" class="sp-btn sp-btn-sm sp-btn-primary sp-rbar-print" data-sp-print><i class="ph-bold ph-file-pdf" aria-hidden="true"></i> <span>PDF</span></button>
   </div>
 </div>

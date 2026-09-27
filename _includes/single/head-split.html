@@ -12,21 +12,21 @@
 {%- endcomment -%}
 {%- assign cover = page.cover | default: page.image -%}
 {%- if cover == site.placeholder_image %}{% assign cover = nil %}{% endif -%}
-<header class="im-splithead{% unless cover %} is-solo{% endunless %}">
-  <div class="im-splithead-copy">
-    <span class="im-kicker">{{ coll.singular | default: "Post" }}</span>
-    <h1 class="im-post-title">{{ page.title }}</h1>
-    {%- if page.description %}<p class="im-splithead-lede">{{ page.description }}</p>{% endif -%}
+<header class="sp-splithead{% unless cover %} is-solo{% endunless %}">
+  <div class="sp-splithead-copy">
+    <span class="sp-kicker">{{ coll.singular | default: "Post" }}</span>
+    <h1 class="sp-post-title">{{ page.title }}</h1>
+    {%- if page.description %}<p class="sp-splithead-lede">{{ page.description }}</p>{% endif -%}
 
-    <div class="im-post-meta">
-      <img class="im-avatar" src="{{ page.author_avatar | default: site.avatarurl | relative_url }}" alt="" width="28" height="28">
+    <div class="sp-post-meta">
+      <img class="sp-avatar" src="{{ page.author_avatar | default: site.avatarurl | relative_url }}" alt="" width="28" height="28">
       <span>{{ page.author | default: site.author | default: site.title }}</span>
-      {%- if page.date %}<span class="im-dot">·</span><time datetime="{{ page.date | date_to_xmlschema }}">{{ page.date | date: "%b %-d, %Y" }}</time>{% endif -%}
-      {%- if page.read_time %}<span class="im-dot">·</span><span>{{ page.read_time }} min read</span>{% endif -%}
+      {%- if page.date %}<span class="sp-dot">·</span><time datetime="{{ page.date | date_to_xmlschema }}">{{ page.date | date: "%b %-d, %Y" }}</time>{% endif -%}
+      {%- if page.read_time %}<span class="sp-dot">·</span><span>{{ page.read_time }} min read</span>{% endif -%}
     </div>
 
     {%- if page.facts -%}
-    <dl class="im-splithead-facts">
+    <dl class="sp-splithead-facts">
       {%- for f in page.facts -%}
       <div><dt>{{ f.label }}</dt><dd>{{ f.value }}</dd></div>
       {%- endfor -%}
@@ -35,7 +35,7 @@
   </div>
 
   {%- if cover -%}
-  <figure class="im-splithead-media">
+  <figure class="sp-splithead-media">
     <img src="{{ cover | relative_url }}" alt="{{ page.title | escape }}" loading="eager">
     {%- if page.cover_caption %}<figcaption>{{ page.cover_caption }}</figcaption>{% endif -%}
   </figure>

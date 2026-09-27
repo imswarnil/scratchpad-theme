@@ -5,9 +5,9 @@
 {%- assign has = false -%}
 {%- if page.role or page.client or page.year or page.timeframe or page.stack.size > 0 or page.repo or page.demo %}{% assign has = true %}{% endif -%}
 {%- if has -%}
-<section class="im-widget im-widget-details">
-  <h2 class="im-widget-title"><i class="ph-bold ph-info" aria-hidden="true"></i> Project details</h2>
-  <dl class="im-deflist">
+<section class="sp-widget sp-widget-details">
+  <h2 class="sp-widget-title"><i class="ph-bold ph-info" aria-hidden="true"></i> Project details</h2>
+  <dl class="sp-deflist">
     {%- if page.client %}<dt>Client</dt><dd>{{ page.client }}</dd>{% endif -%}
     {%- if page.role %}<dt>Role</dt><dd>{{ page.role }}</dd>{% endif -%}
     {%- if page.timeframe %}<dt>Timeframe</dt><dd>{{ page.timeframe }}</dd>{% elsif page.year %}<dt>Year</dt><dd>{{ page.year }}</dd>{% endif -%}
@@ -15,13 +15,13 @@
     {%- if page.status %}<dt>Status</dt><dd>{{ page.status }}</dd>{% endif -%}
   </dl>
   {%- if page.stack.size > 0 -%}
-  <p class="im-widget-sublabel">Built with</p>
-  <div class="im-rcard-topics">{%- for t in page.stack -%}<span class="im-rcard-topic">{{ t }}</span>{%- endfor -%}</div>
+  <p class="sp-widget-sublabel">Built with</p>
+  <div class="sp-rcard-topics">{%- for t in page.stack -%}<span class="sp-rcard-topic">{{ t }}</span>{%- endfor -%}</div>
   {%- endif -%}
   {%- if page.repo or page.demo -%}
-  <div class="im-widget-actions">
-    {%- if page.demo %}<a class="im-btn im-btn-sm im-btn-ink im-w-full" href="{{ page.demo }}" target="_blank" rel="noopener"><i class="ph-bold ph-arrow-square-out" aria-hidden="true"></i> Visit</a>{% endif -%}
-    {%- if page.repo %}<a class="im-btn im-btn-sm im-btn-outline im-w-full" href="{{ page.repo }}" target="_blank" rel="noopener"><i class="ph-bold ph-github-logo" aria-hidden="true"></i> Source</a>{% endif -%}
+  <div class="sp-widget-actions">
+    {%- if page.demo %}<a class="sp-btn sp-btn-sm sp-btn-ink sp-w-full" href="{{ page.demo }}" target="_blank" rel="noopener"><i class="ph-bold ph-arrow-square-out" aria-hidden="true"></i> Visit</a>{% endif -%}
+    {%- if page.repo %}<a class="sp-btn sp-btn-sm sp-btn-outline sp-w-full" href="{{ page.repo }}" target="_blank" rel="noopener"><i class="ph-bold ph-github-logo" aria-hidden="true"></i> Source</a>{% endif -%}
   </div>
   {%- endif -%}
 </section>

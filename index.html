@@ -8,10 +8,10 @@ hero_image: /assets/img/brand/portrait.svg
 ---
 
 {%- assign hero_video = page.hero_video | default: site.hero_video -%}
-<section class="im-home im-page">
-  <div class="im-hero im-hero--media-first">
+<section class="sp-home sp-page">
+  <div class="sp-hero sp-hero--media-first">
     {%- if hero_video and hero_video != "" -%}
-    <div class="im-hero-bgvideo" aria-hidden="true">
+    <div class="sp-hero-bgvideo" aria-hidden="true">
       <iframe src="https://www.youtube.com/embed/{{ hero_video }}?autoplay=1&amp;mute=1&amp;loop=1&amp;playlist={{ hero_video }}&amp;controls=0&amp;playsinline=1" title="" tabindex="-1" allow="autoplay; encrypted-media"></iframe>
     </div>
     {%- endif -%}
@@ -22,42 +22,42 @@ hero_image: /assets/img/brand/portrait.svg
       one box, two shapes, rather than two boxes and a jump. The film is
       not requested until it is asked for (assets/scripts/hero-media.js).
     {%- endcomment -%}
-    <figure class="im-hero-media" data-hero-media>
-      <div class="im-hero-frame">
-        <img class="im-hero-img" src="{{ page.hero_image | relative_url }}" alt="{{ site.author | default: site.title }}" width="900" height="900">
+    <figure class="sp-hero-media" data-hero-media>
+      <div class="sp-hero-frame">
+        <img class="sp-hero-img" src="{{ page.hero_image | relative_url }}" alt="{{ site.author | default: site.title }}" width="900" height="900">
         {%- if hero_video and hero_video != "" -%}
-        <div class="im-hero-film" data-hero-film data-video-id="{{ hero_video }}"></div>
+        <div class="sp-hero-film" data-hero-film data-video-id="{{ hero_video }}"></div>
         {%- endif -%}
       </div>
 
       {%- if hero_video and hero_video != "" -%}
-      <figcaption class="im-hero-switch" role="group" aria-label="Show the portrait or the film">
-        <input class="im-hero-switch-input" type="radio" name="im-hero-view" id="im-hero-photo" value="photo" checked>
-        <label class="im-hero-switch-label" for="im-hero-photo"><i class="ph-bold ph-image" aria-hidden="true"></i> Photo</label>
-        <input class="im-hero-switch-input" type="radio" name="im-hero-view" id="im-hero-film" value="film">
-        <label class="im-hero-switch-label" for="im-hero-film"><i class="ph-fill ph-play" aria-hidden="true"></i> Film</label>
+      <figcaption class="sp-hero-switch" role="group" aria-label="Show the portrait or the film">
+        <input class="sp-hero-switch-input" type="radio" name="sp-hero-view" id="sp-hero-photo" value="photo" checked>
+        <label class="sp-hero-switch-label" for="sp-hero-photo"><i class="ph-bold ph-image" aria-hidden="true"></i> Photo</label>
+        <input class="sp-hero-switch-input" type="radio" name="sp-hero-view" id="sp-hero-film" value="film">
+        <label class="sp-hero-switch-label" for="sp-hero-film"><i class="ph-fill ph-play" aria-hidden="true"></i> Film</label>
       </figcaption>
       {%- endif -%}
     </figure>
     {%- endif -%}
 
-    <div class="im-hero-content">
-      <span class="im-hero-line">
-        <span class="im-hero-quote">“Build fast. Keep it cinematic.”</span>
+    <div class="sp-hero-content">
+      <span class="sp-hero-line">
+        <span class="sp-hero-quote">“Build fast. Keep it cinematic.”</span>
       </span>
-      <h1 class="im-hero-title">{{ page.hero_title }}</h1>
-      <p class="im-hero-subtitle">{{ page.hero_subtitle }}</p>
+      <h1 class="sp-hero-title">{{ page.hero_title }}</h1>
+      <p class="sp-hero-subtitle">{{ page.hero_subtitle }}</p>
 
-      <ul class="im-hero-meta">
+      <ul class="sp-hero-meta">
         {%- if site.work.role -%}<li><i class="ph-bold ph-briefcase" aria-hidden="true"></i> {{ site.work.role }}{% if site.work.company %} · {{ site.work.company }}{% endif %}</li>{%- endif -%}
         {%- if site.location -%}<li><i class="ph-bold ph-map-pin" aria-hidden="true"></i> {{ site.location }}</li>{%- endif -%}
-        <li class="im-hero-status"><span class="im-hero-status-dot" aria-hidden="true"></span> Open to interesting problems</li>
+        <li class="sp-hero-status"><span class="sp-hero-status-dot" aria-hidden="true"></span> Open to interesting problems</li>
       </ul>
 
-      <div class="im-hero-actions">
-        <a class="im-btn im-btn-primary" href="{{ '/portfolio/' | relative_url }}"><i class="ph-bold ph-briefcase" aria-hidden="true"></i> See my work</a>
-        <a class="im-btn" href="{{ '/about/' | relative_url }}">About me</a>
-        {% include social-row.html class="im-hero-social" label="Elsewhere" %}
+      <div class="sp-hero-actions">
+        <a class="sp-btn sp-btn-primary" href="{{ '/portfolio/' | relative_url }}"><i class="ph-bold ph-briefcase" aria-hidden="true"></i> See my work</a>
+        <a class="sp-btn" href="{{ '/about/' | relative_url }}">About me</a>
+        {% include social-row.html class="sp-hero-social" label="Elsewhere" %}
       </div>
 
       {%- comment -%}
@@ -72,12 +72,12 @@ hero_image: /assets/img/brand/portrait.svg
       {%- endcomment -%}
       {%- assign n = site.footer.newsletter -%}
       {%- if n.enabled != false -%}
-      <form class="im-hero-subscribe" action="{{ n.action }}" method="post" target="_blank">
-        <label class="im-visually-hidden" for="im-hero-email">Email address</label>
-        <input id="im-hero-email" type="email" name="{{ n.field | default: 'email' }}"
+      <form class="sp-hero-subscribe" action="{{ n.action }}" method="post" target="_blank">
+        <label class="sp-visually-hidden" for="sp-hero-email">Email address</label>
+        <input id="sp-hero-email" type="email" name="{{ n.field | default: 'email' }}"
                placeholder="{{ n.placeholder | default: 'you@example.com' }}" required
                {% if n.action == nil or n.action == '' %}disabled{% endif %}>
-        <button class="im-btn im-btn-sm" type="submit"
+        <button class="sp-btn sp-btn-sm" type="submit"
                 {% if n.action == nil or n.action == '' %}disabled title="Set footer.newsletter.action in _config.yml"{% endif %}>
           <i class="ph-bold ph-envelope-simple" aria-hidden="true"></i> Subscribe
         </button>
@@ -91,11 +91,11 @@ hero_image: /assets/img/brand/portrait.svg
   {%- comment -%} ── Selected work ── {%- endcomment -%}
   {%- assign work = site.portfolio | sort: "date" | reverse -%}
   {%- if work.size > 0 -%}
-  <section class="im-sec im-reveal" aria-labelledby="sec-work">
+  <section class="sp-sec sp-reveal" aria-labelledby="sec-work">
     {% include utility/section-head.html id="sec-work" eyebrow="Portfolio" title="Selected work" link_url="/portfolio/" link_text="All work" %}
-    <div class="im-grid-12 im-sec-body">
+    <div class="sp-grid-12 sp-sec-body">
       {%- for doc in work limit: 3 -%}
-      <div class="im-span-12 im-span-md-6 im-span-lg-4">{% include utility/card.html item=doc %}</div>
+      <div class="sp-span-12 sp-span-md-6 sp-span-lg-4">{% include utility/card.html item=doc %}</div>
       {%- endfor -%}
     </div>
   </section>
@@ -104,11 +104,11 @@ hero_image: /assets/img/brand/portrait.svg
   {%- comment -%} ── Writing ── {%- endcomment -%}
   {%- assign writing = site.posts | sort: "date" | reverse -%}
   {%- if writing.size > 0 -%}
-  <section class="im-sec im-reveal" aria-labelledby="sec-writing">
+  <section class="sp-sec sp-reveal" aria-labelledby="sec-writing">
     {% include utility/section-head.html id="sec-writing" eyebrow="Blog" title="Writing" link_url="/blog/" link_text="Read the blog" %}
-    <div class="im-grid-12 im-sec-body">
+    <div class="sp-grid-12 sp-sec-body">
       {%- for doc in writing limit: 3 -%}
-      <div class="im-span-12 im-span-md-6 im-span-lg-4">{% include utility/card.html item=doc %}</div>
+      <div class="sp-span-12 sp-span-md-6 sp-span-lg-4">{% include utility/card.html item=doc %}</div>
       {%- endfor -%}
     </div>
   </section>
@@ -117,11 +117,11 @@ hero_image: /assets/img/brand/portrait.svg
   {%- comment -%} ── Videos ── {%- endcomment -%}
   {%- assign vids = site.videos | sort: "date" | reverse -%}
   {%- if vids.size > 0 -%}
-  <section class="im-sec im-reveal" aria-labelledby="sec-videos">
+  <section class="sp-sec sp-reveal" aria-labelledby="sec-videos">
     {% include utility/section-head.html id="sec-videos" eyebrow="YouTube" title="Videos" link_url="/videos/" link_text="All videos" %}
-    <div class="im-grid-12 im-sec-body">
+    <div class="sp-grid-12 sp-sec-body">
       {%- for doc in vids limit: 2 -%}
-      <div class="im-span-12 im-span-lg-6">{% include utility/card.html item=doc %}</div>
+      <div class="sp-span-12 sp-span-lg-6">{% include utility/card.html item=doc %}</div>
       {%- endfor -%}
     </div>
   </section>
@@ -129,15 +129,15 @@ hero_image: /assets/img/brand/portrait.svg
 
   {%- comment -%} ── Skills & stack ── {%- endcomment -%}
   {%- if site.resume.skills.size > 0 -%}
-  <section class="im-sec im-reveal" aria-labelledby="sec-skills">
+  <section class="sp-sec sp-reveal" aria-labelledby="sec-skills">
     {% include utility/section-head.html id="sec-skills" eyebrow="Toolbox" title="Skills &amp; stack" link_url="/resume/" link_text="Full resume" %}
-    <div class="im-grid-12 im-sec-body">
-      <div class="im-span-12 im-span-lg-8">{% include utility/skills.html %}</div>
-      <aside class="im-span-12 im-span-lg-4">
-        <div class="im-card im-card-muted im-skills-note">
-          <p class="im-card-title">Two crafts, one loop</p>
-          <p class="im-card-text">Analytics and CPQ work by day; films and this site by night. Both run the same way — find the story, cut what doesn't serve it, ship fast, measure.</p>
-          <a class="im-flink" href="{{ '/about/' | relative_url }}">How I work <i class="ph-bold ph-arrow-right" aria-hidden="true"></i></a>
+    <div class="sp-grid-12 sp-sec-body">
+      <div class="sp-span-12 sp-span-lg-8">{% include utility/skills.html %}</div>
+      <aside class="sp-span-12 sp-span-lg-4">
+        <div class="sp-card sp-card-muted sp-skills-note">
+          <p class="sp-card-title">Two crafts, one loop</p>
+          <p class="sp-card-text">Analytics and CPQ work by day; films and this site by night. Both run the same way — find the story, cut what doesn't serve it, ship fast, measure.</p>
+          <a class="sp-flink" href="{{ '/about/' | relative_url }}">How I work <i class="ph-bold ph-arrow-right" aria-hidden="true"></i></a>
         </div>
       </aside>
     </div>
@@ -155,11 +155,11 @@ hero_image: /assets/img/brand/portrait.svg
     {%- assign c = site.collections | where: "label", label | first -%}
     {%- assign items = c.docs | sort: "date" | reverse -%}
     {%- if items.size > 0 -%}
-    <section class="im-sec im-reveal" aria-labelledby="sec-{{ label }}" style="--im-c-this: var(--im-c-{{ label }}, var(--im-accent));">
+    <section class="sp-sec sp-reveal" aria-labelledby="sec-{{ label }}" style="--sp-c-this: var(--sp-c-{{ label }}, var(--sp-accent));">
       {% include utility/section-head.html id=label eyebrow=c.title title=c.description link_url=c.landing link_text="All" %}
-      <div class="im-grid-12 im-sec-body">
+      <div class="sp-grid-12 sp-sec-body">
         {%- for doc in items limit: 3 -%}
-        <div class="im-span-12 im-span-md-6 im-span-lg-4">{% include utility/card.html item=doc %}</div>
+        <div class="sp-span-12 sp-span-md-6 sp-span-lg-4">{% include utility/card.html item=doc %}</div>
         {%- endfor -%}
       </div>
     </section>
@@ -180,26 +180,26 @@ hero_image: /assets/img/brand/portrait.svg
   {%- endfor -%}
   {%- assign recent = recent | sort: "date" | reverse -%}
   {%- if recent.size > 3 -%}
-  <section class="im-sec im-reveal" aria-labelledby="sec-recent">
+  <section class="sp-sec sp-reveal" aria-labelledby="sec-recent">
     {% include utility/section-head.html id="sec-recent" eyebrow="Lately" title="Everything, newest first" link_url="/archive/" link_text="The archive" %}
-    <ul class="im-cards" data-view="simple">
+    <ul class="sp-cards" data-view="simple">
       {%- for doc in recent limit: 8 -%}<li>{% include utility/card.html item=doc %}</li>{%- endfor -%}
     </ul>
   </section>
   {%- endif -%}
 
   {%- comment -%} ── Let's talk ── {%- endcomment -%}
-  <section class="im-sec im-reveal" aria-labelledby="sec-talk">
-    <div class="im-cta-band im-grid-12">
-      <div class="im-span-12 im-span-lg-8">
-        <span class="im-sec-eyebrow">Available for interesting problems</span>
-        <h2 class="im-cta-band-title" id="sec-talk">Let's build something fast, cinematic and robust.</h2>
-        <p class="im-cta-band-text">Analytics dashboards, web builds or a short brand film — send a line with scope and timeline and I'll reply within a couple of days.</p>
+  <section class="sp-sec sp-reveal" aria-labelledby="sec-talk">
+    <div class="sp-cta-band sp-grid-12">
+      <div class="sp-span-12 sp-span-lg-8">
+        <span class="sp-sec-eyebrow">Available for interesting problems</span>
+        <h2 class="sp-cta-band-title" id="sec-talk">Let's build something fast, cinematic and robust.</h2>
+        <p class="sp-cta-band-text">Analytics dashboards, web builds or a short brand film — send a line with scope and timeline and I'll reply within a couple of days.</p>
       </div>
-      <div class="im-span-12 im-span-lg-4 im-cta-band-actions">
-        <a class="im-btn im-btn-lg im-btn-ink" href="{{ '/contact/' | relative_url }}"><i class="ph-bold ph-paper-plane-tilt" aria-hidden="true"></i> Get in touch</a>
-        <a class="im-btn im-btn-lg im-btn-outline" href="{{ '/resume/' | relative_url }}"><i class="ph-bold ph-identification-card" aria-hidden="true"></i> Resume</a>
-        {%- if site.email %}<a class="im-cta-band-email im-flink" href="mailto:{{ site.email }}">{{ site.email }}</a>{% endif -%}
+      <div class="sp-span-12 sp-span-lg-4 sp-cta-band-actions">
+        <a class="sp-btn sp-btn-lg sp-btn-ink" href="{{ '/contact/' | relative_url }}"><i class="ph-bold ph-paper-plane-tilt" aria-hidden="true"></i> Get in touch</a>
+        <a class="sp-btn sp-btn-lg sp-btn-outline" href="{{ '/resume/' | relative_url }}"><i class="ph-bold ph-identification-card" aria-hidden="true"></i> Resume</a>
+        {%- if site.email %}<a class="sp-cta-band-email sp-flink" href="mailto:{{ site.email }}">{{ site.email }}</a>{% endif -%}
       </div>
     </div>
   </section>

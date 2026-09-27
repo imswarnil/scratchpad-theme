@@ -1,0 +1,160 @@
+// ======================================================================
+// components/_tags-page.scss — /tags/
+// ----------------------------------------------------------------------
+// Two halves, one idea: a cloud of every tag on the site, then a section
+// per tag listing what is filed under it. The rows are flat things, so
+// they answer with the FILL hover (sp-hover-fill), never the card lift —
+// see abstracts/_mixins.scss. Each row carries its collection's hue in
+// --sp-c-this, set inline the way utility/thumb.html sets it, so the icon
+// plate and the left rule read as that collection everywhere.
+// ======================================================================
+
+.sp-tagpage {
+  .sp-tagcloud,
+  .sp-tagsecs { margin-top: var(--sp-space-8); }
+}
+
+// ---- The cloud --------------------------------------------------------
+.sp-tagcloud {
+  ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--sp-space-2);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  a {
+    @include sp-hover-fill;
+    display: inline-flex;
+    align-items: baseline;
+    gap: var(--sp-space-2);
+    padding: var(--sp-space-2) var(--sp-space-3);
+    border: 1px solid var(--sp-line);
+    border-radius: var(--sp-radius-full);
+    background: var(--sp-surface);
+    color: var(--sp-body-fg);
+    font-size: var(--sp-text-sm);
+    text-decoration: none;
+  }
+}
+
+.sp-tagcloud-hash { color: color-mix(in oklab, var(--sp-c-tags) 70%, var(--sp-muted)); }
+
+.sp-tagcloud-count {
+  color: var(--sp-muted);
+  font-size: var(--sp-text-xs);
+  font-variant-numeric: tabular-nums;
+}
+
+// ---- A tag's section --------------------------------------------------
+.sp-tagsecs { display: grid; gap: var(--sp-space-10); }
+
+.sp-tagsec {
+  scroll-margin-top: calc(var(--sp-navbar-height) + var(--sp-space-6));
+}
+
+.sp-tagsec-title {
+  display: flex;
+  align-items: baseline;
+  gap: var(--sp-space-3);
+  margin: 0 0 var(--sp-space-4);
+  padding-bottom: var(--sp-space-2);
+  border-bottom: 1px solid var(--sp-line);
+  font-size: var(--sp-text-h4);
+  line-height: var(--sp-leading-tight);
+}
+
+.sp-tagsec-hash { color: color-mix(in oklab, var(--sp-c-tags) 80%, var(--sp-ink)); }
+
+.sp-tagsec-count {
+  margin-left: auto;
+  color: var(--sp-muted);
+  font-size: var(--sp-text-sm);
+  font-weight: var(--sp-weight-normal);
+  font-variant-numeric: tabular-nums;
+}
+
+// ---- The rows ---------------------------------------------------------
+.sp-tagrows {
+  display: grid;
+  gap: var(--sp-space-1);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.sp-tagrow-link {
+  @include sp-hover-fill;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: var(--sp-space-3);
+  padding: var(--sp-space-3);
+  border-radius: var(--sp-radius-md);
+  border-left: 2px solid transparent;
+  color: inherit;
+  text-decoration: none;
+
+  &:hover,
+  &:focus-visible {
+    border-left-color: var(--sp-c-this, var(--sp-accent));
+  }
+}
+
+.sp-tagrow-icon {
+  @include sp-collection-tint;
+  display: grid;
+  place-items: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: var(--sp-radius-sm);
+  font-size: var(--sp-text-sm);
+}
+
+.sp-tagrow-text { min-width: 0; }
+
+.sp-tagrow-title {
+  display: block;
+  color: var(--sp-ink);
+  font-weight: var(--sp-weight-medium);
+  line-height: var(--sp-leading-sm);
+}
+
+.sp-tagrow-desc {
+  display: block;
+  margin-top: 0.15rem;
+  overflow: hidden;
+  color: var(--sp-muted);
+  font-size: var(--sp-text-sm);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.sp-tagrow-meta {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-space-3);
+  color: var(--sp-muted);
+  font-size: var(--sp-text-xs);
+  white-space: nowrap;
+}
+
+.sp-tagrow-kind {
+  @include sp-collection-tint(10%);
+  padding: 0.1rem var(--sp-space-2);
+  border-radius: var(--sp-radius-full);
+}
+
+@media (max-width: 40rem) {
+  .sp-tagrow-desc { display: none; }
+  .sp-tagrow-meta > time { display: none; }
+}
+
+// The section headings on the index link through to the tag's own page.
+.sp-tagsec-title > a {
+  color: inherit;
+  text-decoration: none;
+  &:hover { color: var(--sp-accent); }
+}

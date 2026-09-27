@@ -1,7 +1,7 @@
 # Contributing
 
 Thanks for your interest in improving this project! It's a **Jekyll** site with a
-self-contained CSS framework (**IM CSS**, in `_sass/im/`). Contributions of all
+self-contained CSS framework (**Scratchpad CSS**, in `_sass/scratchpad/`). Contributions of all
 kinds are welcome — bug fixes, docs, components, and theme improvements.
 
 ## Prerequisites
@@ -50,9 +50,9 @@ bundle exec jekyll serve --livereload
 _config.yml     site config — nav, header/footer options, collections
 _layouts/       page shells (default, page, post, …)
 _includes/      header, footer, components, SEO partials
-_sass/im/       the IM CSS framework, organised into folders:
+_sass/scratchpad/       the Scratchpad CSS framework, organised into folders:
   abstracts/    build-time SCSS (maps, breakpoints, mixins)
-  tokens/       runtime --im-* custom properties (light + dark)
+  tokens/       runtime --sp-* custom properties (light + dark)
   base/         reset, element typography, motion/background patterns
   layout/       containers, navbar, hero, shell, footer
   components/    buttons, cards, collections, post, home, search, …
@@ -62,10 +62,10 @@ assets/         styles, scripts, images, search index
 
 ## Conventions
 
-- **Everything browser-facing is prefixed `im-`** (classes like `im-card`,
-  `im-row`, helpers like `im-text-small`) and reads `var(--im-*)` tokens, so the
+- **Everything browser-facing is prefixed `sp-`** (classes like `sp-card`,
+  `sp-row`, helpers like `sp-text-small`) and reads `var(--sp-*)` tokens, so the
   whole site re-themes at runtime. Don't hard-code colours — add/consume a token.
-- **`_sass/im/_index.scss` controls the `@import` order** (one shared global
+- **`_sass/scratchpad/_index.scss` controls the `@import` order** (one shared global
   scope, so order matters). Add new partials there.
 - Keep front matter minimal; prefer config- and layout-driven defaults.
 - There's no test suite or linter. For a fast SCSS-only sanity check:

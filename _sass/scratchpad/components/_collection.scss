@@ -1,0 +1,259 @@
+// ======================================================================
+// im/_collection.scss — collection list pages + per-type post cards
+// One base card (.sp-pcard) with per-collection modifiers so each
+// collection reads distinctly while staying DRY.
+// ======================================================================
+
+.sp-collection {
+  width: 100%;
+  max-width: calc(var(--sp-container-wide) + var(--sp-gutter) * 2);
+  margin-inline: auto;
+  padding-inline: var(--sp-gutter);
+}
+
+// Compact head band (utility/collection-head.html): one row on the
+// 12-col grid — icon + title + one-liner left, stats right. About half
+// the height of the old stacked box.
+.sp-collection-head {
+  padding: var(--sp-space-4) var(--sp-space-5);
+  margin-bottom: var(--sp-space-5);
+  border: 1px solid var(--sp-line);
+  border-radius: var(--sp-radius-xl);
+  background: var(--sp-surface);
+
+  .sp-collection-title { margin: 0; font-size: var(--sp-text-2xl); letter-spacing: -0.02em; line-height: 1.15; }
+  .sp-collection-desc  { margin: var(--sp-space-1) 0 0; max-width: 56ch; color: var(--sp-muted); font-size: var(--sp-text-sm); }
+}
+.sp-collection-head-row { align-items: center; row-gap: var(--sp-space-3); }
+.sp-collection-head-main { display: flex; align-items: center; gap: var(--sp-space-4); min-width: 0; }
+.sp-collection-head-text { min-width: 0; }
+.sp-collection-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: var(--sp-radius-lg);
+  font-size: var(--sp-text-lg);
+  @include sp-collection-tint;
+}
+.sp-collection-stats {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--sp-space-2) var(--sp-space-5);
+  font-size: var(--sp-text-sm);
+  color: var(--sp-muted);
+  strong { color: var(--sp-ink); }
+  @include mq($bp-lg) { justify-content: flex-end; }
+}
+
+// The one empty state a collection page can land on: nothing filed yet.
+.sp-collection-empty {
+  margin: var(--sp-space-8) 0;
+  padding: var(--sp-space-6);
+  border: 1px dashed var(--sp-line);
+  border-radius: var(--sp-radius-md);
+  background: var(--sp-surface);
+  color: var(--sp-muted);
+  text-align: center;
+}
+
+.sp-cards {
+  display: grid;
+  gap: var(--sp-grid-gap);
+  grid-template-columns: 1fr;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+
+  // A grid track is min-content wide by DEFAULT, and a card with a <pre>
+  // in it (the snippet card) has a min-content width of one whole line of
+  // code — which on a phone is wider than the screen. `min-width: 0` on
+  // the item is what lets the track shrink and the code clip instead.
+  //
+  // EQUAL HEIGHTS. A row of cards is one row whatever the cards carry: a
+  // post with a three-line excerpt and one with none end level, and their
+  // feet sit on the same line. The grid already stretches each ITEM to its
+  // row's height; making the item a flex box passes that height down to
+  // the card inside it (a flex child stretches by default), and the card's
+  // own body takes up the slack — see %sp-cardbody's `flex: 1` and
+  // %sp-cardfoot's `margin-top: auto` in components/_cards.scss.
+  //
+  // Doing it this way rather than with `height: 100%` everywhere means a
+  // card that is used OUTSIDE a grid — in a sidebar, in an article — still
+  // takes the height of its own content.
+  > * {
+    display: flex;
+    min-width: 0;
+    margin: 0;
+  }
+  // `display: flex` above beats the user-agent's `[hidden] { display: none }`,
+  // which would leave a filtered-out card on screen. Say it again, louder.
+  > [hidden] { display: none; }
+  > * > * {
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+
+  @include mq($bp-sm) { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  @include mq($bp-lg) { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+
+// ---- Base post card ---------------------------------------------------
+// The shared card body the collection lists fall back to. A surface, not a
+// box: filled, no border, no resting shadow — and it answers by filling
+// one step deeper, the way every card in the theme does.
+.sp-pcard {
+  --sp-hover-bg: var(--sp-surface-2);
+
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border-radius: var(--sp-radius-xl);
+  background: var(--sp-surface);
+  color: var(--sp-body);
+  transition: background-color var(--sp-duration-fast) var(--sp-ease-out);
+
+  &:is(:hover, :focus-within) { background: var(--sp-hover-bg); }
+
+  @media (hover: hover) and (prefers-reduced-motion: no-preference) {
+    transition:
+      background-color var(--sp-duration-fast) var(--sp-ease-out),
+      translate var(--sp-duration-fast) var(--sp-ease-out),
+      box-shadow var(--sp-duration-fast) var(--sp-ease-out);
+
+    &:is(:hover, :focus-within) { translate: 0 -1px; box-shadow: var(--sp-card-hover-shadow); }
+  }
+}
+
+.sp-pcard-media {
+  position: relative;
+  display: block;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  background: var(--sp-surface-2);
+
+  // The picture does not grow. A feed of twenty cards each twitching a
+  // photograph is a page nobody can read.
+  img { width: 100%; height: 100%; object-fit: cover; }
+}
+
+// Type chip sitting on the media
+.sp-pcard-type {
+  position: absolute;
+  top: var(--sp-space-3);
+  left: var(--sp-space-3);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-space-1);
+  padding: var(--sp-space-1) var(--sp-space-3);
+  border-radius: var(--sp-radius-full);
+  background: var(--sp-scrim);
+  color: #fff;
+  font-size: var(--sp-text-xs);
+  font-weight: var(--sp-weight-semibold);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+// Duration / badge bottom-right (video/podcast/trip)
+.sp-pcard-badge {
+  position: absolute;
+  bottom: var(--sp-space-3);
+  right: var(--sp-space-3);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-space-1);
+  padding: var(--sp-space-1) var(--sp-space-2);
+  border-radius: var(--sp-radius-sm);
+  background: var(--sp-scrim);
+  color: #fff;
+  font-size: var(--sp-text-xs);
+  font-weight: var(--sp-weight-medium);
+}
+
+// Play glyph overlay for media collections
+.sp-pcard-play {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  color: #fff;
+  opacity: 0.92;
+  pointer-events: none;
+  &::before {
+    content: "";
+    width: 3.25rem; height: 3.25rem;
+    border-radius: var(--sp-radius-full);
+    background: var(--sp-scrim);
+    box-shadow: 0 0 0 1px rgba(255,255,255,0.25) inset;
+  }
+  i, svg { position: absolute; font-size: 1.4rem; }
+}
+
+.sp-pcard-body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-space-2);
+  padding: var(--sp-space-5);
+  flex: 1;
+}
+
+.sp-pcard-title {
+  margin: 0;
+  font-size: var(--sp-text-xl);
+  font-weight: var(--sp-weight-semibold);
+  letter-spacing: -0.01em;
+  a { color: var(--sp-ink); text-decoration: none; }
+  a:hover { color: var(--sp-accent); }
+}
+
+.sp-pcard-excerpt {
+  margin: 0;
+  font-size: var(--sp-text-sm);
+  color: var(--sp-body);
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.sp-pcard-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--sp-space-1) var(--sp-space-3);
+  margin-top: auto;
+  padding-top: var(--sp-space-2);
+  font-size: var(--sp-text-xs);
+  color: var(--sp-muted);
+}
+
+.sp-pcard-tagrow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-space-2);
+  font-size: var(--sp-text-xs);
+  .sp-pcard-tag { color: var(--sp-muted); }
+}
+
+// ---- Per-collection accents ------------------------------------------
+.sp-pcard--blog      { --sp-pcard-accent: #2563eb; }
+.sp-pcard--portfolio { --sp-pcard-accent: #9333ea; }
+.sp-pcard--videos    { --sp-pcard-accent: #dc2626; }
+.sp-pcard--snippets  { --sp-pcard-accent: #16a34a; }
+.sp-pcard--prompts   { --sp-pcard-accent: #0d9488; }
+
+.sp-pcard[class*="sp-pcard--"] .sp-pcard-type { background: var(--sp-pcard-accent, var(--sp-scrim)); }
+
+// Text-first cards (snippets / prompts) — no media, accent strip instead
+.sp-pcard--snippets,
+.sp-pcard--prompts {
+  border-left: 3px solid var(--sp-pcard-accent);
+  .sp-pcard-body { padding-top: var(--sp-space-5); }
+}
+.sp-pcard--snippets .sp-pcard-title { font-family: var(--sp-font-mono); font-size: var(--sp-text-lg); }
+
+.sp-pcard-score { color: var(--sp-warning); font-weight: var(--sp-weight-semibold); }

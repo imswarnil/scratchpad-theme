@@ -1,0 +1,320 @@
+// ======================================================================
+// im/_sitetree.scss — /sitemap/ page (sitemap.html)
+// Two views of the same data: a centred, collapsible connector-line tree
+// diagram (.sp-orgtree) in a scrollable stage, and a plain nested list
+// (.sp-sitetree) that is always in the DOM for crawlers / mobile.
+// ======================================================================
+
+// ---- Page head --------------------------------------------------------
+.sp-sitemap-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--sp-space-4) var(--sp-space-5);
+  padding-bottom: var(--sp-space-5);
+  margin-bottom: var(--sp-space-5);
+  border-bottom: 1px solid var(--sp-line);
+
+  .sp-collection-title { margin: 0; font-size: var(--sp-text-3xl); }
+  .sp-collection-desc { margin: var(--sp-space-1) 0 0; color: var(--sp-muted); }
+  .sp-collection-stats { margin: 0 0 0 auto; }
+}
+
+// ---- Controls row -----------------------------------------------------
+// Hidden until the inline script has picked a view — nothing to toggle
+// before then, and it stops a flash of both views stacked.
+.sp-sitemap-controls {
+  display: none;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-space-3);
+  margin-bottom: var(--sp-space-5);
+  &.is-ready { display: flex; }
+}
+.sp-sitemap-toggle {
+  display: inline-flex;
+  gap: var(--sp-space-1);
+  padding: var(--sp-space-1);
+  border: 1px solid var(--sp-line);
+  border-radius: var(--sp-radius-full);
+  background: var(--sp-surface);
+}
+.sp-sitemap-toggle-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-space-2);
+  padding: var(--sp-space-2) var(--sp-space-4);
+  border: 0;
+  border-radius: var(--sp-radius-full);
+  background: transparent;
+  color: var(--sp-muted);
+  font-family: var(--sp-font-body);
+  font-size: var(--sp-text-sm);
+  font-weight: var(--sp-weight-medium);
+  cursor: pointer;
+  transition: background-color var(--sp-duration-instant), color var(--sp-duration-instant);
+  &:hover { background: var(--sp-hover-bg); color: var(--sp-ink); }
+  &.is-active {
+    background: var(--sp-current-bg);
+    color: var(--sp-current-fg);
+    font-weight: var(--sp-current-weight);
+  }
+}
+.sp-sitemap-expand { display: inline-flex; gap: var(--sp-space-2); }
+
+[data-sitemap-views] {
+  .sp-orgtree-stage,
+  .sp-sitetree-list { display: none; }
+  &[data-view="tree"] .sp-orgtree-stage { display: block; }
+  &[data-view="list"] .sp-sitetree-list { display: block; }
+  // No-JS fallback: the always-crawlable list.
+  &:not([data-view]) .sp-sitetree-list { display: block; }
+}
+
+// ======================================================================
+// Tree diagram — pure-CSS org chart: nested <ul>, connector lines on
+// ::before/::after. Lives in a horizontally-scrollable stage that the
+// script scrolls to centre on load, so the root is in the middle even
+// when the tree is wider than the page.
+// ======================================================================
+.sp-orgtree-stage {
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-behavior: smooth;
+  padding: var(--sp-space-5) var(--sp-space-4) var(--sp-space-5);
+  border: 1px solid var(--sp-line);
+  border-radius: var(--sp-radius-2xl);
+  background:
+    radial-gradient(var(--sp-line) 1px, transparent 1px) 0 0 / 22px 22px,
+    var(--sp-surface);
+  @media (prefers-reduced-motion: reduce) { scroll-behavior: auto; }
+}
+
+.sp-orgtree,
+.sp-orgtree ul {
+  display: flex;
+  justify-content: center;
+  position: relative;
+  width: max-content;
+  min-width: 100%;
+  margin: 0;
+  padding: var(--sp-space-6) 0 0;
+  list-style: none;
+}
+.sp-orgtree { padding-top: 0; margin-inline: auto; }
+
+.sp-orgtree li {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  padding: var(--sp-space-6) var(--sp-space-3) 0;
+}
+
+// Each li draws half of its parent's horizontal bus + a drop to itself.
+.sp-orgtree li::before,
+.sp-orgtree li::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 50%;
+  width: 50%;
+  height: var(--sp-space-6);
+  border-top: 1px solid var(--sp-line);
+}
+.sp-orgtree li::after {
+  right: auto;
+  left: 50%;
+  border-left: 1px solid var(--sp-line);
+}
+.sp-orgtree li:only-child::before,
+.sp-orgtree li:only-child::after { display: none; }
+.sp-orgtree li:only-child { padding-top: 0; }
+.sp-orgtree li:first-child::before,
+.sp-orgtree li:last-child::after { border-color: transparent; }
+.sp-orgtree li:last-child::before { border-right: 1px solid var(--sp-line); border-radius: 0 var(--sp-radius-md) 0 0; }
+.sp-orgtree li:first-child::after { border-radius: var(--sp-radius-md) 0 0 0; }
+
+// Root has no incoming connector.
+.sp-orgtree > li::before,
+.sp-orgtree > li::after { display: none; }
+.sp-orgtree > li { padding-top: 0; }
+
+// Drop-line from a parent node down to its children's bus.
+.sp-orgtree ul::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 0;
+  height: var(--sp-space-6);
+  border-left: 1px solid var(--sp-line);
+}
+.sp-orgtree > li > ul::before { display: none; }
+
+// Collapsed branch: hide its children (and their bus). The toggle button
+// stays, rotated, so the branch can be reopened.
+.sp-orgtree-branch.is-collapsed > ul { display: none; }
+.sp-orgtree-branch.is-collapsed .sp-orgtoggle i { transform: rotate(-90deg); }
+
+// ---- Nodes ------------------------------------------------------------
+.sp-orgnode-wrap { position: relative; display: inline-flex; flex-direction: column; align-items: center; }
+
+.sp-orgnode {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--sp-space-2);
+  width: 6.5rem;
+  padding: var(--sp-space-3) var(--sp-space-2);
+  border: 0;
+  border-radius: var(--sp-radius-xl);
+  box-shadow: inset 0 0 0 1px var(--sp-line);
+  background: transparent;
+  text-decoration: none;
+  color: var(--sp-body);
+  --sp-hover-bg: var(--sp-surface);
+  @include sp-hover-card($shadow: false);
+}
+.sp-orgnode-thumb {
+  display: grid;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: var(--sp-radius-lg);
+  overflow: hidden;
+  background: var(--sp-surface-2);
+  color: var(--sp-muted);
+  font-size: var(--sp-text-lg);
+  img, .sp-thumb { width: 100%; height: 100%; object-fit: cover; }
+}
+.sp-orgnode-label {
+  font-size: var(--sp-text-xs);
+  font-weight: var(--sp-weight-semibold);
+  text-align: center;
+  line-height: 1.25;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+.sp-orgnode-root {
+  width: 8rem;
+  background: var(--sp-ink);
+  border-color: var(--sp-ink);
+  color: var(--sp-canvas);
+  .sp-orgnode-thumb { background: color-mix(in srgb, var(--sp-canvas) 18%, transparent); color: inherit; }
+  .sp-orgnode-label { font-size: var(--sp-text-sm); }
+  @include sp-hover-fill;
+}
+.sp-orgnode-leaf { width: 5.5rem; .sp-orgnode-thumb { width: 3rem; height: 3rem; } }
+.sp-orgnode-more { opacity: 0.75; border-style: dashed; }
+.sp-orgnode .sp-sitetree-count { margin-top: calc(var(--sp-space-1) * -1); }
+
+// The expand/collapse control, hanging off the bottom edge of a branch node.
+.sp-orgtoggle {
+  position: absolute;
+  bottom: -0.85rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.7rem;
+  height: 1.7rem;
+  padding: 0;
+  border: 0;
+  border-radius: var(--sp-radius-full);
+  box-shadow: inset 0 0 0 1px var(--sp-line);
+  background: var(--sp-canvas);
+  color: var(--sp-muted);
+  font-size: 0.75rem;
+  cursor: pointer;
+  transition: background-color var(--sp-duration-instant), color var(--sp-duration-instant);
+  i { transition: transform var(--sp-duration-fast) var(--sp-ease-out); }
+  // It fills. It does not sharpen its border and it does not invert.
+  &:hover, &:focus-visible { background: var(--sp-hover-bg); color: var(--sp-ink); }
+  &:focus-visible { outline: var(--sp-ring-width) solid var(--sp-ring); outline-offset: var(--sp-ring-offset); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .sp-orgnode, .sp-orgtoggle, .sp-orgtoggle i { transition: none; }
+}
+
+// ======================================================================
+// Plain nested list — classic file-tree connector lines on <ul>/<li>,
+// <details> for collapsible branches. Mobile view + always-crawlable.
+// ======================================================================
+.sp-sitetree-list { margin-top: var(--sp-space-2); }
+
+.sp-sitetree,
+.sp-sitetree ul { list-style: none; margin: 0; padding-left: 1.5rem; }
+.sp-sitetree { padding-left: 0; }
+
+.sp-sitetree li { position: relative; padding: var(--sp-space-1) 0 var(--sp-space-1) var(--sp-space-6); }
+.sp-sitetree ul > li::before,
+.sp-sitetree ul > li::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  border-left: 1px solid var(--sp-line);
+}
+.sp-sitetree ul > li::before { top: 0; height: 1.2rem; width: var(--sp-space-5); border-bottom: 1px solid var(--sp-line); }
+.sp-sitetree ul > li::after { top: 1.2rem; bottom: 0; }
+.sp-sitetree ul > li:last-child::after { display: none; }
+.sp-sitetree > li { padding-left: 0; &::before, &::after { display: none; } }
+
+.sp-sitetree-root {
+  font-size: var(--sp-text-lg);
+  font-weight: var(--sp-weight-bold);
+  letter-spacing: -0.01em;
+  margin-bottom: var(--sp-space-2);
+}
+.sp-sitetree-link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-space-2);
+  color: var(--sp-body);
+  text-decoration: none;
+  cursor: pointer;
+  &, & a { color: inherit; text-decoration: none; }
+  a:hover { color: var(--sp-ink); text-decoration: underline; }
+  > i { color: var(--sp-faint); flex: 0 0 auto; }
+}
+a.sp-sitetree-link:hover { color: var(--sp-ink); text-decoration: underline; }
+
+.sp-sitetree-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.35rem;
+  height: 1.35rem;
+  padding-inline: var(--sp-space-1);
+  border-radius: var(--sp-radius-full);
+  background: var(--sp-surface);
+  color: var(--sp-muted);
+  font-size: var(--sp-text-xs);
+  font-weight: var(--sp-weight-semibold);
+}
+.sp-sitetree-date { margin-left: var(--sp-space-2); font-size: var(--sp-text-xs); color: var(--sp-faint); }
+
+.sp-sitetree details > summary { list-style: none; &::-webkit-details-marker { display: none; } }
+.sp-sitetree summary.sp-sitetree-link {
+  position: relative;
+  padding-left: var(--sp-space-5);
+  &::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 50%;
+    width: 0; height: 0;
+    border-left: 5px solid var(--sp-faint);
+    border-top: 4px solid transparent;
+    border-bottom: 4px solid transparent;
+    transform: translateY(-50%);
+    transition: transform var(--sp-duration-fast) var(--sp-ease-out);
+  }
+}
+.sp-sitetree details[open] > summary.sp-sitetree-link::before { transform: translateY(-50%) rotate(90deg); }

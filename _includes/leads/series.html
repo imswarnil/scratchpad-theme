@@ -4,24 +4,24 @@
 {%- endcomment -%}
 {%- assign poster = page.poster | default: page.cover | default: page.image -%}
 {%- assign eps = site.episodes | where: "series", page.slug -%}
-<div class="im-serieshead">
+<div class="sp-serieshead">
   {%- if poster and poster != site.placeholder_image -%}
-  <img class="im-serieshead-poster" src="{{ poster | relative_url }}" alt="{{ page.title }}" width="400" height="600">
+  <img class="sp-serieshead-poster" src="{{ poster | relative_url }}" alt="{{ page.title }}" width="400" height="600">
   {%- endif -%}
-  <div class="im-serieshead-body">
-    <p class="im-serieshead-meta">
+  <div class="sp-serieshead-body">
+    <p class="sp-serieshead-meta">
       {%- if page.year %}<span>{{ page.year }}</span>{% endif -%}
       {%- if page.seasons %}<span>{{ page.seasons }} season{% if page.seasons != 1 %}s{% endif %}</span>{% endif -%}
       {%- if eps.size > 0 %}<span>{{ eps.size }} episode{% if eps.size != 1 %}s{% endif %}</span>{% endif -%}
       {%- if page.genre %}<span>{{ page.genre }}</span>{% endif -%}
-      {%- if page.status %}<span class="im-badge im-badge-collection">{{ page.status }}</span>{% endif -%}
+      {%- if page.status %}<span class="sp-badge sp-badge-collection">{{ page.status }}</span>{% endif -%}
     </p>
-    {%- if page.summary %}<p class="im-serieshead-summary">{{ page.summary }}</p>{% endif -%}
+    {%- if page.summary %}<p class="sp-serieshead-summary">{{ page.summary }}</p>{% endif -%}
     {%- assign first = eps | sort: "episode" | first -%}
     {%- if first -%}
-    <div class="im-serieshead-actions">
-      <a class="im-btn im-btn-primary" href="{{ first.url | relative_url }}"><i class="ph-fill ph-play" aria-hidden="true"></i> Play episode 1</a>
-      {%- if site.social_links.YouTube %}<a class="im-btn" href="{{ site.social_links.YouTube }}" target="_blank" rel="noopener"><i class="ph-bold ph-youtube-logo" aria-hidden="true"></i> Subscribe</a>{% endif -%}
+    <div class="sp-serieshead-actions">
+      <a class="sp-btn sp-btn-primary" href="{{ first.url | relative_url }}"><i class="ph-fill ph-play" aria-hidden="true"></i> Play episode 1</a>
+      {%- if site.social_links.YouTube %}<a class="sp-btn" href="{{ site.social_links.YouTube }}" target="_blank" rel="noopener"><i class="ph-bold ph-youtube-logo" aria-hidden="true"></i> Subscribe</a>{% endif -%}
     </div>
     {%- endif -%}
   </div>

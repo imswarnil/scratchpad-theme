@@ -1,0 +1,945 @@
+// ======================================================================
+// components/_collections-extra.scss — the newer collections' own cards
+// ----------------------------------------------------------------------
+// Web series, episodes, courses, lessons, podcast, newsletter, travel and
+// the things-I-use shelf. Each one is a different SHAPE, because a series
+// and a newsletter issue are different objects — but all of them answer
+// the same way the rest of the theme does: they fill.
+// ======================================================================
+
+// ---- A series, as a poster -------------------------------------------
+// Portrait, because that is the shape a title card has been since the
+// video shop. The words sit ON the picture, over the scrim, so a wall of
+// them reads as a shelf rather than as a grid of paragraphs.
+.sp-poster {
+  --sp-card-radius: var(--sp-radius-lg);
+
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-space-3);
+  min-width: 0;
+}
+.sp-poster-text:last-child { margin-top: auto; }
+.sp-poster-link { display: block; text-decoration: none; }
+
+.sp-poster-art {
+  position: relative;
+  aspect-ratio: 2 / 3;
+  overflow: hidden;
+  border-radius: var(--sp-card-radius);
+  background: var(--sp-surface);
+  isolation: isolate;
+
+  > img, > .sp-thumb { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+  @media (hover: hover) and (prefers-reduced-motion: no-preference) {
+    transition: translate var(--sp-duration-fast) var(--sp-ease-out), box-shadow var(--sp-duration-fast) var(--sp-ease-out);
+    .sp-poster:is(:hover, :focus-within) & { translate: 0 -1px; box-shadow: var(--sp-card-hover-shadow); }
+  }
+}
+.sp-poster-scrim { position: absolute; inset: 0; background: var(--sp-media-scrim); }
+
+.sp-poster-flag {
+  position: absolute;
+  top: var(--sp-space-3);
+  left: var(--sp-space-3);
+  padding: 0.1rem var(--sp-space-2);
+  border-radius: var(--sp-radius-full);
+  background: var(--sp-glass);
+  color: var(--sp-on-media);
+  font-size: var(--sp-text-xs);
+  font-weight: var(--sp-weight-semibold);
+}
+
+// The play mark arrives on hover: at rest the poster is a picture.
+.sp-poster-play {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  translate: -50% -50%;
+  display: grid;
+  place-items: center;
+  width: 3rem;
+  height: 3rem;
+  border-radius: var(--sp-radius-full);
+  background: var(--sp-glass);
+  box-shadow: inset 0 0 0 1px var(--sp-glass-light);
+  color: var(--sp-on-media);
+  opacity: 0;
+  transition: opacity var(--sp-duration-fast) var(--sp-ease-out), background-color var(--sp-duration-fast) var(--sp-ease-out);
+
+  .sp-poster:is(:hover, :focus-within) & { opacity: 1; background: var(--sp-accent); }
+}
+
+.sp-poster-copy { position: absolute; inset: auto 0 0; padding: var(--sp-space-4); color: var(--sp-on-media); }
+.sp-poster-title {
+  margin: 0;
+  font-size: var(--sp-text-h4);
+  line-height: var(--sp-leading-h4);
+  letter-spacing: var(--sp-tracking-tight);
+  color: var(--sp-on-media);
+}
+.sp-poster-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-space-1) var(--sp-space-3);
+  margin: var(--sp-space-1) 0 0;
+  font-size: var(--sp-text-xs);
+  color: var(--sp-on-media-dim);
+}
+.sp-poster-text { margin: 0; font-size: var(--sp-text-sm); line-height: 1.55; color: var(--sp-body); }
+
+// A shelf of posters is narrower than a grid of cards.
+.is-webseries .sp-cards {
+  grid-template-columns: repeat(auto-fill, minmax(min(11rem, 100%), 1fr));
+  @include mq($bp-sm) { grid-template-columns: repeat(auto-fill, minmax(min(13rem, 100%), 1fr)); }
+  @include mq($bp-lg) { grid-template-columns: repeat(auto-fill, minmax(min(14rem, 100%), 1fr)); }
+}
+
+// ---- The series page head --------------------------------------------
+.sp-serieshead {
+  display: grid;
+  gap: var(--sp-space-5);
+  margin-bottom: var(--sp-space-6);
+
+  @include mq($bp-md) { grid-template-columns: 12rem minmax(0, 1fr); align-items: start; }
+}
+.sp-serieshead-poster { width: 100%; aspect-ratio: 2 / 3; object-fit: cover; border-radius: var(--sp-radius-lg); background: var(--sp-surface); }
+.sp-serieshead-meta {
+  display: flex; flex-wrap: wrap; align-items: center; gap: var(--sp-space-2) var(--sp-space-4);
+  margin: 0 0 var(--sp-space-3);
+  font-size: var(--sp-text-sm); color: var(--sp-muted);
+}
+.sp-serieshead-summary { margin: 0 0 var(--sp-space-4); font-size: var(--sp-text-lg); color: var(--sp-body); text-wrap: pretty; }
+.sp-serieshead-actions { display: flex; flex-wrap: wrap; gap: var(--sp-space-3); }
+
+// ---- Episode + lesson rows -------------------------------------------
+.sp-eplist, .sp-curriculum { margin: var(--sp-space-7) 0; }
+.sp-eplist-title, .sp-curriculum-title {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-space-2);
+  margin: 0 0 var(--sp-space-4);
+  padding-bottom: var(--sp-space-2);
+  border-bottom: 1px solid var(--sp-line);
+  font-size: var(--sp-text-h4);
+  line-height: var(--sp-leading-h4);
+}
+.sp-eplist-count { margin-left: auto; font-size: var(--sp-text-sm); font-weight: var(--sp-weight-normal); color: var(--sp-muted); }
+.sp-eplist-rows, .sp-module-rows { display: grid; gap: var(--sp-space-1); }
+
+.sp-eprow-link {
+  display: grid;
+  grid-template-columns: 1.75rem 8rem minmax(0, 1fr) auto;
+  align-items: center;
+  gap: var(--sp-space-3);
+  padding: var(--sp-space-2);
+  border-radius: var(--sp-radius-md);
+  color: inherit;
+  text-decoration: none;
+  @include sp-hover-fill;
+
+  // On a phone the still is what goes, not the runtime: the number, the
+  // title and how long it runs are the three things the row is for.
+  @include mq-down($bp-sm) { grid-template-columns: 1.5rem minmax(0, 1fr) auto; }
+}
+.sp-eprow-n {
+  font-family: var(--sp-font-mono);
+  font-size: var(--sp-text-lg);
+  color: var(--sp-faint);
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+.sp-eprow-still {
+  position: relative;
+  display: block;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  border-radius: var(--sp-radius-sm);
+  background: var(--sp-surface-2);
+
+  img, .sp-thumb { width: 100%; height: 100%; object-fit: cover; display: block; }
+  > i {
+    position: absolute; inset: 0;
+    display: grid; place-items: center;
+    color: var(--sp-on-media);
+    text-shadow: 0 1px 6px rgb(0 0 0 / 50%);
+  }
+  @include mq-down($bp-sm) { display: none; }
+}
+.sp-eprow-body { min-width: 0; display: flex; flex-direction: column; gap: 0.15rem; }
+.sp-eprow-title { color: var(--sp-ink); font-weight: var(--sp-weight-medium); }
+.sp-eprow-text {
+  font-size: var(--sp-text-sm); color: var(--sp-muted);
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.sp-eprow-time { font-size: var(--sp-text-xs); color: var(--sp-faint); font-variant-numeric: tabular-nums; }
+
+.sp-module + .sp-module { margin-top: var(--sp-space-5); }
+.sp-module-title {
+  margin: 0 0 var(--sp-space-2);
+  font-family: var(--sp-font-mono);
+  font-size: var(--sp-text-xs);
+  font-weight: var(--sp-weight-medium);
+  letter-spacing: var(--sp-tracking-wide);
+  text-transform: uppercase;
+  color: var(--sp-faint);
+}
+.sp-lessonrow-link {
+  display: grid;
+  grid-template-columns: 1.75rem minmax(0, 1fr) auto;
+  align-items: center;
+  gap: var(--sp-space-3);
+  padding: var(--sp-space-3) var(--sp-space-2);
+  border-radius: var(--sp-radius-md);
+  color: inherit;
+  text-decoration: none;
+  @include sp-hover-fill;
+}
+.sp-lessonrow-n {
+  font-family: var(--sp-font-mono);
+  color: var(--sp-faint);
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+.sp-lessonrow-body { min-width: 0; display: flex; flex-direction: column; gap: 0.1rem; }
+.sp-lessonrow-title { color: var(--sp-ink); font-weight: var(--sp-weight-medium); }
+.sp-lessonrow-text { font-size: var(--sp-text-sm); color: var(--sp-muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.sp-lessonrow-time { font-size: var(--sp-text-xs); color: var(--sp-faint); white-space: nowrap; }
+
+// ---- A course card ----------------------------------------------------
+.sp-coursecard {
+  --sp-hover-bg: var(--sp-surface-2);
+
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border-radius: var(--sp-radius-xl);
+  background: var(--sp-surface);
+  @include sp-hover-card;
+}
+.sp-coursecard-media {
+  display: block;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  background: var(--sp-surface-2);
+  img, .sp-thumb { width: 100%; height: 100%; object-fit: cover; display: block; }
+}
+.sp-coursecard-body { display: flex; flex-direction: column; gap: var(--sp-space-2); padding: 1.25rem; flex: 1; }
+.sp-coursecard-level {
+  align-self: flex-start;
+  padding: 0.1rem var(--sp-space-2);
+  border-radius: var(--sp-radius-full);
+  font-size: var(--sp-text-xs);
+  font-weight: var(--sp-weight-medium);
+  @include sp-collection-tint;
+}
+.sp-coursecard-title {
+  margin: 0;
+  font-size: var(--sp-text-h4);
+  line-height: var(--sp-leading-h4);
+  letter-spacing: var(--sp-tracking-tight);
+  a { color: var(--sp-ink); text-decoration: none; }
+}
+.sp-coursecard:is(:hover, :focus-within) .sp-coursecard-title a { color: var(--sp-accent); }
+.sp-coursecard-text { margin: 0; font-size: var(--sp-text-sm); line-height: 1.55; color: var(--sp-body); }
+.sp-coursecard-meta {
+  display: flex; flex-wrap: wrap; gap: var(--sp-space-1) var(--sp-space-4);
+  margin: 0; font-size: var(--sp-text-xs); color: var(--sp-muted);
+}
+.sp-coursecard .sp-card-cta { margin-top: auto; padding-top: var(--sp-space-3); }
+
+// ---- A podcast episode ------------------------------------------------
+.sp-podcard {
+  --sp-hover-bg: var(--sp-surface-2);
+
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-space-3);
+  padding: 1.25rem;
+  border-radius: var(--sp-radius-xl);
+  background: var(--sp-surface);
+  @include sp-hover-card($shadow: false);
+}
+.sp-podcard-head { display: flex; align-items: flex-start; gap: var(--sp-space-3); }
+.sp-podcard-n {
+  display: grid; place-items: center;
+  width: 2.75rem; height: 2.75rem; flex: 0 0 auto;
+  border-radius: var(--sp-radius-full);
+  font-family: var(--sp-font-mono);
+  font-size: var(--sp-text-sm);
+  @include sp-collection-tint;
+}
+.sp-podcard-id { min-width: 0; }
+.sp-podcard-title {
+  margin: 0;
+  font-size: var(--sp-text-h4);
+  line-height: var(--sp-leading-h4);
+  letter-spacing: var(--sp-tracking-tight);
+  a { color: var(--sp-ink); text-decoration: none; }
+}
+.sp-podcard:is(:hover, :focus-within) .sp-podcard-title a { color: var(--sp-accent); }
+.sp-podcard-meta { display: flex; flex-wrap: wrap; align-items: center; gap: var(--sp-space-2); margin: 0.15rem 0 0; font-size: var(--sp-text-xs); color: var(--sp-muted); }
+.sp-podcard-text { margin: 0; font-size: var(--sp-text-sm); line-height: 1.55; color: var(--sp-body); }
+.sp-podcard-text { flex: 1 1 auto; }
+.sp-podcard-audio { margin-top: auto; }
+.sp-podcard-audio, .sp-audio audio { width: 100%; height: 2.5rem; }
+.sp-audio { margin: var(--sp-space-5) 0; display: flex; flex-direction: column; gap: var(--sp-space-3); }
+.sp-audio-links { display: flex; flex-wrap: wrap; gap: var(--sp-space-2); margin: 0; }
+
+// ---- A newsletter issue -----------------------------------------------
+.sp-issue-link {
+  display: grid;
+  grid-template-columns: 4rem minmax(0, 1fr) auto;
+  align-items: baseline;
+  gap: var(--sp-space-4);
+  padding: var(--sp-space-4) var(--sp-space-3);
+  border-radius: var(--sp-radius-md);
+  color: inherit;
+  text-decoration: none;
+  @include sp-hover-fill;
+
+  @include mq-down($bp-sm) { grid-template-columns: minmax(0, 1fr) auto; }
+}
+.sp-issue-n {
+  font-family: var(--sp-font-mono);
+  font-size: var(--sp-text-sm);
+  color: color-mix(in oklab, var(--sp-c-this, var(--sp-accent)) 72%, var(--sp-muted));
+  white-space: nowrap;
+  @include mq-down($bp-sm) { display: none; }
+}
+.sp-issue-body { min-width: 0; display: flex; flex-direction: column; gap: 0.2rem; }
+.sp-issue-title {
+  font-size: var(--sp-text-h5);
+  line-height: var(--sp-leading-h5);
+  font-weight: var(--sp-weight-semibold);
+  letter-spacing: var(--sp-tracking-tight);
+  color: var(--sp-ink);
+}
+.sp-issue-text { font-size: var(--sp-text-sm); color: var(--sp-body); }
+.sp-issue-date { font-size: var(--sp-text-xs); color: var(--sp-faint); white-space: nowrap; }
+.is-newsletter .sp-cards { grid-template-columns: 1fr; gap: 1px; }
+
+// ---- A trip -----------------------------------------------------------
+.sp-tripcard-link { display: block; text-decoration: none; }
+.sp-tripcard-art {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  border-radius: var(--sp-radius-xl);
+  background: var(--sp-surface);
+  isolation: isolate;
+
+  > img, > .sp-thumb { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+  @media (hover: hover) and (prefers-reduced-motion: no-preference) {
+    transition: translate var(--sp-duration-fast) var(--sp-ease-out), box-shadow var(--sp-duration-fast) var(--sp-ease-out);
+    .sp-tripcard:is(:hover, :focus-within) & { translate: 0 -1px; box-shadow: var(--sp-card-hover-shadow); }
+  }
+}
+.sp-tripcard-scrim { position: absolute; inset: 0; background: var(--sp-media-scrim); }
+.sp-tripcard-copy { position: absolute; inset: auto 0 0; padding: var(--sp-space-4); color: var(--sp-on-media); }
+.sp-tripcard-place {
+  display: inline-flex; align-items: center; gap: var(--sp-space-1);
+  font-size: var(--sp-text-xs); color: var(--sp-on-media-dim);
+}
+.sp-tripcard-title {
+  margin: var(--sp-space-1) 0 0;
+  font-size: var(--sp-text-h4);
+  line-height: var(--sp-leading-h4);
+  letter-spacing: var(--sp-tracking-tight);
+  color: var(--sp-on-media);
+}
+.sp-tripcard-meta {
+  display: flex; flex-wrap: wrap; gap: var(--sp-space-1) var(--sp-space-3);
+  margin: var(--sp-space-1) 0 0;
+  font-size: var(--sp-text-xs); color: var(--sp-on-media-dim);
+}
+
+// ---- A thing I use ----------------------------------------------------
+.sp-product {
+  --sp-hover-bg: var(--sp-surface-2);
+
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border-radius: var(--sp-radius-xl);
+  background: var(--sp-surface);
+  @include sp-hover-card;
+}
+.sp-product-art {
+  display: block;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  background: var(--sp-surface-2);
+  img, .sp-thumb { width: 100%; height: 100%; object-fit: cover; display: block; }
+}
+.sp-product-body { display: flex; flex-direction: column; gap: var(--sp-space-2); padding: 1.25rem; flex: 1; }
+.sp-product-cat {
+  align-self: flex-start;
+  font-family: var(--sp-font-mono);
+  font-size: var(--sp-text-xs);
+  letter-spacing: var(--sp-tracking-wide);
+  text-transform: uppercase;
+  color: color-mix(in oklab, var(--sp-c-this, var(--sp-accent)) 72%, var(--sp-muted));
+}
+.sp-product-title {
+  margin: 0;
+  font-size: var(--sp-text-h4);
+  line-height: var(--sp-leading-h4);
+  letter-spacing: var(--sp-tracking-tight);
+  a { color: var(--sp-ink); text-decoration: none; }
+}
+.sp-product:is(:hover, :focus-within) .sp-product-title a { color: var(--sp-accent); }
+.sp-product-text { margin: 0; font-size: var(--sp-text-sm); line-height: 1.55; color: var(--sp-body); }
+.sp-product-foot {
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between;
+  gap: var(--sp-space-2); margin-top: auto; padding-top: var(--sp-space-3);
+}
+.sp-product-price { font-weight: var(--sp-weight-semibold); color: var(--sp-ink); font-variant-numeric: tabular-nums; }
+.sp-product-disclosure { margin: 0; font-size: var(--sp-text-xs); color: var(--sp-faint); }
+
+// ---- The course rail (single/coursenav.html) --------------------------
+.sp-coursenav {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-space-5);
+  padding: 1.25rem;
+  border-radius: var(--sp-radius-xl);
+  background: var(--sp-surface);
+  font-size: var(--sp-text-sm);
+}
+
+.sp-coursenav-back {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--sp-space-2);
+  color: inherit;
+  text-decoration: none;
+
+  > i { margin-top: 0.2em; color: var(--sp-muted); }
+  &:hover .sp-coursenav-course { color: var(--sp-accent); }
+}
+.sp-coursenav-kicker {
+  display: block;
+  font-family: var(--sp-font-mono);
+  font-size: var(--sp-text-xs);
+  letter-spacing: var(--sp-tracking-wide);
+  text-transform: uppercase;
+  color: var(--sp-faint);
+}
+.sp-coursenav-course {
+  display: block;
+  font-weight: var(--sp-weight-semibold);
+  letter-spacing: var(--sp-tracking-tight);
+  color: var(--sp-ink);
+}
+
+// How far through, drawn rather than described — the sentence under it
+// still says it in words, because a bar alone is a decoration.
+.sp-coursenav-progress { display: flex; flex-direction: column; gap: var(--sp-space-2); margin: 0; }
+.sp-coursenav-bar {
+  display: block;
+  height: 0.25rem;
+  border-radius: var(--sp-radius-full);
+  background: var(--sp-surface-3);
+  overflow: hidden;
+
+  > span { display: block; height: 100%; border-radius: inherit; background: var(--sp-c-courses); }
+}
+.sp-coursenav-count { color: var(--sp-muted); font-size: var(--sp-text-xs); font-variant-numeric: tabular-nums; }
+
+.sp-coursenav-module + .sp-coursenav-module { margin-top: var(--sp-space-4); }
+.sp-coursenav-modtitle {
+  margin: 0 0 var(--sp-space-2);
+  font-family: var(--sp-font-mono);
+  font-size: var(--sp-text-xs);
+  letter-spacing: var(--sp-tracking-wide);
+  text-transform: uppercase;
+  color: var(--sp-faint);
+}
+.sp-coursenav-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+
+  a {
+    display: grid;
+    grid-template-columns: 1.5rem minmax(0, 1fr) auto;
+    align-items: baseline;
+    gap: var(--sp-space-2);
+    padding: var(--sp-space-2);
+    border-radius: var(--sp-radius-sm);
+    color: var(--sp-body);
+    text-decoration: none;
+    @include sp-hover-fill;
+
+    // The lesson you are on wears the theme's one CURRENT state.
+    &[aria-current="page"] {
+      background: var(--sp-current-bg);
+      color: var(--sp-current-fg);
+      font-weight: var(--sp-current-weight);
+    }
+  }
+}
+.sp-coursenav-n { color: var(--sp-faint); font-family: var(--sp-font-mono); font-variant-numeric: tabular-nums; }
+.sp-coursenav-title { min-width: 0; }
+.sp-coursenav-time { color: var(--sp-faint); font-size: var(--sp-text-xs); white-space: nowrap; }
+
+// ---- The manual's rail (single/docsnav.html) --------------------------
+.sp-docsnav {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-space-5);
+  padding: 1.25rem;
+  border-radius: var(--sp-radius-xl);
+  background: var(--sp-surface);
+  font-size: var(--sp-text-sm);
+}
+.sp-docsnav-home {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-space-2);
+  color: var(--sp-ink);
+  font-weight: var(--sp-weight-semibold);
+  letter-spacing: var(--sp-tracking-tight);
+  text-decoration: none;
+
+  > i { color: var(--sp-c-docs, var(--sp-muted)); }
+  &:hover { color: var(--sp-accent); }
+}
+.sp-docsnav-group + .sp-docsnav-group { margin-top: var(--sp-space-4); }
+.sp-docsnav-title {
+  margin: 0 0 var(--sp-space-2);
+  font-family: var(--sp-font-mono);
+  font-size: var(--sp-text-xs);
+  letter-spacing: var(--sp-tracking-wide);
+  text-transform: uppercase;
+  color: var(--sp-faint);
+}
+.sp-docsnav-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+
+  a {
+    display: block;
+    padding: var(--sp-space-2);
+    border-radius: var(--sp-radius-sm);
+    color: var(--sp-body);
+    text-decoration: none;
+    @include sp-hover-fill;
+
+    &[aria-current="page"] {
+      background: var(--sp-current-bg);
+      color: var(--sp-current-fg);
+      font-weight: var(--sp-current-weight);
+    }
+  }
+}
+
+// ---- A page of the manual, as a card ----------------------------------
+.sp-doccard-link {
+  display: grid;
+  grid-template-columns: 2.5rem minmax(0, 1fr) auto;
+  align-items: center;
+  gap: var(--sp-space-3);
+  padding: var(--sp-space-3);
+  border-radius: var(--sp-radius-lg);
+  box-shadow: inset 0 0 0 1px var(--sp-line);
+  color: inherit;
+  text-decoration: none;
+  @include sp-hover-fill;
+
+  &:hover .sp-doccard-go { translate: 3px 0; }
+}
+.sp-doccard-icon {
+  display: grid;
+  place-items: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: var(--sp-radius-md);
+  @include sp-collection-tint;
+}
+.sp-doccard-body { min-width: 0; display: flex; flex-direction: column; gap: 0.1rem; }
+.sp-doccard-title { color: var(--sp-ink); font-weight: var(--sp-weight-medium); }
+.sp-doccard-text { font-size: var(--sp-text-sm); color: var(--sp-muted); }
+.sp-doccard-go { color: var(--sp-faint); transition: translate var(--sp-duration-instant) var(--sp-ease-out); }
+
+.is-docs .sp-cards { grid-template-columns: minmax(0, 1fr); gap: var(--sp-space-2); }
+@include mq($bp-md) { .is-docs .sp-cards { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+
+// ---- A podcast series, on the landing page ----------------------------
+// A podcast is usually more than one show, and a flat list of episodes
+// from two of them is a list nobody can subscribe to. Each series gets
+// its own heading, its own count and its own feed.
+.sp-series + .sp-series { margin-top: var(--sp-section-gap); }
+
+.sp-series-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--sp-space-3) var(--sp-space-4);
+  margin-bottom: var(--sp-space-5);
+  padding-bottom: var(--sp-space-3);
+  border-bottom: 1px solid var(--sp-line);
+}
+.sp-series-mark {
+  display: grid;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  flex: 0 0 auto;
+  border-radius: var(--sp-radius-lg);
+  font-size: var(--sp-text-lg);
+  @include sp-collection-tint;
+}
+.sp-series-id { min-width: 0; flex: 1 1 16rem; }
+.sp-series-title {
+  margin: 0;
+  font-size: var(--sp-text-h3);
+  line-height: var(--sp-leading-h3);
+  letter-spacing: var(--sp-tracking-tight);
+}
+.sp-series-text { margin: 0.15rem 0 0; color: var(--sp-muted); font-size: var(--sp-text-sm); }
+.sp-series-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-space-3);
+  margin: 0;
+  margin-left: auto;
+}
+.sp-series-count {
+  color: var(--sp-muted);
+  font-family: var(--sp-font-mono);
+  font-size: var(--sp-text-xs);
+  white-space: nowrap;
+}
+
+// ---- A course's own hero (leads/course.html) --------------------------
+// Full width inside the wide shell, in the collection's colour, with the
+// facts counted from the lessons rather than typed in.
+.sp-coursehero {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  margin-bottom: var(--sp-space-7);
+  padding: clamp(2rem, 5vw, 3.5rem);
+  border-radius: var(--sp-radius-2xl);
+  background: var(--sp-surface);
+}
+.sp-coursehero-art {
+  position: absolute;
+  inset: 0 0 0 auto;
+  z-index: -1;
+  width: min(55%, 40rem);
+  opacity: 0.45;
+  mask-image: linear-gradient(to left, #000 20%, transparent);
+  -webkit-mask-image: linear-gradient(to left, #000 20%, transparent);
+}
+.sp-coursehero-copy { max-width: 46rem; }
+.sp-coursehero-title {
+  margin: var(--sp-space-3) 0 0;
+  font-size: clamp(2rem, 1.4rem + 2.6vw, 3.25rem);
+  line-height: 1.02;
+  letter-spacing: var(--sp-tracking-tighter);
+}
+.sp-coursehero-text {
+  margin: var(--sp-space-3) 0 0;
+  max-width: 52ch;
+  font-size: var(--sp-text-lg);
+  line-height: var(--sp-leading-lg);
+  color: var(--sp-body);
+  text-wrap: pretty;
+}
+.sp-coursehero-stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-space-4) var(--sp-space-7);
+  margin: var(--sp-space-5) 0 0;
+
+  > div { display: flex; flex-direction: column-reverse; }
+  dt { font-size: var(--sp-text-xs); letter-spacing: var(--sp-tracking-wide); text-transform: uppercase; color: var(--sp-muted); }
+  dd {
+    margin: 0;
+    font-size: var(--sp-text-h3);
+    font-weight: var(--sp-weight-semibold);
+    letter-spacing: var(--sp-tracking-tight);
+    color: var(--sp-ink);
+    font-variant-numeric: tabular-nums;
+  }
+}
+.sp-coursehero-actions { margin: var(--sp-space-6) 0 0; }
+
+// ---- The bar a lesson wears (single/coursebar.html) -------------------
+// Which course, how far through, and the next one. Sticky and one navbar
+// tall, in the same island shape the site bar takes.
+.sp-coursebar {
+  position: sticky;
+  top: calc(var(--sp-navbar-height) + var(--sp-space-2));
+  z-index: var(--sp-z-bar);
+  display: flex;
+  align-items: center;
+  gap: var(--sp-space-4);
+  margin-bottom: var(--sp-space-6);
+  padding: var(--sp-space-2) var(--sp-space-3);
+  border-radius: var(--sp-radius-full);
+  background: color-mix(in srgb, var(--sp-canvas) 84%, transparent);
+  backdrop-filter: blur(12px) saturate(1.4);
+  -webkit-backdrop-filter: blur(12px) saturate(1.4);
+  box-shadow: inset 0 0 0 1px var(--sp-line);
+  font-size: var(--sp-text-sm);
+}
+
+// On a lesson there is no site header at all, so this bar is not a thing
+// under the chrome — it IS the chrome. It runs the full width of the
+// viewport with a hairline under it, the way a real top bar does, rather
+// than floating as a pill in the middle of a page that has nothing above
+// it. An island needs something to be an island IN.
+.sp-coursebar-solo {
+  position: sticky;
+  top: 0;
+  z-index: var(--sp-z-bar);
+  // Out of the shell's gutter and out of the page's measure, to both
+  // edges of the window.
+  width: 100vw;
+  margin-inline: calc(50% - 50vw);
+  margin-top: 0;
+  margin-bottom: var(--sp-space-6);
+  padding-inline: var(--sp-gutter);
+  border-radius: 0;
+  box-shadow: none;
+  border-bottom: 1px solid var(--sp-line);
+  min-height: var(--sp-navbar-height);
+
+  // …and the row inside it keeps the page's measure, so the back button
+  // sits over the content's left edge rather than in the corner of the
+  // screen.
+  > * { position: relative; }
+}
+.sp-coursebar-course {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-space-2);
+  min-width: 0;
+  padding-inline: var(--sp-space-2);
+  color: var(--sp-ink);
+  font-weight: var(--sp-weight-medium);
+  text-decoration: none;
+  white-space: nowrap;
+
+  > i { color: var(--sp-c-courses); }
+  &:hover { color: var(--sp-accent); }
+  > span { overflow: hidden; text-overflow: ellipsis; }
+}
+.sp-coursebar-progress {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-space-3);
+  flex: 1 1 6rem;
+  min-width: 0;
+}
+.sp-coursebar-bar {
+  display: block;
+  flex: 1 1 auto;
+  height: 0.25rem;
+  min-width: 2rem;
+  border-radius: var(--sp-radius-full);
+  background: var(--sp-surface-2);
+  overflow: hidden;
+
+  > span { display: block; height: 100%; border-radius: inherit; background: var(--sp-c-courses); }
+}
+.sp-coursebar-count { color: var(--sp-muted); font-family: var(--sp-font-mono); font-size: var(--sp-text-xs); white-space: nowrap; }
+.sp-coursebar-back {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-space-2);
+  min-height: 2rem;
+  padding-inline: var(--sp-space-3);
+  border-radius: var(--sp-radius-full);
+  color: var(--sp-ink);
+  font-weight: var(--sp-weight-medium);
+  text-decoration: none;
+  white-space: nowrap;
+  @include sp-hover-fill;
+}
+.sp-coursebar-move { display: flex; align-items: center; gap: var(--sp-space-1); margin-left: auto; }
+.sp-coursebar-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-space-2);
+  min-height: 2rem;
+  padding-inline: var(--sp-space-3);
+  border-radius: var(--sp-radius-full);
+  color: var(--sp-ink);
+  text-decoration: none;
+  @include sp-hover-fill;
+
+  &.is-disabled { opacity: var(--sp-opacity-disabled); pointer-events: none; }
+}
+.sp-coursebar-next { background: var(--sp-ink); color: var(--sp-canvas); &:hover { background: var(--sp-accent); color: var(--sp-on-accent); } }
+
+// What goes as the bar narrows, in the order it stops earning room: the
+// course's name (the back button already says where you are going), then
+// the word on the back button, then the word on Next.
+@include mq-down($bp-lg) { .sp-coursebar-course { display: none; } }
+@include mq-down($bp-sm) {
+  .sp-coursebar-back-label { display: none; }
+  .sp-coursebar-next > span { display: none; }
+}
+
+// ======================================================================
+// /videos/ — the feature, and the shelves
+// ======================================================================
+
+// The newest film, large: picture on one side, the words on the other.
+.sp-vfeature {
+  display: grid;
+  gap: var(--sp-space-6);
+  margin-bottom: var(--sp-section-gap);
+  align-items: center;
+
+  @include mq($bp-lg) {
+    grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+    gap: clamp(2rem, 4vw, 3.5rem);
+  }
+}
+.sp-vfeature-screen {
+  position: relative;
+  display: block;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  border-radius: var(--sp-radius-2xl);
+  background: var(--sp-surface);
+  isolation: isolate;
+
+  img, .sp-thumb { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+  @media (hover: hover) and (prefers-reduced-motion: no-preference) {
+    transition: translate var(--sp-duration-fast) var(--sp-ease-out), box-shadow var(--sp-duration-fast) var(--sp-ease-out);
+    &:is(:hover, :focus-visible) { translate: 0 -1px; box-shadow: var(--sp-card-hover-shadow); }
+  }
+  &:is(:hover, :focus-visible) .sp-vcard-play i { background: var(--sp-accent); color: var(--sp-on-accent); }
+}
+.sp-vfeature-scrim { position: absolute; inset: 0; background: var(--sp-media-scrim); opacity: 0.55; }
+.sp-vfeature-body { min-width: 0; }
+.sp-vfeature-title {
+  margin: var(--sp-space-2) 0 0;
+  font-size: clamp(1.75rem, 1.3rem + 1.8vw, 2.5rem);
+  line-height: 1.06;
+  letter-spacing: var(--sp-tracking-tighter);
+
+  a { color: var(--sp-ink); text-decoration: none; }
+  a:hover { color: var(--sp-accent); }
+}
+.sp-vfeature-text {
+  margin: var(--sp-space-3) 0 0;
+  max-width: 48ch;
+  color: var(--sp-body);
+  line-height: var(--sp-leading-lg);
+  text-wrap: pretty;
+}
+.sp-vfeature-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-space-2) var(--sp-space-4);
+  margin: var(--sp-space-4) 0 0;
+  font-family: var(--sp-font-mono);
+  font-size: var(--sp-text-xs);
+  color: var(--sp-muted);
+
+  > * + *::before {
+    content: "";
+    display: inline-block;
+    width: 3px; height: 3px;
+    margin-right: var(--sp-space-4);
+    border-radius: var(--sp-radius-full);
+    background: currentColor;
+    opacity: 0.55;
+    vertical-align: middle;
+  }
+}
+.sp-vfeature-actions { display: flex; flex-wrap: wrap; gap: var(--sp-space-3); margin: var(--sp-space-5) 0 0; }
+
+// ---- A shelf ----------------------------------------------------------
+// One row that scrolls sideways, the way a streaming service shows a
+// category. A scroll container with snap points, so a finger, a trackpad
+// and the arrow keys all work before any script runs.
+.sp-shelf { margin-bottom: var(--sp-section-gap); }
+
+.sp-shelf-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--sp-space-3);
+  margin-bottom: var(--sp-space-4);
+}
+.sp-shelf-title {
+  margin: var(--sp-space-1) 0 0;
+  font-size: var(--sp-text-h2);
+  line-height: var(--sp-leading-h2);
+  letter-spacing: var(--sp-tracking-tight);
+  text-transform: capitalize;
+}
+
+.sp-shelf-wrap { position: relative; }
+
+.sp-shelf-track {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(15rem, 20rem);
+  gap: var(--sp-grid-gap);
+  overflow-x: auto;
+  scroll-snap-type: x proximity;
+  scroll-behavior: smooth;
+  overscroll-behavior-x: contain;
+  // Room for the lift, so a hovered card is not clipped by the scroller.
+  padding-block: 2px;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar { display: none; }
+  &:focus-visible { outline: var(--sp-ring-width) solid var(--sp-ring); outline-offset: var(--sp-ring-offset); }
+
+  // A shelf of reels is narrower and taller: 9:16 wants less width.
+  &.is-portrait { grid-auto-columns: minmax(10rem, 13rem); }
+}
+.sp-shelf-item { scroll-snap-align: start; min-width: 0; display: flex; }
+.sp-shelf-item > * { flex: 1 1 auto; min-width: 0; }
+
+// A reel in a shelf takes the portrait frame it was shot in.
+.sp-shelf-track.is-portrait .sp-vcard-screen { aspect-ratio: 9 / 16; }
+
+// The buttons float over the ends, and only where there is a pointer to
+// use them — on a touch screen the finger is the control.
+.sp-shelf-btn {
+  position: absolute;
+  top: 50%;
+  translate: 0 -50%;
+  z-index: 1;
+  display: none;
+  place-items: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border: 0;
+  border-radius: var(--sp-radius-full);
+  background: var(--sp-canvas);
+  box-shadow: inset 0 0 0 1px var(--sp-line), var(--sp-shadow-float);
+  color: var(--sp-ink);
+  cursor: pointer;
+  transition: background-color var(--sp-duration-instant);
+
+  &:hover { background: var(--sp-surface); }
+  &:disabled { opacity: 0; pointer-events: none; }
+
+  @media (hover: hover) { display: grid; }
+}
+.sp-shelf-prev { left: calc(var(--sp-space-4) * -1); }
+.sp-shelf-next { right: calc(var(--sp-space-4) * -1); }

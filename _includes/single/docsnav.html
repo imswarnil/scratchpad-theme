@@ -5,15 +5,15 @@
 {%- endcomment -%}
 {%- assign pages = site.docs | sort: "order" -%}
 {%- assign groups = pages | group_by: "section" -%}
-<nav class="im-docsnav" aria-label="Documentation">
-  <a class="im-docsnav-home" href="{{ '/docs/' | relative_url }}">
+<nav class="sp-docsnav" aria-label="Documentation">
+  <a class="sp-docsnav-home" href="{{ '/docs/' | relative_url }}">
     <i class="ph-bold ph-book-open" aria-hidden="true"></i>
     <span>Documentation</span>
   </a>
   {%- for g in groups -%}
-  <div class="im-docsnav-group">
-    {%- if g.name and g.name != "" %}<p class="im-docsnav-title">{{ g.name }}</p>{% endif -%}
-    <ul class="im-docsnav-list">
+  <div class="sp-docsnav-group">
+    {%- if g.name and g.name != "" %}<p class="sp-docsnav-title">{{ g.name }}</p>{% endif -%}
+    <ul class="sp-docsnav-list">
       {%- for d in g.items -%}
       <li>
         <a href="{{ d.url | relative_url }}"{% if d.url == page.url %} aria-current="page"{% endif %}>{{ d.title }}</a>

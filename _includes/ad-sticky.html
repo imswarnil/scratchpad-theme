@@ -4,10 +4,10 @@
   browser session (sessionStorage, see assets/scripts/custom.js).
 {%- endcomment -%}
 {%- if site.adsense.enabled -%}
-<div class="im-sticky-ad" data-im-sticky-ad hidden>
-  <button type="button" class="im-sticky-ad-close" data-im-sticky-ad-close aria-label="Close ad">
+<div class="sp-sticky-ad" data-sp-sticky-ad hidden>
+  <button type="button" class="sp-sticky-ad-close" data-sp-sticky-ad-close aria-label="Close ad">
     <i class="ph-bold ph-x" aria-hidden="true"></i>
   </button>
-  {% include ad.html type="horizontal" class="im-ad--sticky" %}
+  {% include ad.html type="horizontal" class="sp-ad--sticky" %}
 </div>
 {%- endif -%}

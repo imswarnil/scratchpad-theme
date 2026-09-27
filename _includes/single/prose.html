@@ -2,9 +2,9 @@
 {%- assign inline_ads = false -%}
 {%- if page.collection == "posts" and site.adsense.enabled and page.ads != false %}{% assign inline_ads = true %}{% endif -%}
 {%- if site.adsense.enabled and page.ads != false %}{% include ad.html type="in_article" %}{% endif -%}
-<div class="im-prose"{% if inline_ads %} data-im-inline-ads="3"{% endif %}>
+<div class="sp-prose"{% if inline_ads %} data-sp-inline-ads="3"{% endif %}>
   {{ content }}
 </div>
 {%- if inline_ads -%}
-<template id="im-inline-ad-tpl">{% include ad.html type="in_article" class="im-ad--inline" %}</template>
+<template id="sp-inline-ad-tpl">{% include ad.html type="in_article" class="sp-ad--inline" %}</template>
 {%- endif -%}

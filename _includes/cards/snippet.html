@@ -42,8 +42,8 @@
 {%- assign codelines = code | split: "
 " -%}
 {%- assign fname = it.title | slugify | truncate: 22, "" | append: "." | append: ext | replace: "-.", "." -%}
-<article class="im-ccard" data-lang="{{ lang | slugify }}" style="--im-c-this: var(--im-c-{{ it.collection }}, var(--im-accent));">
-  <div class="im-ccard-window">
+<article class="sp-ccard" data-lang="{{ lang | slugify }}" style="--sp-c-this: var(--sp-c-{{ it.collection }}, var(--sp-accent));">
+  <div class="sp-ccard-window">
     {%- comment -%}
       A bar, not a tab. The fake tab, the filename and the traffic lights
       were a drawing of an editor on a card that is already a code window
@@ -51,22 +51,22 @@
       the language, and a button that puts the code on their clipboard
       without opening anything.
     {%- endcomment -%}
-    <div class="im-ccard-titlebar">
-      <span class="im-ccard-lang"><i class="ph-bold ph-code" aria-hidden="true"></i> {{ lang }}</span>
-      <button class="im-ccard-copy" type="button" data-im-copy="{% if prerendered %}{{ code }}{% else %}{{ code | escape }}{% endif %}" aria-label="Copy the snippet">
+    <div class="sp-ccard-titlebar">
+      <span class="sp-ccard-lang"><i class="ph-bold ph-code" aria-hidden="true"></i> {{ lang }}</span>
+      <button class="sp-ccard-copy" type="button" data-sp-copy="{% if prerendered %}{{ code }}{% else %}{{ code | escape }}{% endif %}" aria-label="Copy the snippet">
         <i class="ph-bold ph-copy" aria-hidden="true"></i> Copy
       </button>
     </div>
-    <pre class="im-ccard-editor"><code>{%- for l in codelines limit: 8 -%}<span class="im-ccard-line">{% if prerendered %}{{ l }}{% else %}{{ l | escape }}{% endif %}</span>{%- endfor -%}{%- if codelines.size > 8 -%}<span class="im-ccard-line im-ccard-more">…</span>{%- endif -%}</code></pre>
+    <pre class="sp-ccard-editor"><code>{%- for l in codelines limit: 8 -%}<span class="sp-ccard-line">{% if prerendered %}{{ l }}{% else %}{{ l | escape }}{% endif %}</span>{%- endfor -%}{%- if codelines.size > 8 -%}<span class="sp-ccard-line sp-ccard-more">…</span>{%- endif -%}</code></pre>
   </div>
-  <div class="im-ccard-body">
-    <h3 class="im-ccard-title"><a href="{{ it.url | relative_url }}">{{ it.title }}</a></h3>
+  <div class="sp-ccard-body">
+    <h3 class="sp-ccard-title"><a href="{{ it.url | relative_url }}">{{ it.title }}</a></h3>
     {%- assign snip = it.excerpt | default: it.description -%}
-    {%- if snip %}<p class="im-ccard-excerpt">{{ snip | strip_html | truncate: 110 }}</p>{% endif -%}
-    <div class="im-ccard-foot">
-      <span class="im-ccard-badge"><i class="ph-bold ph-code" aria-hidden="true"></i> {{ lang }}{% if it.date %} · {{ it.date | date: "%b %Y" }}{% endif %}</span>
-      <span class="im-ccard-actions">
-        <a class="im-card-cta" href="{{ it.url | relative_url }}">Open snippet <i class="ph-bold ph-arrow-right" aria-hidden="true"></i></a>
+    {%- if snip %}<p class="sp-ccard-excerpt">{{ snip | strip_html | truncate: 110 }}</p>{% endif -%}
+    <div class="sp-ccard-foot">
+      <span class="sp-ccard-badge"><i class="ph-bold ph-code" aria-hidden="true"></i> {{ lang }}{% if it.date %} · {{ it.date | date: "%b %Y" }}{% endif %}</span>
+      <span class="sp-ccard-actions">
+        <a class="sp-card-cta" href="{{ it.url | relative_url }}">Open snippet <i class="ph-bold ph-arrow-right" aria-hidden="true"></i></a>
       </span>
     </div>
   </div>

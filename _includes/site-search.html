@@ -1,19 +1,19 @@
-<section class="im-searchpage im-page">
-  <h1 class="im-post-title">Search</h1>
-  <p class="im-text-muted im-margin-bottom-5">Search across every guide, project, video, review, trip, podcast and note.</p>
+<section class="sp-searchpage sp-page">
+  <h1 class="sp-post-title">Search</h1>
+  <p class="sp-text-muted sp-margin-bottom-5">Search across every guide, project, video, review, trip, podcast and note.</p>
 
-  <div class="im-searchpage-field">
+  <div class="sp-searchpage-field">
     <i class="ph-bold ph-magnifying-glass" aria-hidden="true"></i>
-    <input type="search" id="im-sp-input" placeholder="Type to search…" autocomplete="off" autofocus aria-label="Search">
+    <input type="search" id="sp-sp-input" placeholder="Type to search…" autocomplete="off" autofocus aria-label="Search">
   </div>
 
-  <ul class="im-searchpage-results" id="im-sp-results"></ul>
+  <ul class="sp-searchpage-results" id="sp-sp-results"></ul>
 </section>
 
 <script>
 (function () {
-  var input = document.getElementById('im-sp-input');
-  var out = document.getElementById('im-sp-results');
+  var input = document.getElementById('sp-sp-input');
+  var out = document.getElementById('sp-sp-results');
   if (!input || !out) return;
   var data = [];
   fetch('{{ "/assets/search.json" | relative_url }}').then(function (r) { return r.json(); }).then(function (d) { data = d; });
@@ -24,10 +24,10 @@
     var hits = data.filter(function (it) {
       return (it.title || '').toLowerCase().indexOf(q) > -1 || (it.content || '').toLowerCase().indexOf(q) > -1;
     }).slice(0, 30);
-    if (!hits.length) { out.innerHTML = '<li class="im-search-empty">Nothing found for “' + q + '”.</li>'; return; }
+    if (!hits.length) { out.innerHTML = '<li class="sp-search-empty">Nothing found for “' + q + '”.</li>'; return; }
     out.innerHTML = hits.map(function (it) {
-      var chip = it.collection ? '<span class="im-search-chip">' + it.collection + '</span> ' : '';
-      return '<li class="im-searchpage-result"><h3>' + chip + '<a href="' + it.url + '">' + it.title + '</a></h3>' +
+      var chip = it.collection ? '<span class="sp-search-chip">' + it.collection + '</span> ' : '';
+      return '<li class="sp-searchpage-result"><h3>' + chip + '<a href="' + it.url + '">' + it.title + '</a></h3>' +
              '<p>' + ((it.excerpt || '').slice(0, 160)) + '</p></li>';
     }).join('');
   }

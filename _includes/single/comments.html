@@ -16,8 +16,8 @@
 {%- endcomment -%}
 {%- assign c = site.comments -%}
 {%- if page.comments != false -%}
-<section class="im-comments" id="comments" aria-labelledby="im-comments-title">
-  <h2 class="im-comments-title" id="im-comments-title"><i class="ph-bold ph-chats-circle" aria-hidden="true"></i> Comments</h2>
+<section class="sp-comments" id="comments" aria-labelledby="sp-comments-title">
+  <h2 class="sp-comments-title" id="sp-comments-title"><i class="ph-bold ph-chats-circle" aria-hidden="true"></i> Comments</h2>
 
   {%- case c.provider -%}
   {%- when "giscus" -%}
@@ -45,12 +45,12 @@
       })();
     </script>
   {%- else -%}
-    <div class="im-comments-placeholder">
+    <div class="sp-comments-placeholder">
       <p><strong>Comments are not wired up yet.</strong></p>
       <p>Set <code>comments.provider</code> in <code>_config.yml</code> to <code>giscus</code>,
          <code>utterances</code> or <code>disqus</code> and the thread appears here.
          Until then, replies are welcome by email or on any of the links above.</p>
-      {%- if site.email %}<a class="im-btn im-btn-sm im-btn-ink" href="mailto:{{ site.email }}?subject={{ page.title | uri_escape }}"><i class="ph-bold ph-envelope" aria-hidden="true"></i> Reply by email</a>{% endif -%}
+      {%- if site.email %}<a class="sp-btn sp-btn-sm sp-btn-ink" href="mailto:{{ site.email }}?subject={{ page.title | uri_escape }}"><i class="ph-bold ph-envelope" aria-hidden="true"></i> Reply by email</a>{% endif -%}
     </div>
   {%- endcase -%}
 </section>

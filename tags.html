@@ -60,7 +60,7 @@ ad_rails: false
 {%- endfor -%}
 {%- assign stats = statblob | split: "|" -%}
 
-<section class="im-collection im-page im-tagpage">
+<section class="sp-collection sp-page sp-tagpage">
   {% include utility/collection-head.html
      title="Tags"
      desc="Every subject on the site, and everything filed under it. Each one has a page of its own."
@@ -69,30 +69,30 @@ ad_rails: false
      count_label="tags" %}
 
   {%- if pairs.size > 0 -%}
-  <nav class="im-tagcloud im-reveal" aria-label="All tags">
+  <nav class="sp-tagcloud sp-reveal" aria-label="All tags">
     <ul>
       {%- for row in stats -%}
       {%- assign bits = row | split: "::" -%}
       <li>
         <a href="/tags/{{ bits[0] }}/">
-          <span class="im-tagcloud-hash" aria-hidden="true">#</span>{{ bits[1] }}
-          <span class="im-tagcloud-count">{{ bits[2] }}</span>
+          <span class="sp-tagcloud-hash" aria-hidden="true">#</span>{{ bits[1] }}
+          <span class="sp-tagcloud-count">{{ bits[2] }}</span>
         </a>
       </li>
       {%- endfor -%}
     </ul>
   </nav>
 
-  <div class="im-tagsecs">
+  <div class="sp-tagsecs">
     {%- for row in stats -%}
     {%- assign bits = row | split: "::" -%}
     {%- assign sl = bits[0] -%}
-    <section class="im-tagsec im-reveal" id="t-{{ sl }}">
-      <h2 class="im-tagsec-title">
-        <a href="/tags/{{ sl }}/"><span class="im-tagsec-hash" aria-hidden="true">#</span>{{ bits[1] }}</a>
-        <span class="im-tagsec-count">{{ bits[2] }} {% if bits[2] == "1" %}entry{% else %}entries{% endif %}</span>
+    <section class="sp-tagsec sp-reveal" id="t-{{ sl }}">
+      <h2 class="sp-tagsec-title">
+        <a href="/tags/{{ sl }}/"><span class="sp-tagsec-hash" aria-hidden="true">#</span>{{ bits[1] }}</a>
+        <span class="sp-tagsec-count">{{ bits[2] }} {% if bits[2] == "1" %}entry{% else %}entries{% endif %}</span>
       </h2>
-      <ul class="im-tagrows">
+      <ul class="sp-tagrows">
         {%- for it in entries -%}
         {%- assign hit = false -%}
         {%- for t in it.tags -%}
@@ -101,16 +101,16 @@ ad_rails: false
         {%- endfor -%}
         {%- if hit -%}
         {%- assign coll = site.collections | where: "label", it.collection | first -%}
-        <li class="im-tagrow" style="--im-c-this: var(--im-c-{{ it.collection }}, var(--im-accent));">
-          <a class="im-tagrow-link" href="{{ it.url | relative_url }}">
-            <span class="im-tagrow-icon" aria-hidden="true"><i class="ph-bold ph-{{ coll.icon | default: 'folder' }}"></i></span>
-            <span class="im-tagrow-text">
-              <span class="im-tagrow-title">{{ it.title | default: it.name }}</span>
+        <li class="sp-tagrow" style="--sp-c-this: var(--sp-c-{{ it.collection }}, var(--sp-accent));">
+          <a class="sp-tagrow-link" href="{{ it.url | relative_url }}">
+            <span class="sp-tagrow-icon" aria-hidden="true"><i class="ph-bold ph-{{ coll.icon | default: 'folder' }}"></i></span>
+            <span class="sp-tagrow-text">
+              <span class="sp-tagrow-title">{{ it.title | default: it.name }}</span>
               {%- assign snip = it.description | default: it.excerpt -%}
-              {%- if snip and snip != "" %}<span class="im-tagrow-desc">{{ snip | strip_html | strip_newlines | truncate: 120 }}</span>{% endif -%}
+              {%- if snip and snip != "" %}<span class="sp-tagrow-desc">{{ snip | strip_html | strip_newlines | truncate: 120 }}</span>{% endif -%}
             </span>
-            <span class="im-tagrow-meta">
-              <span class="im-tagrow-kind">{{ it.kind | default: coll.singular | default: it.collection }}</span>
+            <span class="sp-tagrow-meta">
+              <span class="sp-tagrow-kind">{{ it.kind | default: coll.singular | default: it.collection }}</span>
               {%- if it.date %}<time datetime="{{ it.date | date_to_xmlschema }}">{{ it.date | date: "%b %Y" }}</time>{% endif -%}
             </span>
           </a>
@@ -122,6 +122,6 @@ ad_rails: false
     {%- endfor -%}
   </div>
   {%- else -%}
-  <p class="im-collection-empty">Nothing is tagged yet. Add <code>tags: [something]</code> to an entry's front matter and it will appear here.</p>
+  <p class="sp-collection-empty">Nothing is tagged yet. Add <code>tags: [something]</code> to an entry's front matter and it will appear here.</p>
   {%- endif -%}
 </section>

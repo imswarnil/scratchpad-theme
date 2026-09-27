@@ -1,14 +1,14 @@
 {%- comment -%} Command-palette search overlay. Reads /assets/search.json {%- endcomment -%}
-<div class="im-search" id="im-search" hidden>
-  <div class="im-search-overlay" data-im-search-close></div>
-  <div class="im-search-panel" role="dialog" aria-modal="true" aria-label="Search">
-    <div class="im-search-field">
+<div class="sp-search" id="sp-search" hidden>
+  <div class="sp-search-overlay" data-sp-search-close></div>
+  <div class="sp-search-panel" role="dialog" aria-modal="true" aria-label="Search">
+    <div class="sp-search-field">
       <i class="ph-bold ph-magnifying-glass" aria-hidden="true"></i>
-      <input type="search" id="im-search-input" placeholder="Search guides, videos, notes…" autocomplete="off" aria-label="Search query">
-      <kbd class="im-search-esc">esc</kbd>
+      <input type="search" id="sp-search-input" placeholder="Search guides, videos, notes…" autocomplete="off" aria-label="Search query">
+      <kbd class="sp-search-esc">esc</kbd>
     </div>
-    <ul class="im-search-results" id="im-search-results" role="listbox"></ul>
-    <div class="im-search-foot">
+    <ul class="sp-search-results" id="sp-search-results" role="listbox"></ul>
+    <div class="sp-search-foot">
       <span><kbd>↑</kbd><kbd>↓</kbd> navigate</span>
       <span><kbd>↵</kbd> open</span>
       <span><a href="{{ '/search/' | relative_url }}">Full search →</a></span>
@@ -17,11 +17,11 @@
 </div>
 <script>
 (function () {
-  var root = document.getElementById('im-search');
+  var root = document.getElementById('sp-search');
   if (!root || window.__imSearch) return;
   window.__imSearch = true;
-  var input = document.getElementById('im-search-input');
-  var list  = document.getElementById('im-search-results');
+  var input = document.getElementById('sp-search-input');
+  var list  = document.getElementById('sp-search-results');
   var data = [], loaded = false, active = -1;
 
   function load() {
@@ -47,23 +47,23 @@
     }
     items = items.slice(0, 8);
     active = items.length ? 0 : -1;
-    if (!items.length) { list.innerHTML = '<li class="im-search-empty">No matches</li>'; return; }
+    if (!items.length) { list.innerHTML = '<li class="sp-search-empty">No matches</li>'; return; }
     list.innerHTML = items.map(function (it, i) {
-      var coll = it.collection ? '<span class="im-search-chip">' + it.collection + '</span>' : '';
-      return '<li class="im-search-item' + (i === 0 ? ' is-active' : '') + '" role="option" data-url="' + it.url + '">' +
-               '<span class="im-search-item-title">' + (it.title || 'Untitled') + '</span>' + coll +
-               '<span class="im-search-item-excerpt">' + ((it.excerpt || '').slice(0, 90)) + '</span>' +
+      var coll = it.collection ? '<span class="sp-search-chip">' + it.collection + '</span>' : '';
+      return '<li class="sp-search-item' + (i === 0 ? ' is-active' : '') + '" role="option" data-url="' + it.url + '">' +
+               '<span class="sp-search-item-title">' + (it.title || 'Untitled') + '</span>' + coll +
+               '<span class="sp-search-item-excerpt">' + ((it.excerpt || '').slice(0, 90)) + '</span>' +
              '</li>';
     }).join('');
   }
   function move(d) {
-    var els = list.querySelectorAll('.im-search-item'); if (!els.length) return;
+    var els = list.querySelectorAll('.sp-search-item'); if (!els.length) return;
     els[active] && els[active].classList.remove('is-active');
     active = (active + d + els.length) % els.length;
     els[active].classList.add('is-active'); els[active].scrollIntoView({ block: 'nearest' });
   }
   function go() {
-    var el = list.querySelectorAll('.im-search-item')[active];
+    var el = list.querySelectorAll('.sp-search-item')[active];
     if (el) window.location.href = el.getAttribute('data-url');
   }
 
@@ -74,10 +74,10 @@
     else if (e.key === 'Enter') { e.preventDefault(); go(); }
   });
   list.addEventListener('click', function (e) {
-    var li = e.target.closest('.im-search-item'); if (li) window.location.href = li.getAttribute('data-url');
+    var li = e.target.closest('.sp-search-item'); if (li) window.location.href = li.getAttribute('data-url');
   });
-  document.querySelectorAll('[data-im-search-open]').forEach(function (b) { b.addEventListener('click', open); });
-  document.querySelectorAll('[data-im-search-close]').forEach(function (b) { b.addEventListener('click', close); });
+  document.querySelectorAll('[data-sp-search-open]').forEach(function (b) { b.addEventListener('click', open); });
+  document.querySelectorAll('[data-sp-search-close]').forEach(function (b) { b.addEventListener('click', close); });
   document.addEventListener('keydown', function (e) {
     var typing = /^(input|textarea|select)$/i.test((e.target.tagName || '')) || e.target.isContentEditable;
     if (e.key === '/' && !typing && root.hidden) { e.preventDefault(); open(); }

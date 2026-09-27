@@ -1,7 +1,7 @@
-{%- comment -%} Builds the TOC for desktop sidebar (#im-toc-list) and mobile (#im-toc-mobile-list) {%- endcomment -%}
+{%- comment -%} Builds the TOC for desktop sidebar (#sp-toc-list) and mobile (#sp-toc-mobile-list) {%- endcomment -%}
 <script>
 (function () {
-  var prose = document.querySelector('.im-prose');
+  var prose = document.querySelector('.sp-prose');
   if (!prose) return;
   var heads = prose.querySelectorAll('h2, h3');
   if (heads.length < 2) return;
@@ -16,13 +16,13 @@
   function fill(ul) {
     if (!ul) return;
     ul.innerHTML = items.map(function (it) {
-      return '<li class="im-toc-' + it.lvl + '"><a href="#' + it.id + '" data-toc="' + it.id + '">' + it.text + '</a></li>';
+      return '<li class="sp-toc-' + it.lvl + '"><a href="#' + it.id + '" data-toc="' + it.id + '">' + it.text + '</a></li>';
     }).join('');
   }
-  var deskWrap = document.getElementById('im-toc');
-  var mobWrap  = document.getElementById('im-toc-mobile');
-  fill(document.getElementById('im-toc-list'));
-  fill(document.getElementById('im-toc-mobile-list'));
+  var deskWrap = document.getElementById('sp-toc');
+  var mobWrap  = document.getElementById('sp-toc-mobile');
+  fill(document.getElementById('sp-toc-list'));
+  fill(document.getElementById('sp-toc-mobile-list'));
   if (deskWrap) deskWrap.hidden = false;
   if (mobWrap)  mobWrap.hidden = false;
 
@@ -42,7 +42,7 @@
   // Close the mobile <details> after picking a link
   links.forEach(function (a) {
     a.addEventListener('click', function () {
-      var d = document.getElementById('im-toc-mobile');
+      var d = document.getElementById('sp-toc-mobile');
       if (d && d.tagName === 'DETAILS') d.open = false;
     });
   });

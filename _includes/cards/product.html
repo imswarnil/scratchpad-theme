@@ -6,24 +6,24 @@
 {%- assign it = include.item -%}
 {%- assign shot = it.cover | default: it.image -%}
 {%- if shot == site.placeholder_image %}{% assign shot = nil %}{% endif -%}
-<article class="im-product" style="--im-c-this: var(--im-c-{{ it.collection }}, var(--im-accent));">
-  <a class="im-product-art" href="{{ it.url | relative_url }}" tabindex="-1" aria-hidden="true">
+<article class="sp-product" style="--sp-c-this: var(--sp-c-{{ it.collection }}, var(--sp-accent));">
+  <a class="sp-product-art" href="{{ it.url | relative_url }}" tabindex="-1" aria-hidden="true">
     {%- if shot %}<img src="{{ shot | relative_url }}" alt="" loading="lazy" width="800" height="600">
     {%- else %}{% include utility/thumb.html item=it size="sm" %}{% endif -%}
   </a>
-  <div class="im-product-body">
-    {%- if it.category %}<span class="im-product-cat">{{ it.category }}</span>{% endif -%}
-    <h3 class="im-product-title"><a href="{{ it.url | relative_url }}">{{ it.title }}</a></h3>
+  <div class="sp-product-body">
+    {%- if it.category %}<span class="sp-product-cat">{{ it.category }}</span>{% endif -%}
+    <h3 class="sp-product-title"><a href="{{ it.url | relative_url }}">{{ it.title }}</a></h3>
     {%- assign snip = it.description | default: it.excerpt -%}
-    {%- if snip and snip != "" %}<p class="im-product-text">{{ snip | strip_html | truncate: 110 }}</p>{% endif -%}
-    <div class="im-product-foot">
-      {%- if it.price %}<span class="im-product-price">{{ it.price }}</span>{% endif -%}
+    {%- if snip and snip != "" %}<p class="sp-product-text">{{ snip | strip_html | truncate: 110 }}</p>{% endif -%}
+    <div class="sp-product-foot">
+      {%- if it.price %}<span class="sp-product-price">{{ it.price }}</span>{% endif -%}
       {%- if it.link -%}
-      <a class="im-btn im-btn-sm" href="{{ it.link }}" target="_blank" rel="noopener{% if it.affiliate %} sponsored{% endif %}">
+      <a class="sp-btn sp-btn-sm" href="{{ it.link }}" target="_blank" rel="noopener{% if it.affiliate %} sponsored{% endif %}">
         {{ it.cta | default: "Buy" }} <i class="ph-bold ph-arrow-up-right" aria-hidden="true"></i>
       </a>
       {%- endif -%}
     </div>
-    {%- if it.affiliate %}<p class="im-product-disclosure">Affiliate link — it costs you nothing extra.</p>{% endif -%}
+    {%- if it.affiliate %}<p class="sp-product-disclosure">Affiliate link — it costs you nothing extra.</p>{% endif -%}
   </div>
 </article>

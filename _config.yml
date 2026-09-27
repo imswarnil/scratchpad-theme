@@ -81,7 +81,7 @@ accent_color: "#f22f46"
 # Web fonts. The design system specifies Geist; Caveat is only used for
 # the handwritten accents on the about page. Remove a URL to drop it.
 # The typefaces are SERVED FROM THIS REPOSITORY (assets/fonts/, declared in
-# _sass/im/base/_fonts.scss). A font from a CDN is a third party on every
+# _sass/scratchpad/base/_fonts.scss). A font from a CDN is a third party on every
 # page load — a DNS lookup, a connection, a request that can be slow,
 # blocked or logged. Leave these lists empty unless you are adding a face
 # you cannot vendor.

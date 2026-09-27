@@ -8,33 +8,33 @@
   below it takes over — see resume/bar.html and assets/scripts/resume.js.
 {%- endcomment -%}
 {%- assign r = site.resume -%}
-<header class="im-rhero im-no-print" data-resume-hero>
-  <div class="im-rhero-grid">
-    <figure class="im-rhero-figure">
-      <img class="im-rhero-photo" src="{{ r.avatar | relative_url }}" alt="{{ r.name }}" width="640" height="640">
+<header class="sp-rhero sp-no-print" data-resume-hero>
+  <div class="sp-rhero-grid">
+    <figure class="sp-rhero-figure">
+      <img class="sp-rhero-photo" src="{{ r.avatar | relative_url }}" alt="{{ r.name }}" width="640" height="640">
     </figure>
 
-    <div class="im-rhero-copy">
-      <p class="im-rhero-kicker">Curriculum vitae</p>
-      <h1 class="im-rhero-name">{{ r.name }}</h1>
-      <p class="im-rhero-tagline">{{ r.tagline }}</p>
+    <div class="sp-rhero-copy">
+      <p class="sp-rhero-kicker">Curriculum vitae</p>
+      <h1 class="sp-rhero-name">{{ r.name }}</h1>
+      <p class="sp-rhero-tagline">{{ r.tagline }}</p>
 
-      <ul class="im-rhero-meta">
+      <ul class="sp-rhero-meta">
         {%- if r.contact.location %}<li><i class="ph-bold ph-map-pin" aria-hidden="true"></i> {{ r.contact.location }}</li>{% endif -%}
         {%- if r.contact.email %}<li><a href="mailto:{{ r.contact.email }}"><i class="ph-bold ph-envelope" aria-hidden="true"></i> {{ r.contact.email }}</a></li>{% endif -%}
         {%- if r.contact.site %}<li><a href="https://{{ r.contact.site }}"><i class="ph-bold ph-globe" aria-hidden="true"></i> {{ r.contact.site }}</a></li>{% endif -%}
       </ul>
 
       {%- if r.open_to -%}
-      <p class="im-rhero-open"><span class="im-rhero-open-dot" aria-hidden="true"></span> {{ r.open_to }}</p>
+      <p class="sp-rhero-open"><span class="sp-rhero-open-dot" aria-hidden="true"></span> {{ r.open_to }}</p>
       {%- endif -%}
 
-      <div class="im-rhero-actions">
-        <button type="button" class="im-btn im-btn-primary" data-im-print><i class="ph-bold ph-file-pdf" aria-hidden="true"></i> Save as PDF</button>
-        <a class="im-btn" href="{{ '/' | relative_url }}"><i class="ph-bold ph-arrow-left" aria-hidden="true"></i> Back to site</a>
+      <div class="sp-rhero-actions">
+        <button type="button" class="sp-btn sp-btn-primary" data-sp-print><i class="ph-bold ph-file-pdf" aria-hidden="true"></i> Save as PDF</button>
+        <a class="sp-btn" href="{{ '/' | relative_url }}"><i class="ph-bold ph-arrow-left" aria-hidden="true"></i> Back to site</a>
       </div>
 
-      {% include social-row.html class="im-rhero-social" label="Elsewhere" %}
+      {% include social-row.html class="sp-rhero-social" label="Elsewhere" %}
     </div>
   </div>
 </header>

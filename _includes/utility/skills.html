@@ -3,16 +3,16 @@
   Intermediate, …) — one labelled row per level, in that order.
 {%- endcomment -%}
 {%- assign levels = site.resume.skills | map: "level" | uniq -%}
-<div class="im-skills">
+<div class="sp-skills">
   {%- for lvl in levels -%}
   {%- assign group = site.resume.skills | where: "level", lvl -%}
-  <div class="im-skills-row">
-    <span class="im-skills-level">{{ lvl }}</span>
-    <ul class="im-skills-list">
+  <div class="sp-skills-row">
+    <span class="sp-skills-level">{{ lvl }}</span>
+    <ul class="sp-skills-list">
       {%- for s in group -%}
-      <li class="im-skill" style="--im-skill: {{ s.percent | default: 70 }}%">
-        <span class="im-skill-name">{{ s.name }}</span>
-        {%- if s.percent %}<span class="im-skill-bar" aria-hidden="true"></span>{% endif -%}
+      <li class="sp-skill" style="--sp-skill: {{ s.percent | default: 70 }}%">
+        <span class="sp-skill-name">{{ s.name }}</span>
+        {%- if s.percent %}<span class="sp-skill-bar" aria-hidden="true"></span>{% endif -%}
       </li>
       {%- endfor -%}
     </ul>

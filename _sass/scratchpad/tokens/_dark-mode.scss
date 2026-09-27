@@ -1,0 +1,73 @@
+// ======================================================================
+// im/tokens/_dark-mode.scss — the dark theme
+// ----------------------------------------------------------------------
+// Emitted straight after tokens/_tokens.scss. Only the SEMANTIC layer
+// flips: the primitives (the grey ramp, space, type, radius, motion) are
+// the same in both themes, and every legacy --sp-color-* alias points at
+// a semantic token, so re-mapping the semantics re-themes everything
+// underneath it with no second list to keep in sync.
+//
+//   :root[data-color-scheme="dark"]    explicit
+//   :root[data-color-scheme="system"]  under prefers-color-scheme: dark
+//
+// _includes/head.html writes the attribute before first paint, so there
+// is no flash; the navbar toggle persists it to localStorage.
+// ======================================================================
+
+@mixin sp-dark-tokens {
+  color-scheme: dark;
+
+  // Surfaces, from the page upward
+  --sp-canvas:    var(--sp-gray-950);
+  --sp-surface:   var(--sp-gray-900);
+  --sp-surface-2: var(--sp-gray-800);
+  --sp-surface-3: var(--sp-gray-700);
+  --sp-line:  color-mix(in oklab, var(--sp-gray-400) 26%, transparent);
+  --sp-scrim: rgb(0 0 0 / 72%);
+
+  // Text, loudest to quietest
+  --sp-ink:     var(--sp-white);
+  --sp-body:    var(--sp-gray-400);
+  --sp-muted:   var(--sp-gray-500);
+  --sp-faint:   var(--sp-gray-600);
+
+  // Status — lifted, because the same hue over a dark canvas reads dimmer
+  --sp-success: #{tone(success, dark)};
+  --sp-warning: #{tone(warning, dark)};
+  --sp-danger:  #{tone(danger,  dark)};
+  --sp-info:    #{tone(info,    dark)};
+
+  // The accent lightens on hover here instead of darkening: over a dark
+  // canvas, "more" means brighter.
+  --sp-accent-hover:  oklch(from var(--sp-accent) calc(l + 0.07) c h);
+  --sp-accent-active: oklch(from var(--sp-accent) calc(l + 0.13) c h);
+
+  // On a dark page the canvas is already gray-950, so the code slab steps
+  // UP one shade to stay a distinct surface. Nothing else about it moves.
+  --sp-code-bg: var(--sp-gray-900);
+
+  --sp-shadow-float: #{$shadow-dark};
+  --sp-on-accent: #fff;
+
+  // Legacy aliases whose LIGHT value was a literal, not a var()
+  --sp-color-accent-foreground: var(--sp-canvas);
+  --sp-color-black: #000;
+  --sp-color-white: #fff;
+}
+
+:root[data-color-scheme="dark"] { @include sp-dark-tokens; }
+
+@media (prefers-color-scheme: dark) {
+  :root[data-color-scheme="system"] { @include sp-dark-tokens; }
+  // Visitors who arrive before the no-flash script runs, and visitors with
+  // JavaScript off, still get the right theme.
+  :root:not([data-color-scheme]) { @include sp-dark-tokens; }
+}
+
+@supports not (color: oklch(from #000 l c h)) {
+  :root[data-color-scheme="dark"],
+  :root[data-color-scheme="system"] {
+    --sp-accent-hover:  var(--sp-accent);
+    --sp-accent-active: var(--sp-accent);
+  }
+}

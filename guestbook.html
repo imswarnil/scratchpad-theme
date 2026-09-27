@@ -8,17 +8,17 @@ ad_rails: false
 comments: true
 ---
 {%- assign g = site.guestbook -%}
-<section class="im-home im-page im-pg">
-  <header class="im-pg-head im-grid-12 im-reveal">
-    <div class="im-span-12 im-span-lg-8">
-      <span class="im-sec-eyebrow">Guestbook</span>
-      <h1 class="im-pg-title">Leave a note.</h1>
-      {%- if g.intro %}<p class="im-pg-lede">{{ g.intro }}</p>{% endif -%}
+<section class="sp-home sp-page sp-pg">
+  <header class="sp-pg-head sp-grid-12 sp-reveal">
+    <div class="sp-span-12 sp-span-lg-8">
+      <span class="sp-sec-eyebrow">Guestbook</span>
+      <h1 class="sp-pg-title">Leave a note.</h1>
+      {%- if g.intro %}<p class="sp-pg-lede">{{ g.intro }}</p>{% endif -%}
     </div>
   </header>
 
-  <div class="im-grid-12 im-pg-row im-reveal">
-    <div class="im-span-12 im-span-lg-8">
+  <div class="sp-grid-12 sp-pg-row sp-reveal">
+    <div class="sp-span-12 sp-span-lg-8">
       {%- comment -%}
         The same comments part every entry page uses — a guestbook IS a
         comment thread, and giving it a second implementation would mean

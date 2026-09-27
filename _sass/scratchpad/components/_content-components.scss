@@ -1,0 +1,440 @@
+// ======================================================================
+// im/_content-components.scss — unprefixed "shortcode" components
+// ----------------------------------------------------------------------
+// _includes/components/*.html render plain (non `sp-`) class names so they
+// read cleanly inside Markdown. This partial is their only styling layer —
+// keep it token-driven and consistent with the sp-* framework above.
+// ======================================================================
+
+// ---- Typography helpers -------------------------------------------------
+.lead {
+  font-size: var(--sp-text-lg);
+  line-height: var(--sp-leading-base);
+  color: var(--sp-body);
+}
+.text-muted { color: var(--sp-muted) !important; }
+.text-sm    { font-size: var(--sp-text-sm) !important; }
+.fw-medium  { font-weight: var(--sp-weight-medium) !important; }
+
+// ---- Grids ----------------------------------------------------------------
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+  gap: var(--sp-space-5);
+  margin-block: var(--sp-space-6);
+
+  &.is-auto { grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr)); }
+}
+.stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr));
+  gap: var(--sp-space-5);
+  margin-block: var(--sp-space-6);
+}
+
+// ---- Buttons (Markdown shortcode) -----------------------------------------
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-space-2);
+  min-height: 2.5rem;
+  padding: var(--sp-space-3) var(--sp-space-5);
+  border: 0;
+  border-radius: var(--sp-radius-full);
+  font-size: var(--sp-text-sm);
+  font-weight: var(--sp-weight-semibold);
+  text-decoration: none;
+  cursor: pointer;
+  background: var(--sp-accent);
+  color: var(--sp-on-accent);
+  transition:
+    background-color var(--sp-duration-instant),
+    color var(--sp-duration-instant),
+    translate var(--sp-duration-instant),
+    box-shadow var(--sp-duration-instant);
+
+  // The same movement every filled button in the theme makes: one pixel,
+  // one hairline, and it gives at once under the press.
+  &:hover, &:focus-visible { background: var(--sp-ink); color: var(--sp-canvas); }
+  @media (hover: hover) {
+    &:hover { translate: 0 -1px; box-shadow: var(--sp-shadow-sm); }
+  }
+  &:active { translate: 0; scale: 0.97; box-shadow: none; transition-duration: 0s; }
+}
+.btn--outline {
+  background: transparent;
+  border-color: var(--sp-line);
+  color: var(--sp-ink);
+  @include sp-hover-fill;
+}
+.btn.is-lg { min-height: 3rem; padding: var(--sp-space-4) var(--sp-space-6); font-size: var(--sp-text-base); }
+
+// ---- Card -------------------------------------------------------------
+.card {
+  // A card already sits on a surface, so its hover steps one deeper.
+  --sp-hover-bg: var(--sp-surface-2);
+
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-space-3);
+  padding: 1.25rem;
+  border-radius: var(--sp-radius-xl);
+  background: var(--sp-surface);
+  color: var(--sp-body);
+
+  > :last-child { margin-bottom: 0; }
+}
+.card--link,
+a.card {
+  text-decoration: none;
+  color: inherit;
+  @include sp-hover-card;
+}
+.card--bento { padding: var(--sp-space-6); }
+.card__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: var(--sp-radius-lg);
+  background: var(--sp-surface);
+  color: var(--sp-ink);
+  font-size: var(--sp-text-xl);
+}
+.card__title { margin: 0; font-size: var(--sp-text-lg); font-weight: var(--sp-weight-semibold); letter-spacing: -0.01em; }
+.card__text  { margin: 0; color: var(--sp-muted); }
+.card__footer { margin-top: auto; padding-top: var(--sp-space-3); display: flex; gap: var(--sp-space-4); }
+
+.readmore {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-space-2);
+  font-size: var(--sp-text-sm);
+  font-weight: var(--sp-weight-semibold);
+  color: var(--sp-ink);
+  text-decoration: none;
+
+  i { transition: transform var(--sp-duration-fast) var(--sp-ease-out); }
+  &:hover i { transform: translateX(3px); }
+}
+
+// ---- Badge --------------------------------------------------------------
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-space-1);
+  padding: var(--sp-space-1) var(--sp-space-3);
+  border-radius: var(--sp-radius-full);
+  background: var(--sp-surface);
+  color: var(--sp-ink);
+  font-size: var(--sp-text-xs);
+  font-weight: var(--sp-weight-semibold);
+  line-height: 1.4;
+}
+.badge--solid   { background: var(--sp-ink); color: var(--sp-canvas); }
+.badge--success { background: var(--sp-success); color: #fff; }
+.badge--warning { background: var(--sp-warning); color: #fff; }
+.badge--danger  { background: var(--sp-danger);  color: #fff; }
+.badge--info    { background: var(--sp-info);    color: #fff; }
+.badge__dot { width: 0.4rem; height: 0.4rem; border-radius: var(--sp-radius-full); background: currentColor; }
+
+// ---- Callout / admonition -----------------------------------------------
+.callout {
+  display: flex;
+  gap: var(--sp-space-3);
+  padding: var(--sp-space-4) var(--sp-space-5);
+  margin-block: var(--sp-space-5);
+  border: 1px solid var(--sp-line);
+  border-left-width: 3px;
+  border-radius: var(--sp-radius-lg);
+  background: var(--sp-surface);
+}
+.callout__icon { flex: 0 0 auto; font-size: var(--sp-text-lg); color: var(--sp-muted); }
+.callout__title { margin: 0 0 var(--sp-space-1); font-weight: var(--sp-weight-semibold); }
+.callout__body { color: var(--sp-body); > :last-child { margin-bottom: 0; } }
+.callout--tip     { border-left-color: var(--sp-accent); .callout__icon { color: var(--sp-accent); } }
+.callout--info    { border-left-color: var(--sp-info);   .callout__icon { color: var(--sp-info); } }
+.callout--success { border-left-color: var(--sp-success); .callout__icon { color: var(--sp-success); } }
+.callout--warning { border-left-color: var(--sp-warning); .callout__icon { color: var(--sp-warning); } }
+.callout--danger  { border-left-color: var(--sp-danger); .callout__icon { color: var(--sp-danger); } }
+
+// ---- CTA banner -----------------------------------------------------------
+.cta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-space-6);
+  padding: var(--sp-space-7);
+  margin-block: var(--sp-space-7);
+  border-radius: var(--sp-radius-2xl);
+  background: var(--sp-surface);
+  text-align: center;
+
+  &.cta--split { text-align: left; }
+}
+.cta__title { margin: 0; font-size: var(--sp-text-2xl); letter-spacing: -0.02em; }
+.cta__text  { margin: var(--sp-space-2) 0 0; color: var(--sp-muted); }
+.cta__actions { display: flex; flex-wrap: wrap; gap: var(--sp-space-3); justify-content: center; }
+.cta:not(.cta--split) .cta__actions { justify-content: center; margin-inline: auto; }
+
+// ---- Stat / KPI -----------------------------------------------------------
+.stat {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-space-1);
+  --sp-hover-bg: var(--sp-surface-2);
+
+  padding: 1.25rem;
+  border-radius: var(--sp-radius-xl);
+  background: var(--sp-surface);
+  @include sp-hover-card($shadow: false);
+}
+.stat__icon  { font-size: var(--sp-text-xl); color: var(--sp-muted); }
+.stat__value { font-size: var(--sp-text-2xl); font-weight: var(--sp-weight-bold); letter-spacing: -0.02em; }
+.stat__label { font-size: var(--sp-text-sm); color: var(--sp-muted); }
+.stat__trend { font-size: var(--sp-text-xs); font-weight: var(--sp-weight-semibold); }
+.stat__trend.is-up   { color: var(--sp-success); }
+.stat__trend.is-down  { color: var(--sp-danger); }
+
+// ---- Stepper ----------------------------------------------------------
+.stepper {
+  list-style: none;
+  counter-reset: sp-step;
+  margin: var(--sp-space-6) 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-space-5);
+}
+.step {
+  counter-increment: sp-step;
+  position: relative;
+  padding-left: var(--sp-space-8);
+
+  &::before {
+    content: counter(sp-step);
+    position: absolute;
+    left: 0;
+    top: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.75rem;
+    height: 1.75rem;
+    border-radius: var(--sp-radius-full);
+    border: 1px solid var(--sp-line);
+    background: var(--sp-canvas);
+    font-size: var(--sp-text-xs);
+    font-weight: var(--sp-weight-semibold);
+  }
+  &--done::before { content: "\2713"; background: var(--sp-accent); color: var(--sp-on-accent); border-color: transparent; }
+}
+.step__title { margin: 0 0 var(--sp-space-1); font-size: var(--sp-text-base); font-weight: var(--sp-weight-semibold); }
+.step__body  { color: var(--sp-muted); > :last-child { margin-bottom: 0; } }
+
+.stepper--horizontal {
+  @media (min-width: $bp-md) {
+    flex-direction: row;
+    .step { flex: 1; padding-left: 0; padding-top: var(--sp-space-8); }
+    .step::before { left: 50%; top: 0; transform: translateX(-50%); }
+    .step__title, .step__body { text-align: center; }
+  }
+}
+
+// ---- Tabs (CSS-only) -------------------------------------------------
+.tabs { margin-block: var(--sp-space-6); }
+.tab__radio { position: absolute; opacity: 0; width: 1px; height: 1px; pointer-events: none; }
+.tabs__list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-space-1);
+  padding: var(--sp-space-1);
+  background: var(--sp-surface);
+  border-radius: var(--sp-radius-full);
+  width: fit-content;
+}
+.tab__label {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-space-2);
+  padding: var(--sp-space-2) var(--sp-space-4);
+  border-radius: var(--sp-radius-full);
+  font-size: var(--sp-text-sm);
+  font-weight: var(--sp-weight-medium);
+  color: var(--sp-muted);
+  cursor: pointer;
+  transition: background-color var(--sp-duration-fast) var(--sp-ease-out), color var(--sp-duration-fast) var(--sp-ease-out);
+  &:hover { color: var(--sp-ink); }
+}
+.tab__panel {
+  display: none;
+  padding-top: var(--sp-space-5);
+  > :last-child { margin-bottom: 0; }
+}
+@for $i from 1 through 8 {
+  .tab__radio:nth-of-type(#{$i}):checked ~ .tabs__list .tab__label:nth-of-type(#{$i}) {
+    background: var(--sp-current-bg);
+    color: var(--sp-current-fg);
+    font-weight: var(--sp-current-weight);
+  }
+  .tab__radio:nth-of-type(#{$i}):checked ~ .tab__panel:nth-of-type(#{$i}) { display: block; }
+}
+
+// ---- Timeline -----------------------------------------------------------
+.timeline {
+  position: relative;
+  list-style: none;
+  margin: var(--sp-space-6) 0;
+  padding: 0 0 0 var(--sp-space-6);
+  border-left: 2px solid var(--sp-line);
+}
+.timeline__item {
+  position: relative;
+  padding-bottom: var(--sp-space-7);
+  &:last-child { padding-bottom: 0; }
+  &::before {
+    content: "";
+    position: absolute;
+    left: calc(var(--sp-space-6) * -1 - 5px);
+    top: 0.3em;
+    width: 0.65rem;
+    height: 0.65rem;
+    border-radius: var(--sp-radius-full);
+    background: var(--sp-ink);
+    box-shadow: 0 0 0 3px var(--sp-canvas);
+  }
+}
+.timeline__date  { display: block; font-size: var(--sp-text-xs); font-weight: var(--sp-weight-semibold); letter-spacing: 0.03em; text-transform: uppercase; color: var(--sp-muted); margin-bottom: var(--sp-space-1); }
+.timeline__title {
+  margin: 0 0 var(--sp-space-2);
+  font-size: var(--sp-text-base);
+  font-weight: var(--sp-weight-semibold);
+  a { color: inherit; text-decoration: none; &:hover { color: var(--sp-ink); text-decoration: underline; } }
+}
+.timeline__body { color: var(--sp-body); > :last-child { margin-bottom: 0; } }
+.timeline__item > .badge { margin-top: var(--sp-space-2); }
+
+// ---- Accordion (native <details>) ----------------------------------------
+.accordion { display: flex; flex-direction: column; gap: var(--sp-space-3); margin-block: var(--sp-space-6); }
+.accordion__item {
+  border: 1px solid var(--sp-line);
+  border-radius: var(--sp-radius-xl);
+  padding: var(--sp-space-4) var(--sp-space-5);
+  &[open] { background: var(--sp-surface); }
+}
+.accordion__summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-space-3);
+  cursor: pointer;
+  font-weight: var(--sp-weight-medium);
+  list-style: none;
+  &::-webkit-details-marker { display: none; }
+}
+.accordion__icon { transition: transform var(--sp-duration-fast) var(--sp-ease-out); color: var(--sp-muted); }
+.accordion__item[open] .accordion__icon { transform: rotate(180deg); }
+.accordion__body { padding-top: var(--sp-space-3); color: var(--sp-muted); > :last-child { margin-bottom: 0; } }
+
+// ---- Contact form ---------------------------------------------------------
+.contact-form { display: flex; flex-direction: column; gap: var(--sp-space-4); }
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-space-2);
+
+  input, textarea {
+    padding: var(--sp-space-3) var(--sp-space-4);
+    border: 1px solid var(--sp-line);
+    border-radius: var(--sp-radius-lg);
+    background: var(--sp-canvas);
+    color: var(--sp-body);
+    font: inherit;
+    transition: border-color var(--sp-duration-fast) var(--sp-ease-out), box-shadow var(--sp-duration-fast) var(--sp-ease-out);
+    &:focus { outline: none; border-color: var(--sp-ink); box-shadow: 0 0 0 3px var(--sp-surface-2); }
+  }
+  textarea { resize: vertical; min-height: 8rem; }
+}
+
+// ---- A folded code block (components/code.html) -------------------------
+// The point is made in the prose and the proof is one click away, rather
+// than four screens of scrolling between them. A <details>, so it is open
+// to find-in-page and needs no script.
+.sp-codefold {
+  margin: var(--sp-space-5) 0;
+  overflow: hidden;
+  border-radius: var(--sp-radius-lg);
+  background: var(--sp-code-bg);
+  box-shadow: inset 0 0 0 1px var(--sp-code-line);
+  color-scheme: dark;
+}
+
+.sp-codefold-summary {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-space-2);
+  padding: var(--sp-space-3) var(--sp-space-4);
+  color: var(--sp-code-fg);
+  font-size: var(--sp-text-sm);
+  cursor: pointer;
+  list-style: none;
+  transition: background-color var(--sp-duration-instant);
+
+  &::-webkit-details-marker { display: none; }
+  &:hover { background: var(--sp-code-hover); }
+  &:focus-visible { outline: var(--sp-ring-width) solid var(--sp-ring); outline-offset: -2px; }
+}
+
+.sp-codefold-caret {
+  flex: 0 0 auto;
+  color: var(--sp-code-muted);
+  transition: rotate var(--sp-duration-fast) var(--sp-ease-out);
+}
+.sp-codefold[open] .sp-codefold-caret { rotate: 90deg; }
+
+.sp-codefold-title { font-weight: var(--sp-weight-medium); }
+.sp-codefold-lang {
+  color: var(--sp-code-muted);
+  font-family: var(--sp-font-mono);
+  font-size: var(--sp-text-xs);
+  letter-spacing: var(--sp-tracking-wide);
+  text-transform: uppercase;
+}
+.sp-codefold-copy {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-space-1);
+  margin-left: auto;
+  flex: 0 0 auto;
+  padding: 0.15rem var(--sp-space-2);
+  border: 0;
+  border-radius: var(--sp-radius-full);
+  background: transparent;
+  color: var(--sp-code-muted);
+  font: inherit;
+  font-size: var(--sp-text-xs);
+  cursor: pointer;
+  transition: background-color var(--sp-duration-instant), color var(--sp-duration-instant);
+
+  &:hover { background: var(--sp-code-hover); color: var(--sp-code-fg); }
+}
+
+.sp-codefold-body {
+  border-top: 1px solid var(--sp-code-line);
+
+  > pre {
+    margin: 0;
+    border-radius: 0;
+    box-shadow: none;
+  }
+}
+
+// On paper a folded block is just a block.
+@media print {
+  .sp-codefold { color-scheme: light; }
+  .sp-codefold-body { display: block !important; }
+  .sp-codefold-copy { display: none; }
+}

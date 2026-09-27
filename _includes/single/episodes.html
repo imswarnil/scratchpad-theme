@@ -4,12 +4,12 @@
 {%- endcomment -%}
 {%- assign eps = site.episodes | where: "series", page.slug | sort: "episode" -%}
 {%- if eps.size > 0 -%}
-<section class="im-eplist" aria-labelledby="im-eplist-title">
-  <h2 class="im-eplist-title" id="im-eplist-title">
+<section class="sp-eplist" aria-labelledby="sp-eplist-title">
+  <h2 class="sp-eplist-title" id="sp-eplist-title">
     <i class="ph-bold ph-list-numbers" aria-hidden="true"></i> Episodes
-    <span class="im-eplist-count">{{ eps.size }}</span>
+    <span class="sp-eplist-count">{{ eps.size }}</span>
   </h2>
-  <div class="im-eplist-rows">
+  <div class="sp-eplist-rows">
     {%- for e in eps -%}{% include cards/episode.html item=e %}{%- endfor -%}
   </div>
 </section>

@@ -7,8 +7,8 @@
 {%- assign type = include.type | default: "horizontal" -%}
 {%- assign ad = site.adsense -%}
 {%- assign slot = ad.placements[type] -%}
-<aside class="im-ad im-ad--{{ type }} {{ include.class }}" role="complementary" aria-label="Advertisement">
-  <span class="im-ad-label">Advertisement</span>
+<aside class="sp-ad sp-ad--{{ type }} {{ include.class }}" role="complementary" aria-label="Advertisement">
+  <span class="sp-ad-label">Advertisement</span>
   {%- if ad.enabled and ad.client and slot -%}
     {%- if type == "in_article" -%}
       <ins class="adsbygoogle" style="display:block;text-align:center" data-ad-layout="in-article" data-ad-format="fluid" data-ad-client="{{ ad.client }}" data-ad-slot="{{ slot }}"></ins>
@@ -19,6 +19,6 @@
     {%- endif -%}
     <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
   {%- else -%}
-    <div class="im-ad-placeholder">Ad space</div>
+    <div class="sp-ad-placeholder">Ad space</div>
   {%- endif -%}
 </aside>

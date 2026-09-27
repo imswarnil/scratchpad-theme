@@ -4,18 +4,18 @@
   Params: title, desc, icon (phosphor name), count, count_label,
           latest (date, optional), extra (html, optional — e.g. a CTA)
 {%- endcomment -%}
-<header class="im-collection-head im-bg-dots im-reveal">
-  <div class="im-grid-12 im-collection-head-row">
-    <div class="im-span-lg-8 im-collection-head-main">
-      <span class="im-collection-icon"><i class="ph-bold ph-{{ include.icon | default: 'folder' }}" aria-hidden="true"></i></span>
-      <div class="im-collection-head-text">
-        <h1 class="im-collection-title">{{ include.title }}</h1>
-        {%- if include.desc %}<p class="im-collection-desc">{{ include.desc }}</p>{% endif -%}
+<header class="sp-collection-head sp-bg-dots sp-reveal">
+  <div class="sp-grid-12 sp-collection-head-row">
+    <div class="sp-span-lg-8 sp-collection-head-main">
+      <span class="sp-collection-icon"><i class="ph-bold ph-{{ include.icon | default: 'folder' }}" aria-hidden="true"></i></span>
+      <div class="sp-collection-head-text">
+        <h1 class="sp-collection-title">{{ include.title }}</h1>
+        {%- if include.desc %}<p class="sp-collection-desc">{{ include.desc }}</p>{% endif -%}
       </div>
     </div>
-    <div class="im-span-lg-4 im-collection-stats">
-      {%- if include.count %}<span class="im-collection-stat"><strong>{{ include.count }}</strong> {{ include.count_label | default: "items" }}</span>{% endif -%}
-      {%- if include.latest %}<span class="im-collection-stat">Updated <strong>{{ include.latest | date: "%b %Y" }}</strong></span>{% endif -%}
+    <div class="sp-span-lg-4 sp-collection-stats">
+      {%- if include.count %}<span class="sp-collection-stat"><strong>{{ include.count }}</strong> {{ include.count_label | default: "items" }}</span>{% endif -%}
+      {%- if include.latest %}<span class="sp-collection-stat">Updated <strong>{{ include.latest | date: "%b %Y" }}</strong></span>{% endif -%}
       {%- if include.extra %}{{ include.extra }}{% endif -%}
     </div>
   </div>

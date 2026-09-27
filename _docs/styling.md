@@ -13,16 +13,16 @@ derived from it by rotating the hue, so changing one value moves the whole
 site. Run `npm run thumbs` afterwards to redraw the covers.
 
 Dark mode is automatic, with a toggle in the header. Every colour is an
-`--im-*` custom property, so nothing is defined twice.
+`--sp-*` custom property, so nothing is defined twice.
 
 ## Two interactions, and only two
 
 The CSS follows the Im Design System, and knowing this is most of what you need:
 
-- **Hover** — the thing *fills* (`--im-hover-bg`). Nothing sharpens a border,
+- **Hover** — the thing *fills* (`--sp-hover-bg`). Nothing sharpens a border,
   nothing grows three per cent, nothing rests on a drop shadow.
 - **Current** ("you are here") — a stronger fill and a bolder label
-  (`--im-current-bg`, `--im-current-fg`, `--im-current-weight`). It is never a
+  (`--sp-current-bg`, `--sp-current-fg`, `--sp-current-weight`). It is never a
   change of colour.
 
 A filled button and a card both lift exactly one pixel and cast one hairline.
@@ -35,9 +35,9 @@ while its label stays ink is the bug this rule exists to prevent.
 ## Where things are
 
 ```
-_sass/im/
+_sass/scratchpad/
   abstracts/   build-time maps and the two interactions, written once
-  tokens/      the --im-* properties, light and dark
+  tokens/      the --sp-* properties, light and dark
   base/        reset, element typography, motion
   layout/      containers, navbar, hero, shell, footer
   components/  cards, collections, the single-page parts, …

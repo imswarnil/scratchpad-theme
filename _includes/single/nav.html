@@ -5,19 +5,19 @@
   half-empty.
 {%- endcomment -%}
 {%- if page.previous.url or page.next.url -%}
-<nav class="im-postnav" aria-label="More in {{ coll.title }}">
+<nav class="sp-postnav" aria-label="More in {{ coll.title }}">
   {%- if page.previous.url -%}
   {%- assign p = page.previous -%}
   {%- assign pc = p.cover | default: p.image -%}
   {%- if pc == site.placeholder_image %}{% assign pc = nil %}{% endif -%}
   <a href="{{ p.url | relative_url }}">
-    <span class="im-postnav-art">
+    <span class="sp-postnav-art">
       {%- if pc -%}<img src="{{ pc | relative_url }}" alt="" loading="lazy" width="160" height="100">
       {%- else -%}{% include utility/thumb.html item=p size="sm" %}{%- endif -%}
     </span>
-    <span class="im-postnav-body">
-      <span class="im-postnav-label"><i class="ph-bold ph-arrow-left" aria-hidden="true"></i> Previous</span>
-      <span class="im-postnav-title">{{ p.title }}</span>
+    <span class="sp-postnav-body">
+      <span class="sp-postnav-label"><i class="ph-bold ph-arrow-left" aria-hidden="true"></i> Previous</span>
+      <span class="sp-postnav-title">{{ p.title }}</span>
     </span>
   </a>
   {%- endif -%}
@@ -26,12 +26,12 @@
   {%- assign n = page.next -%}
   {%- assign nc = n.cover | default: n.image -%}
   {%- if nc == site.placeholder_image %}{% assign nc = nil %}{% endif -%}
-  <a class="im-postnav-next" href="{{ n.url | relative_url }}">
-    <span class="im-postnav-body">
-      <span class="im-postnav-label">Next <i class="ph-bold ph-arrow-right" aria-hidden="true"></i></span>
-      <span class="im-postnav-title">{{ n.title }}</span>
+  <a class="sp-postnav-next" href="{{ n.url | relative_url }}">
+    <span class="sp-postnav-body">
+      <span class="sp-postnav-label">Next <i class="ph-bold ph-arrow-right" aria-hidden="true"></i></span>
+      <span class="sp-postnav-title">{{ n.title }}</span>
     </span>
-    <span class="im-postnav-art">
+    <span class="sp-postnav-art">
       {%- if nc -%}<img src="{{ nc | relative_url }}" alt="" loading="lazy" width="160" height="100">
       {%- else -%}{% include utility/thumb.html item=n size="sm" %}{%- endif -%}
     </span>

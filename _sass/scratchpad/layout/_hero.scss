@@ -1,0 +1,281 @@
+// ======================================================================
+// im/_hero.scss — Scratchpad CSS Framework hero / landing band
+// ======================================================================
+
+.sp-hero {
+  display: grid;
+  gap: var(--sp-space-5);
+  align-items: center;
+  padding-block: var(--sp-space-5);
+  // Everything decorative behind the hero (grid, glow, video) is clipped
+  // to the hero's own box, so nothing ever pokes out past the container
+  // edge the navbar shares with it.
+  overflow: clip;
+
+  // Mobile: no forced height. The column stacks (photo, copy, CTAs,
+  // socials) and is already taller than a phone screen — pinning it to
+  // the viewport would only squeeze it and force a scroll *inside* the
+  // hero. It just takes the height its content needs.
+  //
+  // Desktop: on the site's 12-column grid — copy spans 7, photo spans 5 —
+  // and fills the viewport below the top bar, so the whole hero lands in
+  // one screen. See --sp-hero-height for the svh/vh handling.
+  @media (min-width: $bp-lg) {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    column-gap: var(--sp-gutter);
+    min-height: var(--sp-hero-height);
+    padding-block: var(--sp-space-6);
+  }
+}
+
+// Image-led variant: left-aligned copy on the left, bigger picture on the right.
+.sp-hero--media-first {
+  @media (min-width: $bp-lg) {
+    .sp-hero-content { grid-column: 1 / span 7; order: 0; }
+    // Centred in its 5 columns, not flush right: leaves the pointer-drift
+    // (hero.js) room to move without the photo's edge hitting the clip.
+    .sp-hero-media   { grid-column: 8 / span 5; order: 1; justify-self: center; }
+  }
+  .sp-hero-content { text-align: left; align-items: flex-start; }
+}
+
+.sp-hero-content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-space-4);
+  max-width: 40rem;
+}
+
+// Quote + eyebrow badge share a single line above the title.
+.sp-hero-line {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--sp-space-3);
+  align-self: flex-start;
+}
+
+// The kicker over a hero is set in the MONO face — the system's one
+// typographic signal that a line is a label and not a sentence. It is a
+// chip, so it wears the chip's hairline and nothing else.
+
+// The one place the display size is used. Everything else on the site
+// stops at h1 — see base/_elements.scss.
+.sp-hero-title {
+  margin: 0;
+  font-size: var(--sp-text-display);
+  line-height: var(--sp-leading-display);
+  letter-spacing: var(--sp-tracking-tighter);
+}
+
+.sp-hero-subtitle {
+  margin: 0;
+  max-width: 46ch;
+  font-size: var(--sp-text-lg);
+  line-height: var(--sp-leading-lg);
+  color: var(--sp-body);
+  text-wrap: pretty;
+}
+
+.sp-hero-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--sp-space-2) var(--sp-space-5);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: var(--sp-text-sm);
+  color: var(--sp-muted);
+
+  i { margin-right: var(--sp-space-1); color: var(--sp-faint); }
+}
+.sp-hero-status {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-space-2);
+}
+.sp-hero-status-dot {
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: var(--sp-radius-full);
+  background: var(--sp-success);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--sp-success) 25%, transparent);
+}
+
+.sp-hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-space-3);
+  margin-top: var(--sp-space-3);
+}
+
+// Pull the social row up, closer to the actions above it.
+.sp-hero-content .sp-footer-social { margin-top: var(--sp-space-3); }
+
+// ---- The frame, and what is in it -------------------------------------
+// One box, two shapes: a portrait is square, a film is 16:9, and the
+// frame travels between them rather than swapping one box for another.
+.sp-hero-frame {
+  position: relative;
+  aspect-ratio: 1;
+  overflow: hidden;
+  border-radius: var(--sp-radius-2xl);
+  background: var(--sp-surface);
+  transition: aspect-ratio var(--sp-duration-slow) var(--sp-ease-out);
+
+  > img { width: 100%; height: 100%; object-fit: cover; }
+}
+
+.sp-hero-film {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--sp-duration-base) var(--sp-ease-out);
+
+  iframe { width: 100%; height: 100%; border: 0; }
+}
+
+// The switch decides the shape, with `:has()` — no class to set, and the
+// browser keeps the choice because it is a form control.
+.sp-hero-media:has(#sp-hero-film:checked) {
+  .sp-hero-frame { aspect-ratio: 16 / 9; }
+  .sp-hero-img { opacity: 0; }
+  .sp-hero-film { opacity: 1; pointer-events: auto; }
+}
+.sp-hero-img { transition: opacity var(--sp-duration-base) var(--sp-ease-out); }
+
+.sp-hero-switch {
+  display: inline-flex;
+  margin-top: var(--sp-space-3);
+  padding: 3px;
+  border-radius: var(--sp-radius-full);
+  box-shadow: inset 0 0 0 1px var(--sp-line);
+}
+.sp-hero-switch-input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+}
+.sp-hero-switch-label {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-space-2);
+  min-height: 1.75rem;
+  padding: 0 var(--sp-space-3);
+  border-radius: var(--sp-radius-full);
+  color: var(--sp-muted);
+  font-size: var(--sp-text-xs);
+  font-weight: var(--sp-weight-medium);
+  cursor: pointer;
+  transition: background-color var(--sp-duration-instant), color var(--sp-duration-instant);
+
+  &:hover { background: var(--sp-hover-bg); color: var(--sp-ink); }
+}
+.sp-hero-switch-input:checked + .sp-hero-switch-label {
+  background: var(--sp-current-bg);
+  color: var(--sp-current-fg);
+  font-weight: var(--sp-current-weight);
+}
+.sp-hero-switch-input:focus-visible + .sp-hero-switch-label {
+  outline: var(--sp-ring-width) solid var(--sp-ring);
+  outline-offset: var(--sp-ring-offset);
+}
+
+// The socials sit IN the row of actions, not under it.
+.sp-hero-social { margin-left: var(--sp-space-2); }
+.sp-hero-social a { width: 2.25rem; height: 2.25rem; }
+
+// The newsletter, with the calls to action.
+// Quiet at rest, full contrast on approach: the buttons above it are the
+// page's actual calls to action, and a second loud thing beside them is
+// one loud thing wasted. It comes up when someone reaches for it.
+.sp-hero-subscribe {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-space-2);
+  margin-top: var(--sp-space-5);
+  max-width: 24rem;
+  opacity: 0.62;
+  transition: opacity var(--sp-duration-base) var(--sp-ease-out);
+
+  &:hover,
+  &:focus-within { opacity: 1; }
+
+  input {
+    flex: 1 1 10rem;
+    min-width: 0;
+    width: auto;
+    min-height: 2rem;
+    padding: 0 var(--sp-space-3);
+    border: 0;
+    border-radius: var(--sp-radius-full);
+    box-shadow: inset 0 0 0 1px var(--sp-line);
+    background: transparent;
+    color: var(--sp-ink);
+    font-size: var(--sp-text-xs);
+
+    &::placeholder { color: var(--sp-faint); }
+    &:disabled { opacity: var(--sp-opacity-disabled); }
+  }
+
+  .sp-btn { --sp-btn-bg: transparent; box-shadow: inset 0 0 0 1px var(--sp-line); }
+}
+
+.sp-hero-media {
+  position: relative;
+  margin: 0;
+  max-width: 22rem;
+  margin-inline: auto;
+  justify-self: center;
+
+  // Mobile: image leads (above the text).
+  order: -1;
+
+  // Always a clean square with rounded corners (matches the island look).
+  img,
+  video {
+    display: block;
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    border-radius: var(--sp-radius-2xl);
+    box-shadow: var(--sp-shadow-lg);
+    object-fit: cover;
+  }
+
+  @include mq($bp-lg) {
+    order: 0;
+    max-width: 28rem;         // bigger, leading image
+    justify-self: start;
+  }
+}
+
+// ---- Word-mask reveal (hero.js) ---------------------------------------
+// hero.js wraps each title word in .sp-split > .sp-split-i, then slides
+// the inner span up from behind the outer one. The outer span clips, so
+// the padding/negative-margin pair is what stops descenders (the g in
+// "Engineering", the y in "storytelling") being sliced off by it.
+.sp-split {
+  display: inline-block;
+  overflow: hidden;
+  padding-bottom: 0.14em;
+  margin-bottom: -0.14em;
+}
+.sp-split-i { display: inline-block; will-change: transform; }
+
+// Handwritten quote near the picture (leads the copy column).
+.sp-hero-quote {
+  align-self: flex-start;
+  font-family: "Caveat", ui-rounded, cursive;
+  font-weight: 600;
+  font-size: 1.7rem;
+  line-height: 1.05;
+  color: var(--sp-muted);
+  transform: rotate(-1.5deg);
+}
+
+// Lightbox for the hero video (opened by the "Watch" CTA)

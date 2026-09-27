@@ -16,31 +16,31 @@
   {%- endif -%}
 {%- endfor -%}
 {%- assign done = page.lesson | times: 100 | divided_by: all.size -%}
-<div class="im-coursebar im-coursebar-solo im-no-print">
+<div class="sp-coursebar sp-coursebar-solo sp-no-print">
   {%- comment -%}
     This bar IS the page's navigation — the site header is not rendered on
     a lesson (`chrome: false`). So the first thing in it is the way out.
   {%- endcomment -%}
-  <a class="im-coursebar-back" href="{{ parent.url | default: '/courses/' | relative_url }}">
+  <a class="sp-coursebar-back" href="{{ parent.url | default: '/courses/' | relative_url }}">
     <i class="ph-bold ph-arrow-left" aria-hidden="true"></i>
-    <span class="im-coursebar-back-label">Back to course</span>
+    <span class="sp-coursebar-back-label">Back to course</span>
   </a>
 
-  <a class="im-coursebar-course" href="{{ parent.url | default: '/courses/' | relative_url }}">
+  <a class="sp-coursebar-course" href="{{ parent.url | default: '/courses/' | relative_url }}">
     <i class="ph-bold ph-graduation-cap" aria-hidden="true"></i>
     <span>{{ parent.title | default: "Course" }}</span>
   </a>
 
-  <span class="im-coursebar-progress">
-    <span class="im-coursebar-bar" aria-hidden="true"><span style="width: {{ done }}%"></span></span>
-    <span class="im-coursebar-count">{{ page.lesson }} / {{ all.size }}</span>
+  <span class="sp-coursebar-progress">
+    <span class="sp-coursebar-bar" aria-hidden="true"><span style="width: {{ done }}%"></span></span>
+    <span class="sp-coursebar-count">{{ page.lesson }} / {{ all.size }}</span>
   </span>
 
-  <span class="im-coursebar-move">
-    {%- if prev -%}<a class="im-coursebar-btn" href="{{ prev.url | relative_url }}" aria-label="Previous lesson: {{ prev.title | escape }}"><i class="ph-bold ph-arrow-left" aria-hidden="true"></i></a>
-    {%- else -%}<span class="im-coursebar-btn is-disabled" aria-hidden="true"><i class="ph-bold ph-arrow-left"></i></span>{%- endif -%}
-    {%- if next -%}<a class="im-coursebar-btn im-coursebar-next" href="{{ next.url | relative_url }}"><span>Next</span> <i class="ph-bold ph-arrow-right" aria-hidden="true"></i></a>
-    {%- else -%}<a class="im-coursebar-btn im-coursebar-next" href="{{ parent.url | relative_url }}"><span>Finish</span> <i class="ph-bold ph-check" aria-hidden="true"></i></a>{%- endif -%}
+  <span class="sp-coursebar-move">
+    {%- if prev -%}<a class="sp-coursebar-btn" href="{{ prev.url | relative_url }}" aria-label="Previous lesson: {{ prev.title | escape }}"><i class="ph-bold ph-arrow-left" aria-hidden="true"></i></a>
+    {%- else -%}<span class="sp-coursebar-btn is-disabled" aria-hidden="true"><i class="ph-bold ph-arrow-left"></i></span>{%- endif -%}
+    {%- if next -%}<a class="sp-coursebar-btn sp-coursebar-next" href="{{ next.url | relative_url }}"><span>Next</span> <i class="ph-bold ph-arrow-right" aria-hidden="true"></i></a>
+    {%- else -%}<a class="sp-coursebar-btn sp-coursebar-next" href="{{ parent.url | relative_url }}"><span>Finish</span> <i class="ph-bold ph-check" aria-hidden="true"></i></a>{%- endif -%}
   </span>
 </div>
 {%- endif -%}

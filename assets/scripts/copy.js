@@ -1,4 +1,4 @@
-/* One copy button, everywhere: [data-im-copy="<text>"].
+/* One copy button, everywhere: [data-sp-copy="<text>"].
  *
  * Delegated, so it covers buttons that arrive later (a carousel slide, an
  * injected snippet) and costs one listener instead of one per button.
@@ -7,10 +7,10 @@
   "use strict";
 
   document.addEventListener("click", function (e) {
-    var btn = e.target.closest && e.target.closest("[data-im-copy]");
+    var btn = e.target.closest && e.target.closest("[data-sp-copy]");
     if (!btn) return;
 
-    var value = btn.getAttribute("data-im-copy");
+    var value = btn.getAttribute("data-sp-copy");
     // The attribute is HTML-escaped by the template; unescape it so what
     // lands on the clipboard is what was written, not &quot; and &amp;.
     try {

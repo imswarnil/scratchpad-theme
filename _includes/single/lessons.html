@@ -5,15 +5,15 @@
 {%- assign all = site.lessons | where: "course", page.slug | sort: "lesson" -%}
 {%- if all.size > 0 -%}
 {%- assign modules = all | group_by: "module" -%}
-<section class="im-curriculum" aria-labelledby="im-curriculum-title">
-  <h2 class="im-curriculum-title" id="im-curriculum-title">
+<section class="sp-curriculum" aria-labelledby="sp-curriculum-title">
+  <h2 class="sp-curriculum-title" id="sp-curriculum-title">
     <i class="ph-bold ph-list-checks" aria-hidden="true"></i> Curriculum
-    <span class="im-eplist-count">{{ all.size }} lessons</span>
+    <span class="sp-eplist-count">{{ all.size }} lessons</span>
   </h2>
   {%- for m in modules -%}
-  <div class="im-module">
-    {%- if m.name and m.name != "" %}<h3 class="im-module-title">{{ m.name }}</h3>{% endif -%}
-    <div class="im-module-rows">
+  <div class="sp-module">
+    {%- if m.name and m.name != "" %}<h3 class="sp-module-title">{{ m.name }}</h3>{% endif -%}
+    <div class="sp-module-rows">
       {%- for l in m.items -%}{% include cards/lesson.html item=l %}{%- endfor -%}
     </div>
   </div>

@@ -1,186 +1,186 @@
 ---
 layout: default
 title: "Design Foundation"
-description: "Tokens, typography, components and patterns behind scratchpad.imswarnil.com — the IM CSS framework's living style guide."
+description: "Tokens, typography, components and patterns behind scratchpad.imswarnil.com — the Scratchpad CSS framework's living style guide."
 permalink: /design/
 indexing: false
 sidebar: false
 ad_rails: false
 ---
-<section class="im-collection im-page">
-  <header class="im-collection-head im-bg-dots im-reveal">
-    <span class="im-collection-icon"><i class="ph-bold ph-palette" aria-hidden="true"></i></span>
-    <h1 class="im-collection-title">Design Foundation</h1>
-    <p class="im-collection-desc">The tokens, typography, components and patterns behind this site — self-documenting: the navbar above and footer below on this very page are the live components, not screenshots.</p>
+<section class="sp-collection sp-page">
+  <header class="sp-collection-head sp-bg-dots sp-reveal">
+    <span class="sp-collection-icon"><i class="ph-bold ph-palette" aria-hidden="true"></i></span>
+    <h1 class="sp-collection-title">Design Foundation</h1>
+    <p class="sp-collection-desc">The tokens, typography, components and patterns behind this site — self-documenting: the navbar above and footer below on this very page are the live components, not screenshots.</p>
   </header>
 
-  <div class="im-doc-section">
-    <div class="im-doc-section-head">
+  <div class="sp-doc-section">
+    <div class="sp-doc-section-head">
       <h2>Architecture</h2>
-      <p>Everything here is <strong>IM CSS</strong>, a self-contained framework under <code class="im-mono">_sass/im/</code> — no external UI library. One entry point imports every layer in a fixed order (it's <code class="im-mono">@import</code>, one shared global scope, so order matters):</p>
+      <p>Everything here is <strong>Scratchpad CSS</strong>, a self-contained framework under <code class="sp-mono">_sass/scratchpad/</code> — no external UI library. One entry point imports every layer in a fixed order (it's <code class="sp-mono">@import</code>, one shared global scope, so order matters):</p>
     </div>
-    <ol class="im-padding-left-5">
+    <ol class="sp-padding-left-5">
       <li><strong>abstracts</strong> — build-time SCSS only: breakpoints, z-index scale, the light/dark colour maps, mixins. Nothing here reaches the browser directly.</li>
-      <li><strong>tokens</strong> — turns the abstracts into runtime <code class="im-mono">--im-*</code> custom properties on <code class="im-mono">:root</code>, plus the <code class="im-mono">[data-color-scheme]</code> dark overrides. This is the single source of truth every other layer reads from.</li>
+      <li><strong>tokens</strong> — turns the abstracts into runtime <code class="sp-mono">--sp-*</code> custom properties on <code class="sp-mono">:root</code>, plus the <code class="sp-mono">[data-color-scheme]</code> dark overrides. This is the single source of truth every other layer reads from.</li>
       <li><strong>base</strong> — reset, element typography, background/motion patterns (grid, dots, scroll-reveal).</li>
       <li><strong>layout</strong> — containers, navbar, hero, content shell, footer: the structural chrome shared by every page.</li>
       <li><strong>components</strong> — buttons, cards, collection cards, post/article, search, home, resume, sitemap: the reusable UI pieces.</li>
-      <li><strong>utilities</strong> — spacing / text / flex helpers, imported <em>last</em> so their <code class="im-mono">!important</code> rules win.</li>
+      <li><strong>utilities</strong> — spacing / text / flex helpers, imported <em>last</em> so their <code class="sp-mono">!important</code> rules win.</li>
     </ol>
-    <p class="im-text-muted">Every class that reaches HTML is prefixed <code class="im-mono">im-</code> (<code class="im-mono">im-card</code>, <code class="im-mono">im-btn</code>, <code class="im-mono">im-pcard--video</code>…) and reads <code class="im-mono">var(--im-*)</code> tokens — nothing is hard-coded, so the whole site re-themes from one place.</p>
+    <p class="sp-text-muted">Every class that reaches HTML is prefixed <code class="sp-mono">sp-</code> (<code class="sp-mono">sp-card</code>, <code class="sp-mono">sp-btn</code>, <code class="sp-mono">sp-pcard--video</code>…) and reads <code class="sp-mono">var(--sp-*)</code> tokens — nothing is hard-coded, so the whole site re-themes from one place.</p>
   </div>
 
-  <div class="im-doc-section">
-    <div class="im-doc-section-head">
+  <div class="sp-doc-section">
+    <div class="sp-doc-section-head">
       <h2>Color tokens</h2>
-      <p>Sourced from one map in <code class="im-mono">abstracts/_config.scss</code> (<code class="im-mono">$theme-light</code> / <code class="im-mono">$theme-dark</code>) and emitted as <code class="im-mono">--im-color-*</code>. This site's palette is deliberately monochrome — <code class="im-mono">accent</code> and <code class="im-mono">contrast</code> are pure black in light mode, pure white in dark mode. Toggle the sun/moon icon in the navbar to see every swatch below flip live.</p>
+      <p>Sourced from one map in <code class="sp-mono">abstracts/_config.scss</code> (<code class="sp-mono">$theme-light</code> / <code class="sp-mono">$theme-dark</code>) and emitted as <code class="sp-mono">--sp-color-*</code>. This site's palette is deliberately monochrome — <code class="sp-mono">accent</code> and <code class="sp-mono">contrast</code> are pure black in light mode, pure white in dark mode. Toggle the sun/moon icon in the navbar to see every swatch below flip live.</p>
     </div>
-    <div class="im-swatch-grid">
+    <div class="sp-swatch-grid">
       {%- assign _tokens = "accent,contrast,foreground,secondary,mute,background,background-100,background-200,background-300,surface,border,success,warning,danger" | split: "," -%}
       {%- for t in _tokens -%}
-      <div class="im-swatch">
-        <div class="im-swatch-fill" style="background: var(--im-color-{{ t }});"></div>
-        <span class="im-swatch-name">{{ t }}</span>
-        <span class="im-swatch-value">--im-color-{{ t }}</span>
+      <div class="sp-swatch">
+        <div class="sp-swatch-fill" style="background: var(--sp-color-{{ t }});"></div>
+        <span class="sp-swatch-name">{{ t }}</span>
+        <span class="sp-swatch-value">--sp-color-{{ t }}</span>
       </div>
       {%- endfor -%}
     </div>
   </div>
 
-  <div class="im-doc-section">
-    <div class="im-doc-section-head">
+  <div class="sp-doc-section">
+    <div class="sp-doc-section-head">
       <h2>Typography &amp; font pairing</h2>
-      <p>Two families, one job each — loaded via <code class="im-mono">site.fonts</code> in <code class="im-mono">_config.yml</code>.</p>
+      <p>Two families, one job each — loaded via <code class="sp-mono">site.fonts</code> in <code class="sp-mono">_config.yml</code>.</p>
     </div>
-    <div class="im-card im-margin-bottom-5">
-      <p style="font-family: var(--im-font-body); font-size: var(--im-text-2xl); font-weight: var(--im-fw-bold); margin: 0;">Geist — UI &amp; body</p>
-      <p class="im-text-muted" style="margin: 0;">Every heading, paragraph, label and button. Variable weight (100–900), system-stack fallback (<code class="im-mono">-apple-system, Segoe UI, Roboto, Inter…</code>) so text never flashes unstyled.</p>
+    <div class="sp-card sp-margin-bottom-5">
+      <p style="font-family: var(--sp-font-body); font-size: var(--sp-text-2xl); font-weight: var(--sp-fw-bold); margin: 0;">Geist — UI &amp; body</p>
+      <p class="sp-text-muted" style="margin: 0;">Every heading, paragraph, label and button. Variable weight (100–900), system-stack fallback (<code class="sp-mono">-apple-system, Segoe UI, Roboto, Inter…</code>) so text never flashes unstyled.</p>
     </div>
-    <div class="im-card">
-      <p style="font-family: 'Caveat', ui-rounded, cursive; font-size: var(--im-text-3xl); font-weight: 700; margin: 0;">Caveat — the handwritten accent</p>
-      <p class="im-text-muted" style="margin: 0;">Used sparingly, on purpose: the hero quote, the "that's me!" tag, the signature. It's a voice, not a body font — never used for anything you have to read at length.</p>
+    <div class="sp-card">
+      <p style="font-family: 'Caveat', ui-rounded, cursive; font-size: var(--sp-text-3xl); font-weight: 700; margin: 0;">Caveat — the handwritten accent</p>
+      <p class="sp-text-muted" style="margin: 0;">Used sparingly, on purpose: the hero quote, the "that's me!" tag, the signature. It's a voice, not a body font — never used for anything you have to read at length.</p>
     </div>
 
-    <h3 class="im-margin-top-6">Type scale</h3>
+    <h3 class="sp-margin-top-6">Type scale</h3>
     {%- assign _sizes = "xs,sm,base,lg,xl,2xl,3xl,4xl,5xl" | split: "," -%}
     {%- for s in _sizes -%}
-    <div class="im-scale-row">
-      <span class="im-scale-label">--im-text-{{ s }}</span>
-      <span style="font-size: var(--im-text-{{ s }}); line-height: 1;">Aa Engineering meets storytelling</span>
+    <div class="sp-scale-row">
+      <span class="sp-scale-label">--sp-text-{{ s }}</span>
+      <span style="font-size: var(--sp-text-{{ s }}); line-height: 1;">Aa Engineering meets storytelling</span>
     </div>
     {%- endfor -%}
 
-    <h3 class="im-margin-top-6">Weights</h3>
+    <h3 class="sp-margin-top-6">Weights</h3>
     {%- assign _weights = "regular,medium,semibold,bold" | split: "," -%}
     {%- for w in _weights -%}
-    <div class="im-scale-row">
-      <span class="im-scale-label">--im-fw-{{ w }}</span>
-      <span style="font-weight: var(--im-fw-{{ w }});">The quick brown fox</span>
+    <div class="sp-scale-row">
+      <span class="sp-scale-label">--sp-fw-{{ w }}</span>
+      <span style="font-weight: var(--sp-fw-{{ w }});">The quick brown fox</span>
     </div>
     {%- endfor -%}
   </div>
 
-  <div class="im-doc-section">
-    <div class="im-doc-section-head">
+  <div class="sp-doc-section">
+    <div class="sp-doc-section-head">
       <h2>Spacing &amp; radius</h2>
-      <p>Two canonical scales, consumed everywhere — nothing in the framework uses a raw <code class="im-mono">px</code>/<code class="im-mono">rem</code> value outside these two maps.</p>
+      <p>Two canonical scales, consumed everywhere — nothing in the framework uses a raw <code class="sp-mono">px</code>/<code class="sp-mono">rem</code> value outside these two maps.</p>
     </div>
     {%- assign _space = "1,2,3,4,5,6,7,8" | split: "," -%}
     {%- for s in _space -%}
-    <div class="im-scale-row">
-      <span class="im-scale-label">--im-space-{{ s }}</span>
-      <div class="im-scale-box" style="width: var(--im-space-{{ s }}); height: 1.25rem;"></div>
+    <div class="sp-scale-row">
+      <span class="sp-scale-label">--sp-space-{{ s }}</span>
+      <div class="sp-scale-box" style="width: var(--sp-space-{{ s }}); height: 1.25rem;"></div>
     </div>
     {%- endfor -%}
 
-    <h3 class="im-margin-top-6">Radius</h3>
+    <h3 class="sp-margin-top-6">Radius</h3>
     {%- assign _radius = "1,2,3,4,5,6,pill" | split: "," -%}
     {%- for r in _radius -%}
-    <div class="im-scale-row">
-      <span class="im-scale-label">--im-radius-{{ r }}</span>
-      <div class="im-scale-box" style="width: 3.5rem; height: 2.25rem; border-radius: var(--im-radius-{{ r }});"></div>
+    <div class="sp-scale-row">
+      <span class="sp-scale-label">--sp-radius-{{ r }}</span>
+      <div class="sp-scale-box" style="width: 3.5rem; height: 2.25rem; border-radius: var(--sp-radius-{{ r }});"></div>
     </div>
     {%- endfor -%}
   </div>
 
-  <div class="im-doc-section">
-    <div class="im-doc-section-head">
+  <div class="sp-doc-section">
+    <div class="sp-doc-section-head">
       <h2>Buttons</h2>
-      <p><code class="im-mono">.im-btn</code> is solid-accent by default; modifiers swap the fill, size stays a separate axis.</p>
+      <p><code class="sp-mono">.sp-btn</code> is solid-accent by default; modifiers swap the fill, size stays a separate axis.</p>
     </div>
-    <div class="im-row im-row-tight im-flex-wrap im-margin-bottom-4">
-      <button class="im-btn">Solid</button>
-      <button class="im-btn im-btn-outline">Outline</button>
-      <button class="im-btn im-btn-ghost">Ghost</button>
-      <button class="im-btn im-btn-muted">Muted</button>
+    <div class="sp-row sp-row-tight sp-flex-wrap sp-margin-bottom-4">
+      <button class="sp-btn">Solid</button>
+      <button class="sp-btn sp-btn-outline">Outline</button>
+      <button class="sp-btn sp-btn-ghost">Ghost</button>
+      <button class="sp-btn sp-btn-muted">Muted</button>
     </div>
-    <div class="im-row im-row-tight im-flex-wrap im-items-center">
-      <button class="im-btn im-btn-sm">Small</button>
-      <button class="im-btn">Default</button>
-      <button class="im-btn im-btn-lg">Large</button>
-      <button class="im-btn im-btn-icon im-btn-outline" aria-label="Icon button"><i class="ph-bold ph-heart"></i></button>
+    <div class="sp-row sp-row-tight sp-flex-wrap sp-items-center">
+      <button class="sp-btn sp-btn-sm">Small</button>
+      <button class="sp-btn">Default</button>
+      <button class="sp-btn sp-btn-lg">Large</button>
+      <button class="sp-btn sp-btn-icon sp-btn-outline" aria-label="Icon button"><i class="ph-bold ph-heart"></i></button>
     </div>
   </div>
 
-  <div class="im-doc-section">
-    <div class="im-doc-section-head">
+  <div class="sp-doc-section">
+    <div class="sp-doc-section-head">
       <h2>Cards</h2>
-      <p><code class="im-mono">.im-card</code> plus flat/dashed/muted modifiers — the same shell every collection card (<code class="im-mono">.im-pcard</code>) and bento tile builds on.</p>
+      <p><code class="sp-mono">.sp-card</code> plus flat/dashed/muted modifiers — the same shell every collection card (<code class="sp-mono">.sp-pcard</code>) and bento tile builds on.</p>
     </div>
-    <div class="im-grid-3">
-      <div class="im-card">
-        <p class="im-card-title" style="margin:0;">Default</p>
-        <p class="im-text-muted" style="margin:0;">Surface fill, border, shadow.</p>
+    <div class="sp-grid-3">
+      <div class="sp-card">
+        <p class="sp-card-title" style="margin:0;">Default</p>
+        <p class="sp-text-muted" style="margin:0;">Surface fill, border, shadow.</p>
       </div>
-      <div class="im-card im-card-flat">
-        <p class="im-card-title" style="margin:0;">Flat</p>
-        <p class="im-text-muted" style="margin:0;">No shadow — sits quieter in a grid.</p>
+      <div class="sp-card sp-card-flat">
+        <p class="sp-card-title" style="margin:0;">Flat</p>
+        <p class="sp-text-muted" style="margin:0;">No shadow — sits quieter in a grid.</p>
       </div>
-      <div class="im-card im-card-dashed">
-        <p class="im-card-title" style="margin:0;">Dashed</p>
-        <p class="im-text-muted" style="margin:0;">Empty-state / "add new" placeholder.</p>
+      <div class="sp-card sp-card-dashed">
+        <p class="sp-card-title" style="margin:0;">Dashed</p>
+        <p class="sp-text-muted" style="margin:0;">Empty-state / "add new" placeholder.</p>
       </div>
     </div>
   </div>
 
-  <div class="im-doc-section">
-    <div class="im-doc-section-head">
+  <div class="sp-doc-section">
+    <div class="sp-doc-section-head">
       <h2>Navbar</h2>
-      <p>You're looking at it — the header on this page <em>is</em> the component, driven entirely by <code class="im-mono">site.header</code> in <code class="im-mono">_config.yml</code>.</p>
+      <p>You're looking at it — the header on this page <em>is</em> the component, driven entirely by <code class="sp-mono">site.header</code> in <code class="sp-mono">_config.yml</code>.</p>
     </div>
-    <ul class="im-padding-left-5">
-      <li><strong>island | full</strong> — island starts as a normal bar, then detaches into a floating rounded pill once scrolled (<code class="im-mono">.is-scrolled</code>). It keeps the site width throughout; only height, padding, radius and surface change, so its edges stay locked to the content below.</li>
-      <li><strong>Progress ring</strong> — an SVG path traced around the pill's own rounded outline, left → bottom → right → top, revealed with <code class="im-mono">stroke-dashoffset</code> as you scroll (<code class="im-mono">navbar.js</code>). Path length, not angle, so it moves at one constant rate around straights and corners alike.</li>
-      <li><strong>Brand mark</strong> — a circular "SS" initials avatar beside the name, identical in the top bar and the scrolled pill. Initials rather than a logo image, derived from <code class="im-mono">site.author</code>.</li>
-      <li><strong>Dropdown / megamenu</strong> — <code class="im-mono">item.children</code> for a simple list, a child with its own <code class="im-mono">children</code> for a two-level flyout, <code class="im-mono">megamenu: true</code> + <code class="im-mono">groups</code> for the large grouped panel.</li>
+    <ul class="sp-padding-left-5">
+      <li><strong>island | full</strong> — island starts as a normal bar, then detaches into a floating rounded pill once scrolled (<code class="sp-mono">.is-scrolled</code>). It keeps the site width throughout; only height, padding, radius and surface change, so its edges stay locked to the content below.</li>
+      <li><strong>Progress ring</strong> — an SVG path traced around the pill's own rounded outline, left → bottom → right → top, revealed with <code class="sp-mono">stroke-dashoffset</code> as you scroll (<code class="sp-mono">navbar.js</code>). Path length, not angle, so it moves at one constant rate around straights and corners alike.</li>
+      <li><strong>Brand mark</strong> — a circular "SS" initials avatar beside the name, identical in the top bar and the scrolled pill. Initials rather than a logo image, derived from <code class="sp-mono">site.author</code>.</li>
+      <li><strong>Dropdown / megamenu</strong> — <code class="sp-mono">item.children</code> for a simple list, a child with its own <code class="sp-mono">children</code> for a two-level flyout, <code class="sp-mono">megamenu: true</code> + <code class="sp-mono">groups</code> for the large grouped panel.</li>
     </ul>
   </div>
 
-  <div class="im-doc-section">
-    <div class="im-doc-section-head">
+  <div class="sp-doc-section">
+    <div class="sp-doc-section-head">
       <h2>Footer</h2>
-      <p>Scroll to the bottom of this page for the live example. Driven by <code class="im-mono">site.footer</code>: <code class="im-mono">layout: columns | minimal</code>, optional <code class="im-mono">boxed</code> card wrapper (off by default — it sits directly on the page background), and a slim bottom strip carrying copyright, legal links and back-to-top, set apart with a tinted background.</p>
+      <p>Scroll to the bottom of this page for the live example. Driven by <code class="sp-mono">site.footer</code>: <code class="sp-mono">layout: columns | minimal</code>, optional <code class="sp-mono">boxed</code> card wrapper (off by default — it sits directly on the page background), and a slim bottom strip carrying copyright, legal links and back-to-top, set apart with a tinted background.</p>
     </div>
   </div>
 
-  <div class="im-doc-section">
-    <div class="im-doc-section-head">
+  <div class="sp-doc-section">
+    <div class="sp-doc-section-head">
       <h2>Dark mode</h2>
-      <p>An inline no-flash script in <code class="im-mono">head.html</code> writes <code class="im-mono">data-color-scheme</code> (<code class="im-mono">light</code> / <code class="im-mono">dark</code> / <code class="im-mono">system</code>) onto <code class="im-mono">&lt;html&gt;</code> before first paint. The navbar's sun/moon toggle flips it and persists the choice to <code class="im-mono">localStorage</code> (<code class="im-mono">im-color-scheme</code>). Every token above is redefined under <code class="im-mono">[data-color-scheme="dark"]</code> in <code class="im-mono">tokens/_dark-mode.scss</code> — components never branch on theme themselves, they just read the same <code class="im-mono">var(--im-color-*)</code>.</p>
+      <p>An inline no-flash script in <code class="sp-mono">head.html</code> writes <code class="sp-mono">data-color-scheme</code> (<code class="sp-mono">light</code> / <code class="sp-mono">dark</code> / <code class="sp-mono">system</code>) onto <code class="sp-mono">&lt;html&gt;</code> before first paint. The navbar's sun/moon toggle flips it and persists the choice to <code class="sp-mono">localStorage</code> (<code class="sp-mono">sp-color-scheme</code>). Every token above is redefined under <code class="sp-mono">[data-color-scheme="dark"]</code> in <code class="sp-mono">tokens/_dark-mode.scss</code> — components never branch on theme themselves, they just read the same <code class="sp-mono">var(--sp-color-*)</code>.</p>
     </div>
   </div>
 
-  <div class="im-doc-section">
-    <div class="im-doc-section-head">
+  <div class="sp-doc-section">
+    <div class="sp-doc-section-head">
       <h2>Motion &amp; background accents</h2>
-      <p>Kept subtle and always <code class="im-mono">prefers-reduced-motion</code>-aware.</p>
+      <p>Kept subtle and always <code class="sp-mono">prefers-reduced-motion</code>-aware.</p>
     </div>
-    <ul class="im-padding-left-5">
-      <li><strong>Dot / line grid</strong> — <code class="im-mono">.im-bg-dots</code> / <code class="im-mono">.im-bg-grid</code>, a radial or linear pattern masked so it fades into the page rather than tiling edge-to-edge.</li>
+    <ul class="sp-padding-left-5">
+      <li><strong>Dot / line grid</strong> — <code class="sp-mono">.sp-bg-dots</code> / <code class="sp-mono">.sp-bg-grid</code>, a radial or linear pattern masked so it fades into the page rather than tiling edge-to-edge.</li>
       <li><strong>Hero glow</strong> — a soft, slowly drifting accent-colour circle behind the hero grid, on a 16s float loop.</li>
-      <li><strong>Ambient hero video</strong> — on the homepage, a muted/looped YouTube embed sits behind the copy, masked with a <code class="im-mono">closest-side</code> circle (guaranteed to reach full transparency before any edge) and <code class="im-mono">mix-blend-mode: screen</code> so dark frames melt into the page instead of reading as a grey box — desktop only, skipped under reduced motion.</li>
-      <li><strong>Hero choreography</strong> — a GSAP timeline (<code class="im-mono">hero.js</code>, loaded only on pages with a <code class="im-mono">hero_title</code>): the photo settles in, title words rise from behind per-word masks, the rest of the copy staggers up. Then a slow idle float, a pointer-following drift on fine pointers, and a scroll lift on the copy. No CSS sets a hidden start state, so without GSAP the hero just renders.</li>
-      <li><strong>Scroll reveal</strong> — <code class="im-mono">.im-reveal</code> elements fade/rise in via an <code class="im-mono">IntersectionObserver</code> (<code class="im-mono">custom.js</code>); content stays fully visible if JS never runs.</li>
+      <li><strong>Ambient hero video</strong> — on the homepage, a muted/looped YouTube embed sits behind the copy, masked with a <code class="sp-mono">closest-side</code> circle (guaranteed to reach full transparency before any edge) and <code class="sp-mono">mix-blend-mode: screen</code> so dark frames melt into the page instead of reading as a grey box — desktop only, skipped under reduced motion.</li>
+      <li><strong>Hero choreography</strong> — a GSAP timeline (<code class="sp-mono">hero.js</code>, loaded only on pages with a <code class="sp-mono">hero_title</code>): the photo settles in, title words rise from behind per-word masks, the rest of the copy staggers up. Then a slow idle float, a pointer-following drift on fine pointers, and a scroll lift on the copy. No CSS sets a hidden start state, so without GSAP the hero just renders.</li>
+      <li><strong>Scroll reveal</strong> — <code class="sp-mono">.sp-reveal</code> elements fade/rise in via an <code class="sp-mono">IntersectionObserver</code> (<code class="sp-mono">custom.js</code>); content stays fully visible if JS never runs.</li>
     </ul>
   </div>
 </section>

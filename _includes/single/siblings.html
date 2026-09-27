@@ -12,13 +12,13 @@
   {%- assign label = "lessons" -%}
 {%- endif -%}
 {%- if sibs.size > 1 -%}
-<section class="im-eplist" aria-labelledby="im-siblings-title">
-  <h2 class="im-eplist-title" id="im-siblings-title">
+<section class="sp-eplist" aria-labelledby="sp-siblings-title">
+  <h2 class="sp-eplist-title" id="sp-siblings-title">
     <i class="ph-bold ph-list-numbers" aria-hidden="true"></i>
     {%- if parent %} More in {{ parent.title }}{% else %} All {{ label }}{% endif -%}
-    <span class="im-eplist-count">{{ sibs.size }}</span>
+    <span class="sp-eplist-count">{{ sibs.size }}</span>
   </h2>
-  <div class="im-eplist-rows">
+  <div class="sp-eplist-rows">
     {%- for s in sibs -%}
       {%- unless s.url == page.url -%}
         {%- if page.collection == "episodes" -%}{% include cards/episode.html item=s %}

@@ -1,0 +1,232 @@
+// ======================================================================
+// im/_base.scss — reset + element defaults (built on --sp-* tokens)
+// Trimmed from the pasted theme reset; greyscale, token-driven.
+// ======================================================================
+
+*, *::before, *::after { box-sizing: border-box; }
+
+@media (prefers-reduced-motion: no-preference) {
+  :root { scroll-behavior: smooth; }
+}
+
+// NOTE: use `overflow-x: clip`, NOT `hidden`. `hidden` turns html/body into a
+// scroll container, which breaks `position: sticky` on the navbar. `clip`
+// prevents horizontal scrollbars the same way but keeps sticky working.
+html { height: 100%; -webkit-text-size-adjust: 100%; text-size-adjust: 100%; overflow-x: clip; }
+
+body {
+  margin: 0;
+  min-height: 100%;
+  overflow-x: clip;      // clip (not hidden) so the sticky navbar keeps working
+  font-family: var(--sp-font-body);
+  font-size: 16px;
+  font-weight: var(--sp-weight-normal);
+  line-height: var(--sp-leading-base);
+  color: var(--sp-body);
+  background-color: var(--sp-canvas);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-tap-highlight-color: transparent;
+  word-break: break-word;
+}
+
+img, svg, video, canvas, iframe { display: block; max-width: 100%; height: auto; }
+img { border-style: none; }
+svg:not([fill]) { fill: currentColor; }
+
+p { margin: 0 0 var(--sp-space-4); }
+
+// These are PROSE rules, so they apply to prose lists: the ones Markdown
+// writes, which carry no class. Every list the theme styles itself has one
+// — a card grid, a nav, a tag row — and a 4px margin between its items is
+// at best noise and at worst a bug: in a grid it offsets the second item
+// and stops it stretching to its row, so a row of cards stops lining up.
+:where(ul, ol):not([class]) {
+  margin: 0 0 var(--sp-space-4);
+  padding-left: 1.5rem;
+
+  li + li { margin-top: var(--sp-space-1); }
+}
+
+hr {
+  height: 0;
+  margin: var(--sp-space-6) 0;
+  border: 0;
+  border-top: 1px solid var(--sp-line);
+}
+
+b, strong { font-weight: var(--sp-weight-semibold); }
+small { font-size: var(--sp-text-sm); }
+
+a {
+  color: var(--sp-ink);
+  text-decoration: underline;
+  text-decoration-thickness: 0.075em;
+  text-underline-offset: 0.15em;
+  text-decoration-color: color-mix(in srgb, currentColor 35%, transparent);
+  transition: color var(--sp-duration-fast) var(--sp-ease-out), text-decoration-color var(--sp-duration-fast) var(--sp-ease-out);
+
+  &:hover { color: var(--sp-accent); text-decoration-color: currentColor; }
+}
+
+// Headings
+// The design system's ladder: six sizes, each with its own leading, and a
+// restrained h1 — the big type on a page belongs to a hero, which asks for
+// --sp-text-display by name. A heading also balances its last line.
+h1, h2, h3, h4, h5, h6 {
+  margin: 0 0 var(--sp-space-3);
+  font-family: var(--sp-font-head);
+  font-weight: var(--sp-weight-semibold);
+  color: var(--sp-ink);
+  letter-spacing: var(--sp-tracking-tight);
+  text-wrap: balance;
+}
+h1 { font-size: var(--sp-text-h1); line-height: var(--sp-leading-h1); }
+h2 { font-size: var(--sp-text-h2); line-height: var(--sp-leading-h2); }
+h3 { font-size: var(--sp-text-h3); line-height: var(--sp-leading-h3); }
+h4 { font-size: var(--sp-text-h4); line-height: var(--sp-leading-h4); }
+h5 { font-size: var(--sp-text-h5); line-height: var(--sp-leading-h5); }
+h6 { font-size: var(--sp-text-h6); line-height: var(--sp-leading-h6); }
+
+// Quotes
+blockquote {
+  margin: var(--sp-space-5) 0;
+  padding: 0.25em 0 0.25em var(--sp-space-4);
+  // The collection's own hue, which on a post IS the accent — a pull
+  // quote is the one place in prose that earns a colour.
+  border-left: 3px solid var(--sp-c-current, var(--sp-accent));
+  color: var(--sp-ink);
+  font-weight: var(--sp-weight-medium);
+}
+
+// Code
+code, kbd, samp, pre { font-family: var(--sp-font-mono); }
+code, kbd, samp, pre { font-feature-settings: "liga" 0; }
+:not(pre) > code {
+  padding: 0.15em 0.4em;
+  font-size: 0.875em;
+  border-radius: var(--sp-radius-sm);
+  background: var(--sp-accent-tint);
+  box-shadow: inset 0 0 0 1px color-mix(in oklab, var(--sp-accent) 18%, transparent);
+  color: color-mix(in oklab, var(--sp-accent) 62%, var(--sp-ink));
+}
+
+// A block of code is DARK in both themes. Code reads best light-on-dark, and
+// a dark slab gives a page of prose a clear change of voice — so it does not
+// flip with the theme, and it carries its own hairline (--sp-code-line)
+// rather than the page's, which is tuned for the page's background.
+pre {
+  display: block;
+  overflow: auto;
+  max-height: 32rem;
+  margin: var(--sp-space-5) 0;
+  padding: var(--sp-space-4) var(--sp-space-5);
+  font-size: var(--sp-text-sm);
+  line-height: 1.65;
+  tab-size: 2;
+  border-radius: var(--sp-radius-lg);
+  background: var(--sp-code-bg);
+  box-shadow: inset 0 0 0 1px var(--sp-code-line);
+  color: var(--sp-code-fg);
+  color-scheme: dark;
+}
+pre code { padding: 0; background: none; box-shadow: none; color: inherit; font-size: inherit; }
+
+// The one escape hatch: a sample that has to sit light, e.g. beside a
+// colour swatch. Same box, the page's own palette.
+pre.sp-code-light {
+  --sp-code-bg:   var(--sp-gray-100);
+  --sp-code-fg:   var(--sp-gray-900);
+  --sp-code-line: rgb(0 0 0 / 10%);
+
+  color-scheme: light;
+}
+
+kbd {
+  display: inline-block;
+  padding: 0.1em 0.45em;
+  border-radius: var(--sp-radius-sm);
+  background: var(--sp-canvas);
+  box-shadow: inset 0 0 0 1px var(--sp-line), 0 1px 0 var(--sp-line);
+  color: var(--sp-ink);
+  font-size: 0.8125em;
+  white-space: nowrap;
+}
+
+mark {
+  padding: 0.1em 0.3em;
+  border-radius: var(--sp-radius-xs);
+  background: color-mix(in oklab, var(--sp-accent) 22%, transparent);
+  color: inherit;
+}
+
+// Tables
+table {
+  width: 100%;
+  margin: var(--sp-space-5) 0;
+  border-collapse: collapse;
+  font-size: var(--sp-text-sm);
+}
+th, td {
+  padding: var(--sp-space-3) var(--sp-space-4);
+  text-align: left;
+  border-bottom: 1px solid var(--sp-line);
+}
+thead th { font-weight: var(--sp-weight-semibold); color: var(--sp-ink); }
+
+// Forms
+button, input, select, textarea { font: inherit; color: inherit; }
+input, select, textarea {
+  width: 100%;
+  padding: var(--sp-space-3) var(--sp-space-4);
+  border: 1px solid var(--sp-line);
+  border-radius: var(--sp-radius-lg);
+  background: var(--sp-canvas);
+  color: var(--sp-ink);
+
+  &::placeholder { color: var(--sp-faint); }
+  &:focus-visible {
+    outline: var(--sp-ring-width) solid var(--sp-ring);
+    outline-offset: 1px;
+    border-color: transparent;
+  }
+}
+
+figure { margin: 0; }
+figcaption {
+  margin-top: var(--sp-space-2);
+  font-size: var(--sp-text-sm);
+  color: var(--sp-muted);
+  text-align: center;
+}
+
+// ONE focus ring for the whole site. Every focusable thing draws it, at
+// the same width and the same offset, in both themes — a keyboard user
+// learns it once. Three tokens, so a site can change it in one place.
+:focus-visible {
+  outline: var(--sp-ring-width) solid var(--sp-ring);
+  outline-offset: var(--sp-ring-offset);
+  border-radius: var(--sp-radius-xs);
+}
+
+::selection {
+  background: color-mix(in oklab, var(--sp-accent) 28%, transparent);
+  color: var(--sp-ink);
+}
+
+// Motion is felt, not watched — and never forced on someone who asked for
+// less of it. One rule, site-wide, rather than a @media in every partial.
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+// Site shell -----------------------------------------------------------
+.main { display: block; }
+.sp-page { padding-block: var(--sp-space-5) var(--sp-space-7); }

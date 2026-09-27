@@ -15,7 +15,7 @@
     var slides = [].slice.call(root.querySelectorAll("[data-carousel-slide]"));
     // A shelf has no dots and pages by however many cards are on screen;
     // a figure carousel has dots and pages one slide at a time.
-    var isShelf = root.classList.contains("im-shelf-wrap");
+    var isShelf = root.classList.contains("sp-shelf-wrap");
     var dots = [].slice.call(root.querySelectorAll("[data-carousel-dot]"));
     var prev = root.querySelector("[data-carousel-prev]");
     var next = root.querySelector("[data-carousel-next]");

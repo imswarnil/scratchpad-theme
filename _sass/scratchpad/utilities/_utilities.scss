@@ -1,0 +1,140 @@
+// ======================================================================
+// im/_utilities.scss — Scratchpad CSS Framework utility classes
+// Verbose, predictable helper names, all prefixed `sp-`.
+//   sp-padding-top-2 · sp-margin-bottom-4 · sp-text-small · sp-gap-3 …
+// Values come straight from the --sp-* tokens so utilities re-theme too.
+// ======================================================================
+
+// ---- Spacing (margin / padding) ---------------------------------------
+// Sides map -> property fragments. `x`/`y` expand to two declarations.
+$sp-sides: (
+  "":      ("padding": padding,            "margin": margin),
+  "-top":    ("padding": padding-top,      "margin": margin-top),
+  "-right":  ("padding": padding-right,    "margin": margin-right),
+  "-bottom": ("padding": padding-bottom,   "margin": margin-bottom),
+  "-left":   ("padding": padding-left,     "margin": margin-left),
+);
+
+@each $step, $val in $sp-space {
+  @each $suffix, $props in $sp-sides {
+    .sp-padding#{$suffix}-#{$step} { #{map-get($props, "padding")}: var(--sp-space-#{$step}) !important; }
+    .sp-margin#{$suffix}-#{$step}  { #{map-get($props, "margin")}:  var(--sp-space-#{$step}) !important; }
+  }
+  // Axis helpers
+  .sp-padding-x-#{$step} { padding-left: var(--sp-space-#{$step}) !important; padding-right: var(--sp-space-#{$step}) !important; }
+  .sp-padding-y-#{$step} { padding-top: var(--sp-space-#{$step}) !important;  padding-bottom: var(--sp-space-#{$step}) !important; }
+  .sp-margin-x-#{$step}  { margin-left: var(--sp-space-#{$step}) !important;  margin-right: var(--sp-space-#{$step}) !important; }
+  .sp-margin-y-#{$step}  { margin-top: var(--sp-space-#{$step}) !important;   margin-bottom: var(--sp-space-#{$step}) !important; }
+  // Gap (flex / grid)
+  .sp-gap-#{$step} { gap: var(--sp-space-#{$step}) !important; }
+}
+.sp-margin-auto   { margin-inline: auto !important; }
+.sp-margin-x-auto { margin-left: auto !important; margin-right: auto !important; }
+
+// ---- Display ----------------------------------------------------------
+.sp-block        { display: block !important; }
+.sp-inline       { display: inline !important; }
+.sp-inline-block { display: inline-block !important; }
+.sp-flex         { display: flex !important; }
+.sp-inline-flex  { display: inline-flex !important; }
+.sp-grid         { display: grid !important; }
+.sp-hidden       { display: none !important; }
+
+// ---- Flexbox ----------------------------------------------------------
+.sp-flex-row     { flex-direction: row !important; }
+.sp-flex-col     { flex-direction: column !important; }
+.sp-flex-wrap    { flex-wrap: wrap !important; }
+.sp-flex-nowrap  { flex-wrap: nowrap !important; }
+.sp-flex-1       { flex: 1 1 0% !important; }
+.sp-flex-auto    { flex: 1 1 auto !important; }
+.sp-flex-none    { flex: none !important; }
+.sp-items-start    { align-items: flex-start !important; }
+.sp-items-center   { align-items: center !important; }
+.sp-items-end      { align-items: flex-end !important; }
+.sp-items-stretch  { align-items: stretch !important; }
+.sp-justify-start   { justify-content: flex-start !important; }
+.sp-justify-center  { justify-content: center !important; }
+.sp-justify-end     { justify-content: flex-end !important; }
+.sp-justify-between { justify-content: space-between !important; }
+.sp-justify-around  { justify-content: space-around !important; }
+
+// ---- Text -------------------------------------------------------------
+@each $name, $val in $sp-text {
+  .sp-text-#{$name} { font-size: var(--sp-text-#{$name}) !important; }
+}
+// Friendly aliases
+.sp-text-small { font-size: var(--sp-text-sm) !important; }
+.sp-text-large { font-size: var(--sp-text-lg) !important; }
+
+.sp-text-left    { text-align: left !important; }
+.sp-text-center  { text-align: center !important; }
+.sp-text-right   { text-align: right !important; }
+.sp-text-balance { text-wrap: balance !important; }
+
+.sp-text-regular  { font-weight: var(--sp-weight-normal) !important; }
+.sp-text-medium   { font-weight: var(--sp-weight-medium) !important; }
+.sp-text-semibold { font-weight: var(--sp-weight-semibold) !important; }
+.sp-text-bold     { font-weight: var(--sp-weight-bold) !important; }
+.sp-uppercase     { text-transform: uppercase !important; letter-spacing: 0.06em; }
+.sp-mono          { font-family: var(--sp-font-mono) !important; }
+
+.sp-text-muted    { color: var(--sp-muted) !important; }
+.sp-text-contrast { color: var(--sp-ink) !important; }
+.sp-text-accent   { color: var(--sp-accent) !important; }
+.sp-text-success  { color: var(--sp-success) !important; }
+.sp-text-danger   { color: var(--sp-danger) !important; }
+
+.sp-truncate { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.sp-clamp-2,
+.sp-clamp-3 { display: -webkit-box; -webkit-box-orient: vertical; overflow: hidden; }
+.sp-clamp-2 { -webkit-line-clamp: 2; }
+.sp-clamp-3 { -webkit-line-clamp: 3; }
+
+// ---- Backgrounds ------------------------------------------------------
+.sp-bg-surface { background: var(--sp-canvas) !important; }
+.sp-bg-muted   { background: var(--sp-surface) !important; }
+.sp-bg-100     { background: var(--sp-surface) !important; }
+.sp-bg-200     { background: var(--sp-surface-2) !important; }
+.sp-bg-accent  { background: var(--sp-accent) !important; color: var(--sp-on-accent) !important; }
+
+// ---- Borders & shape --------------------------------------------------
+.sp-border        { border: 1px solid var(--sp-line) !important; }
+.sp-border-top    { border-top: 1px solid var(--sp-line) !important; }
+.sp-border-bottom { border-bottom: 1px solid var(--sp-line) !important; }
+.sp-rounded       { border-radius: var(--sp-radius-xl) !important; }
+.sp-rounded-sm    { border-radius: var(--sp-radius-md) !important; }
+.sp-rounded-lg    { border-radius: var(--sp-radius-2xl) !important; }
+.sp-rounded-pill  { border-radius: var(--sp-radius-full) !important; }
+.sp-rounded-none  { border-radius: 0 !important; }
+.sp-shadow        { box-shadow: var(--sp-shadow) !important; }
+.sp-shadow-sm     { box-shadow: var(--sp-shadow-sm) !important; }
+.sp-shadow-lg     { box-shadow: var(--sp-shadow-lg) !important; }
+.sp-shadow-none   { box-shadow: none !important; }
+
+// ---- Sizing & overflow ------------------------------------------------
+.sp-w-full   { width: 100% !important; }
+.sp-w-auto   { width: auto !important; }
+.sp-h-full   { height: 100% !important; }
+.sp-mw-full  { max-width: 100% !important; }
+.sp-overflow-hidden { overflow: hidden !important; }
+.sp-overflow-auto   { overflow: auto !important; }
+
+// ---- Position ---------------------------------------------------------
+.sp-relative { position: relative !important; }
+.sp-absolute { position: absolute !important; }
+.sp-sticky   { position: sticky !important; }
+
+// ---- Accessibility & visibility --------------------------------------
+.sp-visually-hidden {
+  position: absolute !important;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0, 0, 0, 0);
+  white-space: nowrap; border: 0;
+}
+.sp-hide-mobile  { @media (max-width: $bp-md - 1px) { display: none !important; } }
+.sp-hide-desktop { @media (min-width: $bp-md)        { display: none !important; } }
+
+// Shown only on paper. The screen already said it another way — /resume/
+// puts its identity in the hero and this block in the print stylesheet.
+.sp-print-only { display: none !important; }

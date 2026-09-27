@@ -1,0 +1,292 @@
+// ======================================================================
+// im/_post.scss — single post / page article + prose + TOC
+// ======================================================================
+
+.sp-article {
+  width: 100%;
+  max-width: calc(var(--sp-container-narrow) + var(--sp-gutter) * 2);
+  margin-inline: auto;
+  padding-inline: var(--sp-gutter);
+}
+
+// ---- Post header ------------------------------------------------------
+.sp-post-header { margin-bottom: var(--sp-space-6); }
+
+// The kicker is a LABEL: mono face, and the colour of the collection the
+// entry belongs to — the same hue its card, its chips and its cover wear.
+// --sp-c-current is set on <body> by the default layout.
+.sp-kicker {
+  display: inline-block;
+  margin-bottom: var(--sp-space-3);
+  font-family: var(--sp-font-mono);
+  font-size: var(--sp-text-xs);
+  font-weight: var(--sp-weight-medium);
+  letter-spacing: var(--sp-tracking-wide);
+  text-transform: uppercase;
+  color: color-mix(in oklab, var(--sp-c-current) 72%, var(--sp-muted));
+}
+
+.sp-post-title {
+  margin: 0 0 var(--sp-space-4);
+  font-size: clamp(var(--sp-text-3xl), 5vw, var(--sp-text-4xl));
+  line-height: 1.1;
+}
+
+.sp-post-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--sp-space-2) var(--sp-space-3);
+  font-size: var(--sp-text-sm);
+  color: var(--sp-muted);
+
+  .sp-avatar { width: 1.75rem; height: 1.75rem; border-radius: var(--sp-radius-full); }
+  .sp-dot { opacity: 0.5; }
+}
+
+.sp-post-cover {
+  margin: var(--sp-space-6) 0;
+  img { width: 100%; border-radius: var(--sp-radius-xl); }
+}
+
+// ---- Post media (video / audio) --------------------------------------
+.sp-post-media {
+  margin: var(--sp-space-5) 0;
+  iframe, video {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    border: 0;
+    border-radius: var(--sp-radius-xl);
+  }
+  audio { width: 100%; }
+}
+
+// ---- Review rating ----------------------------------------------------
+
+// ---- Trip facts -------------------------------------------------------
+.sp-factbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-space-2) var(--sp-space-5);
+  margin: var(--sp-space-4) 0;
+  padding: var(--sp-space-4);
+  border: 1px solid var(--sp-line);
+  border-radius: var(--sp-radius-xl);
+  background: var(--sp-surface);
+  font-size: var(--sp-text-sm);
+
+  .sp-fact { display: inline-flex; align-items: center; gap: var(--sp-space-2); }
+  .sp-fact-label { color: var(--sp-muted); }
+  .sp-fact-value { font-weight: var(--sp-weight-semibold); color: var(--sp-ink); }
+}
+
+// ---- Prose (rendered markdown) ---------------------------------------
+.sp-prose {
+  font-size: var(--sp-text-lg);
+  color: var(--sp-body);
+
+  > * + * { margin-top: var(--sp-space-4); }
+  h2, h3, h4 { margin-top: var(--sp-space-6); scroll-margin-top: calc(var(--sp-navbar-height) + var(--sp-space-4)); }
+  img { border-radius: var(--sp-radius-xl); }
+  > :first-child { margin-top: 0; }
+}
+
+// ---- Tags -------------------------------------------------------------
+.sp-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-space-2);
+  margin: var(--sp-space-6) 0 0;
+  padding: 0;
+  list-style: none;
+
+  // A tag is a chip, and it takes the chip's steps: a hairline at rest,
+  // the hover fill when it is pointed at.
+  a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    min-height: 1.75rem;
+    padding: 0 var(--sp-space-3);
+    border-radius: var(--sp-radius-full);
+    box-shadow: inset 0 0 0 1px var(--sp-line);
+    background: transparent;
+    color: var(--sp-ink);
+    font-size: var(--sp-text-sm);
+    font-weight: var(--sp-weight-medium);
+    text-decoration: none;
+    transition: background-color var(--sp-duration-instant);
+    &:hover { background: var(--sp-hover-bg); color: var(--sp-ink); }
+  }
+}
+
+// ---- Share + author + prev/next --------------------------------------
+.sp-share {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-space-2);
+  margin: var(--sp-space-6) 0;
+}
+
+
+.sp-postnav {
+  display: grid;
+  gap: var(--sp-space-3);
+  margin: var(--sp-space-7) 0 0;
+
+  @include mq($bp-sm) { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+
+  > a {
+    display: flex;
+    align-items: center;
+    gap: var(--sp-space-4);
+    min-width: 0;
+    padding: var(--sp-space-3);
+    border-radius: var(--sp-radius-lg);
+    color: inherit;
+    text-decoration: none;
+    @include sp-hover-fill;
+  }
+
+  // The NEXT card reads right-to-left, so the pair mirrors: the arrow and
+  // the picture both point the way they send you.
+  > .sp-postnav-next { flex-direction: row; justify-content: flex-end; text-align: right; }
+  > .sp-postnav-next .sp-postnav-label { justify-content: flex-end; }
+
+  // With only one of the two, it takes the side it belongs on rather than
+  // stretching across a row it has no partner for.
+  > a:only-child { grid-column: span 1; }
+  > .sp-postnav-next:only-child { @include mq($bp-sm) { grid-column: 2; } }
+}
+
+.sp-postnav-art {
+  flex: 0 0 5rem;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  border-radius: var(--sp-radius-md);
+  background: var(--sp-surface-2);
+
+  img, .sp-thumb { width: 100%; height: 100%; object-fit: cover; display: block; }
+}
+.sp-postnav-body { min-width: 0; display: flex; flex-direction: column; gap: 0.15rem; }
+.sp-postnav-label {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-space-1);
+  font-family: var(--sp-font-mono);
+  font-size: var(--sp-text-xs);
+  letter-spacing: var(--sp-tracking-wide);
+  text-transform: uppercase;
+  color: var(--sp-faint);
+}
+.sp-postnav-title {
+  font-weight: var(--sp-weight-medium);
+  color: var(--sp-ink);
+  line-height: var(--sp-leading-sm);
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+}
+
+// ---- Pagination -------------------------------------------------------
+.sp-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-space-3);
+  margin-top: var(--sp-space-7);
+  padding-top: var(--sp-space-6);
+  border-top: 1px solid var(--sp-line);
+}
+// A page number is a chip, and a chip has the system's three steps: a
+// hairline at rest, the hover fill, the current fill with a bolder label.
+.sp-page-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-space-2);
+  min-height: 2rem;
+  padding: 0 var(--sp-space-4);
+  border: 0;
+  border-radius: var(--sp-radius-full);
+  box-shadow: inset 0 0 0 1px var(--sp-line);
+  font-size: var(--sp-text-sm);
+  font-weight: var(--sp-weight-medium);
+  color: var(--sp-ink);
+  text-decoration: none;
+  transition: background-color var(--sp-duration-instant), color var(--sp-duration-instant);
+  &:hover { background: var(--sp-hover-bg); color: var(--sp-ink); }
+  &[aria-current="page"] {
+    background: var(--sp-current-bg);
+    color: var(--sp-current-fg);
+    font-weight: var(--sp-current-weight);
+    box-shadow: none;
+  }
+  &.is-disabled { opacity: var(--sp-opacity-disabled); pointer-events: none; }
+}
+.sp-page-indicator { font-size: var(--sp-text-sm); color: var(--sp-muted); font-variant-numeric: tabular-nums; }
+
+// The numbers themselves. Each is a chip, so they take the same three
+// steps every other chip in the theme does.
+.sp-page-nums {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--sp-space-1);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.sp-page-num {
+  display: grid;
+  place-items: center;
+  min-width: 2rem;
+  min-height: 2rem;
+  padding-inline: var(--sp-space-2);
+  border-radius: var(--sp-radius-full);
+  color: var(--sp-ink);
+  font-size: var(--sp-text-sm);
+  font-variant-numeric: tabular-nums;
+  text-decoration: none;
+  transition: background-color var(--sp-duration-instant);
+
+  &:hover { background: var(--sp-hover-bg); }
+  &[aria-current="page"] {
+    background: var(--sp-current-bg);
+    color: var(--sp-current-fg);
+    font-weight: var(--sp-current-weight);
+  }
+}
+.sp-page-gap { padding-inline: var(--sp-space-1); color: var(--sp-faint); }
+
+// ---- Page breadcrumb --------------------------------------------------
+.sp-breadcrumb {
+  display: flex;
+  gap: var(--sp-space-2);
+  font-size: var(--sp-text-sm);
+  color: var(--sp-muted);
+  margin-bottom: var(--sp-space-3);
+  a { color: inherit; text-decoration: none; &:hover { color: var(--sp-ink); } }
+}
+
+// ---- TOC --------------------------------------------------------------
+.sp-toc {
+  font-size: var(--sp-text-sm);
+  ol, ul { list-style: none; margin: 0; padding-left: var(--sp-space-3); }
+  > ol, > ul { padding-left: 0; }
+  a {
+    display: block;
+    padding: var(--sp-space-1) var(--sp-space-2);
+    border-radius: var(--sp-radius-sm);
+    color: var(--sp-muted);
+    text-decoration: none;
+    transition: background-color var(--sp-duration-instant), color var(--sp-duration-instant);
+    &:hover { background: var(--sp-hover-bg); color: var(--sp-ink); }
+    &.active { background: var(--sp-current-bg); color: var(--sp-current-fg); font-weight: var(--sp-current-weight); }
+  }
+}
+.sp-toc-title {
+  margin-bottom: var(--sp-space-3);
+  font-size: var(--sp-text-xs);
+  font-weight: var(--sp-weight-semibold);
+  text-transform: uppercase;
+  letter-spacing: var(--sp-tracking-wide);
+  color: var(--sp-faint);
+}

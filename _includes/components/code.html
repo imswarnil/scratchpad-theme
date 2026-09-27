@@ -12,14 +12,14 @@
   between them. It is a <details>, so it is open to find-in-page, it
   prints open, and it works with no JavaScript at all.
 {%- endcomment -%}
-<details class="im-codefold"{% if include.open %} open{% endif %}>
-  <summary class="im-codefold-summary">
-    <i class="ph-bold ph-caret-right im-codefold-caret" aria-hidden="true"></i>
-    <span class="im-codefold-title">{{ include.title | default: "Show the code" }}</span>
-    {%- if include.lang %}<span class="im-codefold-lang">{{ include.lang }}</span>{% endif -%}
-    {%- if include.code %}<button class="im-codefold-copy" type="button" data-im-copy="{{ include.code | escape }}" aria-label="Copy"><i class="ph-bold ph-copy" aria-hidden="true"></i> Copy</button>{% endif -%}
+<details class="sp-codefold"{% if include.open %} open{% endif %}>
+  <summary class="sp-codefold-summary">
+    <i class="ph-bold ph-caret-right sp-codefold-caret" aria-hidden="true"></i>
+    <span class="sp-codefold-title">{{ include.title | default: "Show the code" }}</span>
+    {%- if include.lang %}<span class="sp-codefold-lang">{{ include.lang }}</span>{% endif -%}
+    {%- if include.code %}<button class="sp-codefold-copy" type="button" data-sp-copy="{{ include.code | escape }}" aria-label="Copy"><i class="ph-bold ph-copy" aria-hidden="true"></i> Copy</button>{% endif -%}
   </summary>
-  <div class="im-codefold-body">
+  <div class="sp-codefold-body">
     {%- if include.code -%}<pre><code>{{ include.code }}</code></pre>{%- else -%}{{ include.body | markdownify }}{%- endif -%}
   </div>
 </details>

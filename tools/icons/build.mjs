@@ -12,7 +12,7 @@
  * The class names stay what they were (`ph-house`), so no markup changed
  * when this replaced the font.
  *
- *   node tools/icons/build.mjs            # writes _sass/im/base/_icons.scss
+ *   node tools/icons/build.mjs            # writes _sass/scratchpad/base/_icons.scss
  *   node tools/icons/build.mjs --check    # lists icons used but not mapped
  */
 import fs from 'node:fs';
@@ -145,7 +145,7 @@ const rules = [];
 for (const n of names) {
   const inner = BRANDS[n] || (MAP[n] ? body(MAP[n]) : null);
   if (!inner) { missing.push(n); continue; }
-  rules.push(`.ph-${n} { --im-icon: url("${dataUri(inner)}"); }`);
+  rules.push(`.ph-${n} { --sp-icon: url("${dataUri(inner)}"); }`);
 }
 
 if (process.argv.includes('--check')) {
@@ -176,11 +176,11 @@ const header = `// =============================================================
   flex: none;
   vertical-align: -0.125em;
   background-color: currentColor;
-  mask-image: var(--im-icon);
+  mask-image: var(--sp-icon);
   mask-repeat: no-repeat;
   mask-position: center;
   mask-size: contain;
-  -webkit-mask-image: var(--im-icon);
+  -webkit-mask-image: var(--sp-icon);
   -webkit-mask-repeat: no-repeat;
   -webkit-mask-position: center;
   -webkit-mask-size: contain;
@@ -194,5 +194,5 @@ const header = `// =============================================================
 
 fs.mkdirSync(path.dirname(OUT), { recursive: true });
 fs.writeFileSync(OUT, header + rules.join('\n') + '\n');
-console.log(`  ✓ wrote ${rules.length} icons to _sass/im/base/_icons.scss`);
+console.log(`  ✓ wrote ${rules.length} icons to _sass/scratchpad/base/_icons.scss`);
 if (missing.length) console.log(`  ! ${missing.length} unmapped: ${missing.join(' ')}`);

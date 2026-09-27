@@ -8,34 +8,34 @@
 {%- assign all = site.lessons | where: "course", page.course | sort: "lesson" -%}
 {%- if all.size > 0 -%}
 {%- assign modules = all | group_by: "module" -%}
-<nav class="im-coursenav" aria-label="Course contents">
+<nav class="sp-coursenav" aria-label="Course contents">
   {%- if parent -%}
-  <a class="im-coursenav-back" href="{{ parent.url | relative_url }}">
+  <a class="sp-coursenav-back" href="{{ parent.url | relative_url }}">
     <i class="ph-bold ph-arrow-left" aria-hidden="true"></i>
     <span>
-      <span class="im-coursenav-kicker">Course</span>
-      <span class="im-coursenav-course">{{ parent.title }}</span>
+      <span class="sp-coursenav-kicker">Course</span>
+      <span class="sp-coursenav-course">{{ parent.title }}</span>
     </span>
   </a>
   {%- endif -%}
 
   {%- assign done = 0 -%}
   {%- for l in all -%}{%- if l.lesson <= page.lesson %}{% assign done = done | plus: 1 %}{% endif -%}{%- endfor -%}
-  <p class="im-coursenav-progress">
-    <span class="im-coursenav-bar" aria-hidden="true"><span style="width: {{ done | times: 100 | divided_by: all.size }}%"></span></span>
-    <span class="im-coursenav-count">Lesson {{ page.lesson }} of {{ all.size }}</span>
+  <p class="sp-coursenav-progress">
+    <span class="sp-coursenav-bar" aria-hidden="true"><span style="width: {{ done | times: 100 | divided_by: all.size }}%"></span></span>
+    <span class="sp-coursenav-count">Lesson {{ page.lesson }} of {{ all.size }}</span>
   </p>
 
   {%- for m in modules -%}
-  <div class="im-coursenav-module">
-    {%- if m.name and m.name != "" %}<p class="im-coursenav-modtitle">{{ m.name }}</p>{% endif -%}
-    <ol class="im-coursenav-list">
+  <div class="sp-coursenav-module">
+    {%- if m.name and m.name != "" %}<p class="sp-coursenav-modtitle">{{ m.name }}</p>{% endif -%}
+    <ol class="sp-coursenav-list">
       {%- for l in m.items -%}
       <li>
         <a href="{{ l.url | relative_url }}"{% if l.url == page.url %} aria-current="page"{% endif %}>
-          <span class="im-coursenav-n">{{ l.lesson }}</span>
-          <span class="im-coursenav-title">{{ l.title }}</span>
-          {%- if l.minutes %}<span class="im-coursenav-time">{{ l.minutes }}m</span>{% endif -%}
+          <span class="sp-coursenav-n">{{ l.lesson }}</span>
+          <span class="sp-coursenav-title">{{ l.title }}</span>
+          {%- if l.minutes %}<span class="sp-coursenav-time">{{ l.minutes }}m</span>{% endif -%}
         </a>
       </li>
       {%- endfor -%}

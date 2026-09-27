@@ -119,7 +119,7 @@ window), `prompt` (chat window), `webseries` (portrait poster), `episode`,
 `course`, `lesson`, `podcast`, `issue`, `trip`, `product`. Unset falls back to
 `blog`, so a new collection looks right before it has a design of its own.
 
-**Cards in a grid row are always the same height.** `.im-cards` stretches each
+**Cards in a grid row are always the same height.** `.sp-cards` stretches each
 item and the card's body takes the slack — so a new card only has to put
 `flex: 1` on its body and `margin-top: auto` on its foot.
 
@@ -140,17 +140,17 @@ the tag links fall back to anchors on `/tags/`.
 
 The theme follows the Im Design System, and it has exactly two interactions:
 
-- **HOVER** — the thing FILLS (`--im-hover-bg`). Nothing sharpens a border,
+- **HOVER** — the thing FILLS (`--sp-hover-bg`). Nothing sharpens a border,
   nothing grows three per cent, nothing rests on a drop shadow.
 - **CURRENT** — "you are here": a stronger fill and a bolder label
-  (`--im-current-bg/-fg/-weight`). It is never a change of colour.
+  (`--sp-current-bg/-fg/-weight`). It is never a change of colour.
 
 The accent is for the primary button, a link's hover, the focus ring,
 selection, and each collection's derived hue — nothing else. A filled button
 and a card both lift exactly one pixel and cast one hairline.
 
-Everything is a `--im-*` custom property; nothing is a literal colour.
-`_sass/im/abstracts/_mixins.scss` holds both interactions, written once.
+Everything is a `--sp-*` custom property; nothing is a literal colour.
+`_sass/scratchpad/abstracts/_mixins.scss` holds both interactions, written once.
 
 ## 8. The commands
 

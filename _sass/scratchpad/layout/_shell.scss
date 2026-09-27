@@ -1,0 +1,354 @@
+// ======================================================================
+// im/_shell.scss — content shell, right sidebar, TOC, ad rails, ad units
+// ======================================================================
+
+// ---- Ad rails (outer, very wide screens only) ------------------------
+.sp-rails { display: block; }
+.sp-rail { display: none; }
+
+@media (min-width: 1500px) {
+  .sp-rails.has-rails {
+    display: grid;
+    grid-template-columns: 1fr minmax(0, calc(var(--sp-container-wide) + var(--sp-gutter) * 2)) 1fr;
+    align-items: start;
+    column-gap: var(--sp-space-4);
+  }
+  .sp-rails.has-rails > .main { grid-column: 2; }
+  .sp-rails.has-rails .sp-rail {
+    display: block;
+    position: sticky;
+    top: calc(var(--sp-navbar-height) + var(--sp-space-4));
+    width: var(--sp-rail);
+    max-width: calc(100% - var(--sp-space-5) * 2);
+    justify-self: center;
+    // Margin all round so the ad card floats clear of the viewport edge and
+    // the content column instead of sitting flush in the corner.
+    margin: var(--sp-space-6) var(--sp-space-5) var(--sp-space-6);
+  }
+  .sp-rail-left  { grid-column: 1; }
+  .sp-rail-right { grid-column: 3; }
+}
+
+// ---- Content shell (article + right sidebar) -------------------------
+// ---- The four shells --------------------------------------------------
+// How wide an entry page is, and what sits beside it, is the collection's
+// `single.shell` — see _layouts/post.html. One class, four answers.
+.sp-shell {
+  width: 100%;
+  max-width: calc(var(--sp-container) + var(--sp-gutter) * 2);
+  margin-inline: auto;
+  padding-inline: var(--sp-gutter);
+}
+.sp-shell-main { min-width: 0; }
+
+// READING — prose, centred on the reading measure, nothing beside it. A
+// post and a snippet are read, not scanned, and a column of widgets beside
+// 44rem of type is a second thing competing for the same attention.
+// READING — prose on the reading measure. With a rail beside it the shell
+// takes the room for both; on its own it stays narrow and centred.
+.sp-shell.is-reading {
+  max-width: calc(var(--sp-content) + var(--sp-gutter) * 2);
+
+  .sp-article { max-width: none; }
+
+  &.has-sidebar {
+    @include mq($bp-lg) {
+      max-width: calc(var(--sp-container-wide) + var(--sp-gutter) * 2);
+      grid-template-columns: minmax(0, var(--sp-content)) var(--sp-sidebar);
+      justify-content: center;
+    }
+  }
+}
+
+// WIDE — the full fluid container, for a page whose subject is a PICTURE:
+// a film, an episode, a lesson. The prose inside it still sets itself on
+// the reading measure, so the words never run the width of a cinema.
+.sp-shell.is-wide {
+  max-width: calc(var(--sp-container-wide) + var(--sp-gutter) * 2);
+
+  .sp-article { max-width: none; }
+
+  // With a rail, the prose stops setting its own measure — the column it
+  // is in is already the right width.
+  &.has-sidebar .sp-prose { max-width: none; }
+  .sp-prose,
+  .sp-post-header,
+  .sp-tags,
+  .sp-share,
+  .sp-ask,
+  .sp-authorbox,
+  .sp-comments { max-width: var(--sp-content); }
+
+  // …but the media, the episode list and the curriculum take the room.
+  .sp-post-media,
+  .sp-carousel,
+  .sp-eplist,
+  .sp-curriculum,
+  .sp-serieshead,
+  .sp-factbar { max-width: none; }
+}
+
+// A reading column with a rail beside it (`aside`), and the 70/30 the
+// `split` shell asks for. Both stack below lg.
+@include mq($bp-lg) {
+  .sp-shell.has-sidebar {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) var(--sp-sidebar);
+    gap: var(--sp-space-8);
+    align-items: start;
+    max-width: calc(var(--sp-container-wide) + var(--sp-gutter) * 2);
+  }
+  .sp-shell.has-sidebar .sp-article { max-width: none; padding-inline: 0; margin-inline: 0; }
+
+  // SPLIT — seven parts to three, rather than a fixed rail: a project page
+  // is a picture and a panel of facts, and the panel should grow with the
+  // window instead of stranding the pictures in the middle of it.
+  .sp-shell.is-split.has-sidebar {
+    grid-template-columns: minmax(0, 7fr) minmax(0, 3fr);
+    gap: clamp(2rem, 4vw, 3.5rem);
+  }
+}
+
+// ---- Sidebar ----------------------------------------------------------
+.sp-sidebar { min-width: 0; }
+@media (max-width: 991px) {
+  .sp-sidebar { margin-top: var(--sp-space-7); }
+  // hide the desktop TOC widget on mobile (mobile uses the collapsible one)
+  .sp-toc-widget { display: none; }
+}
+.sp-sidebar-sticky {
+  position: sticky;
+  top: calc(var(--sp-navbar-height) + var(--sp-space-4));
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-space-5);
+  max-height: calc(100vh - var(--sp-navbar-height) - var(--sp-space-6));
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+// A widget is a SURFACE — a filled panel with no border and no shadow,
+// the same material a card is made of.
+.sp-widget {
+  padding: 1.25rem;
+  border-radius: var(--sp-radius-xl);
+  background: var(--sp-surface);
+}
+.sp-widget-title {
+  display: flex; align-items: center; gap: var(--sp-space-2);
+  margin: 0 0 var(--sp-space-3);
+  font-size: var(--sp-text-sm);
+  font-weight: var(--sp-weight-semibold);
+  color: var(--sp-ink);
+  > i { color: var(--sp-muted); }
+}
+.sp-widget-text { margin: 0 0 var(--sp-space-3); font-size: var(--sp-text-sm); color: var(--sp-muted); }
+.sp-widget-cta { background: var(--sp-surface-2); }
+
+.sp-widget-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-space-2);
+  font-size: var(--sp-text-sm);
+
+  a {
+    color: var(--sp-body);
+    text-decoration: none;
+    transition: color var(--sp-duration-fast) var(--sp-ease-out);
+    &:hover { color: var(--sp-ink); text-decoration: underline; }
+  }
+}
+
+.sp-widget-author {
+  .sp-widget-avatar { width: 2.75rem; height: 2.75rem; border-radius: var(--sp-radius-full); object-fit: cover; margin-bottom: var(--sp-space-3); }
+  .sp-footer-social { margin: 0 0 var(--sp-space-4); }
+}
+
+// ---- TOC --------------------------------------------------------------
+.sp-toc {
+  ul { list-style: none; margin: 0; padding: 0; }
+  li { line-height: 1.3; }
+  .sp-toc-sub a { padding-left: var(--sp-space-4); font-size: var(--sp-text-xs); }
+  a {
+    display: block;
+    padding: var(--sp-space-2) var(--sp-space-2);
+    border-left: 2px solid transparent;
+    margin-left: -2px;
+    border-radius: 0 var(--sp-radius-sm) var(--sp-radius-sm) 0;
+    font-size: var(--sp-text-sm);
+    color: var(--sp-muted);
+    text-decoration: none;
+    transition: background-color var(--sp-duration-instant), color var(--sp-duration-instant);
+    // The same two states as every other list of links in the theme: it
+    // fills on hover, and the entry you are reading wears the current fill
+    // with a bolder label. The rule on the left marks the position; it is
+    // the ink, not the accent, because "you are here" is not an action.
+    &:hover { background: var(--sp-hover-bg); color: var(--sp-ink); }
+    &.active {
+      background: var(--sp-current-bg);
+      border-left-color: var(--sp-ink);
+      color: var(--sp-current-fg);
+      font-weight: var(--sp-current-weight);
+    }
+  }
+}
+
+// Mobile collapsible TOC (above content)
+.sp-toc-mobile {
+  margin-bottom: var(--sp-space-5);
+  border-radius: var(--sp-radius-lg);
+  box-shadow: inset 0 0 0 1px var(--sp-line);
+
+  summary {
+    display: flex; align-items: center; gap: var(--sp-space-2);
+    padding: var(--sp-space-3) var(--sp-space-4);
+    font-weight: var(--sp-weight-semibold);
+    font-size: var(--sp-text-sm);
+    cursor: pointer;
+    list-style: none;
+    &::-webkit-details-marker { display: none; }
+    > i { color: var(--sp-muted); }
+  }
+  .sp-toc { padding: 0 var(--sp-space-3) var(--sp-space-3); }
+}
+@media (min-width: 992px) { .sp-toc-mobile { display: none; } }
+
+// ---- Ad unit ----------------------------------------------------------
+// AdSense's auto-format script sets its own inline width/height on the
+// `ins`/iframe it injects — cap them at the container's box no matter what
+// Google decides to set, so a slow-to-detect container width can never
+// blow out the layout or cause horizontal page scroll.
+.sp-ad {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--sp-space-2);
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  padding: var(--sp-space-3);
+  border: 1px solid var(--sp-line);
+  border-radius: var(--sp-radius-lg);
+  background: var(--sp-surface);
+  overflow: hidden;
+  contain: layout;
+
+  ins, ins.adsbygoogle, iframe {
+    display: block !important;
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+}
+.sp-ad-label {
+  align-self: flex-start;
+  font-size: 0.625rem;
+  font-weight: var(--sp-weight-semibold);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--sp-faint);
+}
+.sp-ad-placeholder {
+  display: grid; place-items: center;
+  width: 100%; min-height: 6rem;
+  border: 1px dashed var(--sp-line);
+  border-radius: var(--sp-radius-md);
+  color: var(--sp-faint);
+  font-size: var(--sp-text-sm);
+}
+.sp-ad--horizontal { margin-block: var(--sp-space-6); }
+.sp-ad--horizontal .sp-ad-placeholder,
+.sp-ad--in_article .sp-ad-placeholder { min-height: 5.5rem; }
+.sp-ad--vertical .sp-ad-placeholder { min-height: 30rem; }
+.sp-ad--in_article,
+.sp-ad--inline { margin-block: var(--sp-space-6); }
+
+// ---- Floating bottom leaderboard (728x90) ------------------------------
+// Desktop only — a small ad on a phone screen just eats the viewport.
+.sp-sticky-ad {
+  display: none;
+  position: fixed;
+  left: 50%;
+  bottom: var(--sp-space-4);
+  z-index: $z-toast;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 750px;
+  padding-right: 2.5rem;
+
+  .sp-ad { margin: 0; box-shadow: var(--sp-shadow-lg); }
+  .sp-ad-placeholder { min-height: 90px; }
+
+  @media (min-width: 768px) { &:not([hidden]) { display: block; } }
+}
+.sp-sticky-ad-close {
+  position: absolute;
+  top: 0.4rem;
+  right: 0.4rem;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.75rem;
+  height: 1.75rem;
+  border: 1px solid var(--sp-line);
+  border-radius: var(--sp-radius-full);
+  background: var(--sp-canvas);
+  color: var(--sp-muted);
+  cursor: pointer;
+  transition: color var(--sp-duration-fast) var(--sp-ease-out), background-color var(--sp-duration-fast) var(--sp-ease-out);
+  &:hover { color: var(--sp-ink); background: var(--sp-surface); }
+}
+
+// ---- Prompt box (prompts collection) ---------------------------------
+.sp-promptbox {
+  margin: var(--sp-space-5) 0;
+  border: 1px solid var(--sp-line);
+  border-radius: var(--sp-radius-xl);
+  overflow: hidden;
+}
+.sp-promptbox-head {
+  display: flex; align-items: center; justify-content: space-between; gap: var(--sp-space-3);
+  padding: var(--sp-space-3) var(--sp-space-4);
+  background: var(--sp-surface);
+  border-bottom: 1px solid var(--sp-line);
+}
+.sp-promptbox-body { margin: 0; border-radius: 0; box-shadow: none; max-height: none; }
+.sp-snippet-lang { display: inline-flex; align-items: center; gap: var(--sp-space-2); font-size: var(--sp-text-sm); color: var(--sp-muted); text-transform: capitalize; }
+
+// COURSE — the contents on the left, the lesson beside them. In a course
+// "where am I" is the first question a reader has, not the last, so the
+// rail leads rather than trails.
+.sp-shell.is-course {
+  max-width: calc(var(--sp-container-wide) + var(--sp-gutter) * 2);
+
+  // A lesson has no site header, so its own bar runs the full width of
+  // the window. The shell has to let it: no clipping, and the bar's
+  // negative margins resolve against the viewport.
+  overflow: visible;
+
+  .sp-article { max-width: none; }
+  .sp-prose { max-width: var(--sp-content); }
+
+  @include mq($bp-lg) {
+    display: grid;
+    grid-template-columns: var(--sp-sidebar) minmax(0, 1fr);
+    gap: clamp(2rem, 4vw, 3.5rem);
+    align-items: start;
+  }
+}
+
+.sp-shell-rail {
+  min-width: 0;
+
+  @include mq($bp-lg) {
+    position: sticky;
+    top: calc(var(--sp-navbar-height) + var(--sp-space-4));
+    max-height: calc(100vh - var(--sp-navbar-height) - var(--sp-space-6));
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+  @include mq-down($bp-lg) { margin-bottom: var(--sp-space-6); }
+}

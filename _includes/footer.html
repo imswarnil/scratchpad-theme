@@ -16,45 +16,45 @@
 {%- assign skin = f.skin | default: "line" -%}
 {%- assign n = f.newsletter -%}
 
-<footer class="im-footer im-footer-{{ skin }}{% if flayout == 'minimal' %} im-footer-minimal{% endif %}">
+<footer class="sp-footer sp-footer-{{ skin }}{% if flayout == 'minimal' %} sp-footer-minimal{% endif %}">
 
   {%- if flayout == "minimal" -%}
-  <div class="im-footer-strip im-footer-strip-only">
-    <p class="im-footer-copy">© {{ site.time | date: '%Y' }} {{ site.author | default: site.title }}</p>
-    <nav class="im-footer-inlinenav" aria-label="Footer">
-      {%- for item in site.navigation_footer -%}<a class="im-flink" href="{{ item.url | relative_url }}">{{ item.title }}</a>{%- endfor -%}
+  <div class="sp-footer-strip sp-footer-strip-only">
+    <p class="sp-footer-copy">© {{ site.time | date: '%Y' }} {{ site.author | default: site.title }}</p>
+    <nav class="sp-footer-inlinenav" aria-label="Footer">
+      {%- for item in site.navigation_footer -%}<a class="sp-flink" href="{{ item.url | relative_url }}">{{ item.title }}</a>{%- endfor -%}
     </nav>
-    {% include social-row.html class="im-footer-social" label="Elsewhere" %}
+    {% include social-row.html class="sp-footer-social" label="Elsewhere" %}
   </div>
 
   {%- else -%}
-  <div class="im-footer-cols">
+  <div class="sp-footer-cols">
 
     {%- if f.show_details != false -%}
-    <div class="im-footer-lead">
-      <a class="im-footer-brand" href="{{ '/' | relative_url }}">
+    <div class="sp-footer-lead">
+      <a class="sp-footer-brand" href="{{ '/' | relative_url }}">
         {%- if site.logo %}<img src="{{ site.logo | relative_url }}" alt="" width="28" height="28">{% endif -%}
         <span>{{ site.title }}</span>
       </a>
-      {%- if f.tagline %}<p class="im-footer-text">{{ f.tagline }}</p>{% endif -%}
-      <ul class="im-footer-facts">
+      {%- if f.tagline %}<p class="sp-footer-text">{{ f.tagline }}</p>{% endif -%}
+      <ul class="sp-footer-facts">
         {%- if site.location %}<li><i class="ph-bold ph-map-pin" aria-hidden="true"></i> {{ site.location }}</li>{% endif -%}
         {%- if site.email %}<li><a href="mailto:{{ site.email }}"><i class="ph-bold ph-envelope-simple" aria-hidden="true"></i> {{ site.email }}</a></li>{% endif -%}
       </ul>
-      {%- if f.show_social != false %}{% include social-row.html class="im-footer-social" label="Elsewhere" %}{% endif -%}
+      {%- if f.show_social != false %}{% include social-row.html class="sp-footer-social" label="Elsewhere" %}{% endif -%}
     </div>
     {%- endif -%}
 
     {%- for col in f.columns -%}
-    <nav class="im-footer-col" aria-label="{{ col.title }}">
-      <h2 class="im-footer-title">{{ col.title }}</h2>
-      <ul class="im-footer-links">
+    <nav class="sp-footer-col" aria-label="{{ col.title }}">
+      <h2 class="sp-footer-title">{{ col.title }}</h2>
+      <ul class="sp-footer-links">
         {%- for label in col.collections -%}
           {%- assign c = site.collections | where: "label", label | first -%}
           {%- if c and c.docs.size > 0 -%}
           <li>
             <a href="{{ c.landing | default: c.url | relative_url }}">
-              <i class="ph-bold ph-{{ c.icon | default: 'folder' }}" aria-hidden="true" style="color: var(--im-c-{{ label }}, var(--im-faint));"></i>
+              <i class="ph-bold ph-{{ c.icon | default: 'folder' }}" aria-hidden="true" style="color: var(--sp-c-{{ label }}, var(--sp-faint));"></i>
               {{ c.title | default: label }}<small>{{ c.docs.size }}</small>
             </a>
           </li>
@@ -68,35 +68,35 @@
     {%- endfor -%}
 
     {%- if n.enabled != false -%}
-    <div class="im-footer-col im-footer-col-news">
-      <h2 class="im-footer-title">{{ n.title | default: "Newsletter" }}</h2>
-      {%- if n.text %}<p class="im-footer-text">{{ n.text }}</p>{% endif -%}
-      <form class="im-footer-form" action="{{ n.action }}" method="post" target="_blank">
-        <label class="im-visually-hidden" for="im-footer-email">Email address</label>
-        <input id="im-footer-email" type="email" name="{{ n.field | default: 'email' }}"
+    <div class="sp-footer-col sp-footer-col-news">
+      <h2 class="sp-footer-title">{{ n.title | default: "Newsletter" }}</h2>
+      {%- if n.text %}<p class="sp-footer-text">{{ n.text }}</p>{% endif -%}
+      <form class="sp-footer-form" action="{{ n.action }}" method="post" target="_blank">
+        <label class="sp-visually-hidden" for="sp-footer-email">Email address</label>
+        <input id="sp-footer-email" type="email" name="{{ n.field | default: 'email' }}"
                placeholder="{{ n.placeholder | default: 'you@example.com' }}" required
                {% if n.action == nil or n.action == '' %}disabled{% endif %}>
-        <button class="im-btn im-btn-sm im-btn-primary" type="submit"
+        <button class="sp-btn sp-btn-sm sp-btn-primary" type="submit"
                 {% if n.action == nil or n.action == '' %}disabled title="Set footer.newsletter.action in _config.yml"{% endif %}>
           Subscribe
         </button>
       </form>
       {%- if n.action == nil or n.action == '' -%}
-      <p class="im-footer-note">Set <code>footer.newsletter.action</code> in <code>_config.yml</code> to switch this on.</p>
+      <p class="sp-footer-note">Set <code>footer.newsletter.action</code> in <code>_config.yml</code> to switch this on.</p>
       {%- endif -%}
     </div>
     {%- endif -%}
 
   </div>
 
-  <div class="im-footer-strip">
-    <p class="im-footer-copy">© {{ site.time | date: '%Y' }} {{ site.author | default: site.title }}</p>
+  <div class="sp-footer-strip">
+    <p class="sp-footer-copy">© {{ site.time | date: '%Y' }} {{ site.author | default: site.title }}</p>
     {%- if f.show_legal != false and site.navigation_legal -%}
-    <nav class="im-footer-legal" aria-label="Legal">
+    <nav class="sp-footer-legal" aria-label="Legal">
       {%- for item in site.navigation_legal -%}<a href="{{ item.url | relative_url }}">{{ item.title }}</a>{%- endfor -%}
     </nav>
     {%- endif -%}
-    <a class="im-footer-top-link" href="#top">Back to top <i class="ph-bold ph-arrow-up" aria-hidden="true"></i></a>
+    <a class="sp-footer-top-link" href="#top">Back to top <i class="ph-bold ph-arrow-up" aria-hidden="true"></i></a>
   </div>
   {%- endif -%}
 </footer>

@@ -13,8 +13,8 @@
   if (!media) return;
 
   var slot = media.querySelector("[data-hero-film]");
-  var film = media.querySelector("#im-hero-film");
-  var photo = media.querySelector("#im-hero-photo");
+  var film = media.querySelector("#sp-hero-film");
+  var photo = media.querySelector("#sp-hero-photo");
   if (!slot || !film) return;
 
   var id = slot.getAttribute("data-video-id");

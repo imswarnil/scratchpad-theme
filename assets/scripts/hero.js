@@ -12,7 +12,7 @@
 (function () {
   "use strict";
 
-  var hero = document.querySelector(".im-hero");
+  var hero = document.querySelector(".sp-hero");
   if (!hero) return;
 
   var reduced = window.matchMedia("(prefers-reduced-motion: reduce)");
@@ -26,12 +26,12 @@
   // nobody saw.
   function enter() {
     var parts = [
-      hero.querySelector(".im-hero-line"),
-      hero.querySelector(".im-hero-title"),
-      hero.querySelector(".im-hero-subtitle"),
-      hero.querySelector(".im-hero-meta"),
-      hero.querySelector(".im-hero-actions"),
-      hero.querySelector(".im-hero-subscribe"),
+      hero.querySelector(".sp-hero-line"),
+      hero.querySelector(".sp-hero-title"),
+      hero.querySelector(".sp-hero-subtitle"),
+      hero.querySelector(".sp-hero-meta"),
+      hero.querySelector(".sp-hero-actions"),
+      hero.querySelector(".sp-hero-subscribe"),
     ].filter(Boolean);
 
     parts.forEach(function (el, i) {
@@ -44,7 +44,7 @@
       );
     });
 
-    var media = hero.querySelector(".im-hero-media");
+    var media = hero.querySelector(".sp-hero-media");
     if (media) {
       media.animate(
         [
@@ -69,7 +69,7 @@
   // ---- Drift ----------------------------------------------------------
   // The picture leans a little towards the pointer. A transform on a
   // composited layer, written on a frame — no library, no layout.
-  var media = hero.querySelector(".im-hero-media");
+  var media = hero.querySelector(".sp-hero-media");
   if (media && window.matchMedia("(hover: hover)").matches) {
     var tx = 0, ty = 0, cx = 0, cy = 0, drifting = false;
 
@@ -102,7 +102,7 @@
   // ---- Parallax -------------------------------------------------------
   // The words leave a touch faster than the page scrolls. Capped, so a
   // long hero never drags the copy off its own section.
-  var content = hero.querySelector(".im-hero-content");
+  var content = hero.querySelector(".sp-hero-content");
   if (content) {
     var ticking = false;
     function onScroll() {

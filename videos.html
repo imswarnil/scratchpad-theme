@@ -21,32 +21,32 @@ ad_rails: false
 {%- assign wide = all | where_exp: "d", "d.orientation != 'portrait'" -%}
 {%- assign lead = wide | first -%}
 
-<section class="im-collection im-page is-videos" style="--im-c-current: var(--im-c-videos, var(--im-accent));">
+<section class="sp-collection sp-page is-videos" style="--sp-c-current: var(--sp-c-videos, var(--sp-accent));">
   {% include collection/hero.html coll=coll docs=all title=page.title views=true tags=true %}
 
   {%- comment -%} ── The newest film, large ── {%- endcomment -%}
   {%- if lead -%}
-  <article class="im-vfeature im-reveal">
-    <a class="im-vfeature-screen" href="{{ lead.url | relative_url }}" aria-label="Watch: {{ lead.title | escape }}">
+  <article class="sp-vfeature sp-reveal">
+    <a class="sp-vfeature-screen" href="{{ lead.url | relative_url }}" aria-label="Watch: {{ lead.title | escape }}">
       {%- assign lc = lead.cover | default: lead.image -%}
       {%- if lc and lc != site.placeholder_image -%}<img src="{{ lc | relative_url }}" alt="" width="1200" height="675">
       {%- else -%}{% include utility/thumb.html item=lead %}{%- endif -%}
-      <span class="im-vfeature-scrim" aria-hidden="true"></span>
-      <span class="im-vcard-play" aria-hidden="true"><i class="ph-fill ph-play"></i></span>
-      {%- if lead.duration %}<span class="im-vcard-duration">{{ lead.duration }}</span>{% endif -%}
+      <span class="sp-vfeature-scrim" aria-hidden="true"></span>
+      <span class="sp-vcard-play" aria-hidden="true"><i class="ph-fill ph-play"></i></span>
+      {%- if lead.duration %}<span class="sp-vcard-duration">{{ lead.duration }}</span>{% endif -%}
     </a>
-    <div class="im-vfeature-body">
-      <p class="im-caption">{{ lead.kind | default: "Latest" }}</p>
-      <h2 class="im-vfeature-title"><a href="{{ lead.url | relative_url }}">{{ lead.title }}</a></h2>
-      {%- if lead.description %}<p class="im-vfeature-text">{{ lead.description }}</p>{% endif -%}
-      <p class="im-vfeature-meta">
+    <div class="sp-vfeature-body">
+      <p class="sp-caption">{{ lead.kind | default: "Latest" }}</p>
+      <h2 class="sp-vfeature-title"><a href="{{ lead.url | relative_url }}">{{ lead.title }}</a></h2>
+      {%- if lead.description %}<p class="sp-vfeature-text">{{ lead.description }}</p>{% endif -%}
+      <p class="sp-vfeature-meta">
         {%- if lead.views %}<span>{{ lead.views }} views</span>{% endif -%}
         {%- if lead.duration %}<span>{{ lead.duration }}</span>{% endif -%}
         {%- if lead.date %}<span>{{ lead.date | date: "%b %Y" }}</span>{% endif -%}
       </p>
-      <p class="im-vfeature-actions">
-        <a class="im-btn im-btn-primary" href="{{ lead.url | relative_url }}"><i class="ph-fill ph-play" aria-hidden="true"></i> Watch</a>
-        {%- if site.social_links.YouTube %}<a class="im-btn" href="{{ site.social_links.YouTube }}" target="_blank" rel="noopener"><i class="ph-bold ph-youtube-logo" aria-hidden="true"></i> Subscribe</a>{% endif -%}
+      <p class="sp-vfeature-actions">
+        <a class="sp-btn sp-btn-primary" href="{{ lead.url | relative_url }}"><i class="ph-fill ph-play" aria-hidden="true"></i> Watch</a>
+        {%- if site.social_links.YouTube %}<a class="sp-btn" href="{{ site.social_links.YouTube }}" target="_blank" rel="noopener"><i class="ph-bold ph-youtube-logo" aria-hidden="true"></i> Subscribe</a>{% endif -%}
       </p>
     </div>
   </article>
@@ -68,9 +68,9 @@ ad_rails: false
   {%- endfor -%}
 
   {%- comment -%} ── Everything, as a grid ── {%- endcomment -%}
-  <section class="im-sec im-reveal">
+  <section class="sp-sec sp-reveal">
     {% include utility/section-head.html id="all-videos" eyebrow="Everything" title="All films" %}
-    <ul class="im-cards" id="feed" data-view="{{ coll.view | default: 'grid' }}">
+    <ul class="sp-cards" id="feed" data-view="{{ coll.view | default: 'grid' }}">
       {%- for d in wide -%}<li>{% include utility/card.html item=d %}</li>{%- endfor -%}
     </ul>
   </section>

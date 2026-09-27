@@ -17,33 +17,33 @@
 {%- endif -%}
 {%- capture taglist -%}{%- for t in it.tags %}{{ t | slugify }} {% endfor -%}{%- for t in it.stack %}{{ t | slugify }} {% endfor -%}{%- endcapture -%}
 {%- assign topics = it.stack | default: it.tags -%}
-<article class="im-rcard" data-kind="{{ it.kind | default: 'project' }}" style="--im-c-this: var(--im-c-{{ it.collection }}, var(--im-accent));" data-tags="{{ taglist | strip }}" data-lang="{{ it.lang | downcase | slugify }}">
-  <a class="im-rcard-media" href="{{ it.url | relative_url }}" tabindex="-1" aria-hidden="true">
+<article class="sp-rcard" data-kind="{{ it.kind | default: 'project' }}" style="--sp-c-this: var(--sp-c-{{ it.collection }}, var(--sp-accent));" data-tags="{{ taglist | strip }}" data-lang="{{ it.lang | downcase | slugify }}">
+  <a class="sp-rcard-media" href="{{ it.url | relative_url }}" tabindex="-1" aria-hidden="true">
     {%- if cover and cover != "" -%}<img src="{{ cover | relative_url }}" alt="" loading="lazy" width="1200" height="675">
     {%- else -%}{%- include utility/thumb.html item=it -%}{%- endif -%}
   </a>
-  <div class="im-rcard-body">
-    <div class="im-rcard-head">
+  <div class="sp-rcard-body">
+    <div class="sp-rcard-head">
       <i class="ph-bold {% if it.kind == 'film' %}ph-film-slate{% elsif it.kind == 'design' %}ph-pen-nib{% else %}ph-git-branch{% endif %}" aria-hidden="true"></i>
-      <a class="im-rcard-slug" href="{{ it.url | relative_url }}"><span class="im-rcard-owner">{{ slug | split: "/" | first }}</span>/<strong>{{ slug | split: "/" | last }}</strong></a>
-      <span class="im-rcard-kind">{{ it.kind | default: "project" }}</span>
+      <a class="sp-rcard-slug" href="{{ it.url | relative_url }}"><span class="sp-rcard-owner">{{ slug | split: "/" | first }}</span>/<strong>{{ slug | split: "/" | last }}</strong></a>
+      <span class="sp-rcard-kind">{{ it.kind | default: "project" }}</span>
     </div>
-    <h3 class="im-rcard-title"><a href="{{ it.url | relative_url }}">{{ it.title }}</a></h3>
-    {%- if snip %}<p class="im-rcard-desc">{{ snip | strip_html | truncate: 140 }}</p>{% endif -%}
+    <h3 class="sp-rcard-title"><a href="{{ it.url | relative_url }}">{{ it.title }}</a></h3>
+    {%- if snip %}<p class="sp-rcard-desc">{{ snip | strip_html | truncate: 140 }}</p>{% endif -%}
     {%- if topics.size > 0 -%}
-    <div class="im-rcard-topics">{%- for t in topics limit: 5 -%}<span class="im-rcard-topic">{{ t }}</span>{%- endfor -%}</div>
+    <div class="sp-rcard-topics">{%- for t in topics limit: 5 -%}<span class="sp-rcard-topic">{{ t }}</span>{%- endfor -%}</div>
     {%- endif -%}
-    <div class="im-rcard-meta">
-      {%- if it.lang %}<span class="im-rcard-lang"><i class="im-lang-dot" aria-hidden="true"></i>{{ it.lang }}</span>{% endif -%}
+    <div class="sp-rcard-meta">
+      {%- if it.lang %}<span class="sp-rcard-lang"><i class="sp-lang-dot" aria-hidden="true"></i>{{ it.lang }}</span>{% endif -%}
       {%- if it.stars %}<span><i class="ph-bold ph-star" aria-hidden="true"></i> {{ it.stars }}</span>{% endif -%}
       {%- if it.forks %}<span><i class="ph-bold ph-git-fork" aria-hidden="true"></i> {{ it.forks }}</span>{% endif -%}
       {%- if it.role %}<span><i class="ph-bold ph-user-circle" aria-hidden="true"></i> {{ it.role }}</span>{% endif -%}
       {%- if it.date %}<span>Updated <time datetime="{{ it.date | date_to_xmlschema }}">{{ it.date | date: "%b %Y" }}</time></span>{% elsif it.year %}<span>{{ it.year }}</span>{% endif -%}
     </div>
-    <div class="im-rcard-foot">
-      <a class="im-card-cta" href="{{ it.url | relative_url }}">View project <i class="ph-bold ph-arrow-right" aria-hidden="true"></i></a>
-      {%- if it.repo %}<a class="im-btn im-btn-sm im-btn-outline" href="{{ it.repo }}" target="_blank" rel="noopener"><i class="ph-bold ph-github-logo" aria-hidden="true"></i> Code</a>{% endif -%}
-      {%- if it.demo %}<a class="im-btn im-btn-sm im-btn-ghost" href="{{ it.demo }}" target="_blank" rel="noopener"><i class="ph-bold ph-arrow-square-out" aria-hidden="true"></i> Live</a>{% endif -%}
+    <div class="sp-rcard-foot">
+      <a class="sp-card-cta" href="{{ it.url | relative_url }}">View project <i class="ph-bold ph-arrow-right" aria-hidden="true"></i></a>
+      {%- if it.repo %}<a class="sp-btn sp-btn-sm sp-btn-outline" href="{{ it.repo }}" target="_blank" rel="noopener"><i class="ph-bold ph-github-logo" aria-hidden="true"></i> Code</a>{% endif -%}
+      {%- if it.demo %}<a class="sp-btn sp-btn-sm sp-btn-ghost" href="{{ it.demo }}" target="_blank" rel="noopener"><i class="ph-bold ph-arrow-square-out" aria-hidden="true"></i> Live</a>{% endif -%}
     </div>
   </div>
 </article>

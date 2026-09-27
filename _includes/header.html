@@ -8,7 +8,7 @@
 {%- endcomment -%}
 {%- assign h = site.header -%}
 {%- assign navmods = "" -%}
-{%- if h.layout == "island" %}{% assign navmods = navmods | append: " im-navbar--island" %}{% else %}{% assign navmods = navmods | append: " im-navbar--full" %}{% endif -%}
+{%- if h.layout == "island" %}{% assign navmods = navmods | append: " sp-navbar--island" %}{% else %}{% assign navmods = navmods | append: " sp-navbar--full" %}{% endif -%}
 {%- if h.sticky != false %}{% assign navmods = navmods | append: " is-sticky" %}{% endif -%}
 {%- if h.blur != false %}{% assign navmods = navmods | append: " is-blur" %}{% endif -%}
 
@@ -23,30 +23,30 @@
   {%- assign _initials = _parts[0] | slice: 0, 2 | upcase -%}
 {%- endif -%}
 
-<header class="im-navbar{{ navmods }}" data-im-navbar>
-  <div class="im-navbar-inner"{% if h.progress != false %} data-im-progress{% endif %}>
+<header class="sp-navbar{{ navmods }}" data-sp-navbar>
+  <div class="sp-navbar-inner"{% if h.progress != false %} data-sp-progress{% endif %}>
     {%- if h.progress != false -%}
-    <svg class="im-navbar-progress-ring" data-im-progress-ring aria-hidden="true"><path pathLength="1"></path></svg>
+    <svg class="sp-navbar-progress-ring" data-sp-progress-ring aria-hidden="true"><path pathLength="1"></path></svg>
     {%- endif -%}
     {%- comment -%} ── Brand ── {%- endcomment -%}
     {%- comment -%}
       Island layout wears the initials mark ("SS") rather than the logo
       image, in every state — top bar and scrolled pill alike.
     {%- endcomment -%}
-    <a class="im-brand" href="{{ '/' | relative_url }}" aria-label="{{ site.title }}">
+    <a class="sp-brand" href="{{ '/' | relative_url }}" aria-label="{{ site.title }}">
       {%- unless h.brand == "title" -%}
         {%- if h.layout == "island" -%}
-        <span class="im-brand-avatar" aria-hidden="true">{{ _initials }}</span>
+        <span class="sp-brand-avatar" aria-hidden="true">{{ _initials }}</span>
         {%- elsif site.logo -%}
-        <img class="im-brand-logo" src="{{ site.logo | relative_url }}" alt="">
+        <img class="sp-brand-logo" src="{{ site.logo | relative_url }}" alt="">
         {%- endif -%}
       {%- endunless -%}
-      {%- unless h.brand == "logo" -%}<span class="im-brand-name">{{ site.title }}</span>{%- endunless -%}
+      {%- unless h.brand == "logo" -%}<span class="sp-brand-name">{{ site.title }}</span>{%- endunless -%}
     </a>
 
     {%- comment -%} ── Primary nav ── {%- endcomment -%}
-    <nav class="im-nav-wrap" aria-label="Primary">
-      <ul class="im-nav" id="im-nav">
+    <nav class="sp-nav-wrap" aria-label="Primary">
+      <ul class="sp-nav" id="sp-nav">
         {%- for item in site.navigation_header -%}
           {%- assign has_children = false -%}
           {%- if h.dropdowns != false and item.children %}{% assign has_children = true %}{% endif -%}
@@ -58,37 +58,37 @@
           {%- elsif page.url contains item.url -%}
             {%- assign active = true -%}
           {%- endif -%}
-          <li class="im-nav-item{% if has_children or is_mega %} has-dropdown{% endif %}{% if is_mega %} has-mega{% endif %}">
-            <a class="im-nav-link" href="{{ item.url | relative_url }}"{% if active %} aria-current="page"{% endif %}{% if has_children or is_mega %} aria-haspopup="true" aria-expanded="false"{% endif %}>
+          <li class="sp-nav-item{% if has_children or is_mega %} has-dropdown{% endif %}{% if is_mega %} has-mega{% endif %}">
+            <a class="sp-nav-link" href="{{ item.url | relative_url }}"{% if active %} aria-current="page"{% endif %}{% if has_children or is_mega %} aria-haspopup="true" aria-expanded="false"{% endif %}>
               {%- if h.show_icons != false and item.icon %}<i class="ph-bold ph-{{ item.icon }}" aria-hidden="true"></i>{% endif -%}
               <span>{{ item.title }}</span>
-              {%- if has_children or is_mega %}<i class="ph-bold ph-caret-down im-nav-caret" aria-hidden="true"></i>{% endif -%}
+              {%- if has_children or is_mega %}<i class="ph-bold ph-caret-down sp-nav-caret" aria-hidden="true"></i>{% endif -%}
             </a>
 
             {%- if is_mega -%}
             {%- comment -%} ── Large grouped megamenu ── {%- endcomment -%}
-            <div class="im-mega" role="menu">
-              {%- if item.blurb -%}<p class="im-mega-blurb">{{ item.blurb }}</p>{%- endif -%}
-              <div class="im-mega-body">
-                <div class="im-mega-groups">
+            <div class="sp-mega" role="menu">
+              {%- if item.blurb -%}<p class="sp-mega-blurb">{{ item.blurb }}</p>{%- endif -%}
+              <div class="sp-mega-body">
+                <div class="sp-mega-groups">
                   {%- for g in item.groups -%}
-                  <div class="im-mega-group">
-                    {%- if g.title -%}<p class="im-mega-group-title">{{ g.title }}</p>{%- endif -%}
+                  <div class="sp-mega-group">
+                    {%- if g.title -%}<p class="sp-mega-group-title">{{ g.title }}</p>{%- endif -%}
                     {%- for c in g.items -%}
-                    <a class="im-mega-item" href="{{ c.url | relative_url }}" role="menuitem">
-                      {%- if c.icon %}<span class="im-mega-icon"><i class="ph-bold ph-{{ c.icon }}"></i></span>{% endif -%}
-                      <span class="im-mega-text"><span class="im-mega-title">{{ c.title }}</span>{% if c.sub %}<span class="im-mega-sub">{{ c.sub }}</span>{% endif %}</span>
+                    <a class="sp-mega-item" href="{{ c.url | relative_url }}" role="menuitem">
+                      {%- if c.icon %}<span class="sp-mega-icon"><i class="ph-bold ph-{{ c.icon }}"></i></span>{% endif -%}
+                      <span class="sp-mega-text"><span class="sp-mega-title">{{ c.title }}</span>{% if c.sub %}<span class="sp-mega-sub">{{ c.sub }}</span>{% endif %}</span>
                     </a>
                     {%- endfor -%}
                   </div>
                   {%- endfor -%}
                 </div>
                 {%- if item.featured -%}
-                <a class="im-mega-featured" href="{{ item.featured.url | relative_url }}" role="menuitem">
-                  {%- if item.featured.icon %}<i class="ph-bold ph-{{ item.featured.icon }} im-mega-featured-icon" aria-hidden="true"></i>{% endif -%}
-                  <span class="im-mega-featured-title">{{ item.featured.title }}</span>
-                  {%- if item.featured.text %}<span class="im-mega-featured-text">{{ item.featured.text }}</span>{% endif -%}
-                  <span class="im-mega-featured-cta">Open <i class="ph-bold ph-arrow-right"></i></span>
+                <a class="sp-mega-featured" href="{{ item.featured.url | relative_url }}" role="menuitem">
+                  {%- if item.featured.icon %}<i class="ph-bold ph-{{ item.featured.icon }} sp-mega-featured-icon" aria-hidden="true"></i>{% endif -%}
+                  <span class="sp-mega-featured-title">{{ item.featured.title }}</span>
+                  {%- if item.featured.text %}<span class="sp-mega-featured-text">{{ item.featured.text }}</span>{% endif -%}
+                  <span class="sp-mega-featured-cta">Open <i class="ph-bold ph-arrow-right"></i></span>
                 </a>
                 {%- endif -%}
               </div>
@@ -96,19 +96,19 @@
 
             {%- elsif has_children -%}
             {%- comment -%} ── Dropdown (with optional second-level flyout) ── {%- endcomment -%}
-            <ul class="im-dropdown" role="menu">
+            <ul class="sp-dropdown" role="menu">
               {%- for c in item.children -%}
               {%- assign has_sub = false -%}{%- if c.children %}{% assign has_sub = true %}{% endif -%}
-              <li role="none" class="im-dropdown-item{% if has_sub %} has-sub{% endif %}">
-                <a class="im-dropdown-link" href="{{ c.url | default: '#' | relative_url }}" role="menuitem"{% if has_sub %} aria-haspopup="true" aria-expanded="false"{% endif %}>
+              <li role="none" class="sp-dropdown-item{% if has_sub %} has-sub{% endif %}">
+                <a class="sp-dropdown-link" href="{{ c.url | default: '#' | relative_url }}" role="menuitem"{% if has_sub %} aria-haspopup="true" aria-expanded="false"{% endif %}>
                   {%- if h.show_icons != false and c.icon %}<i class="ph-bold ph-{{ c.icon }}" aria-hidden="true"></i>{% endif -%}
                   <span>{{ c.title }}</span>
-                  {%- if has_sub %}<i class="ph-bold ph-caret-right im-dropdown-caret" aria-hidden="true"></i>{% endif -%}
+                  {%- if has_sub %}<i class="ph-bold ph-caret-right sp-dropdown-caret" aria-hidden="true"></i>{% endif -%}
                 </a>
                 {%- if has_sub -%}
-                <ul class="im-subdropdown" role="menu">
+                <ul class="sp-subdropdown" role="menu">
                   {%- for s in c.children -%}
-                  <li role="none"><a class="im-dropdown-link" href="{{ s.url | relative_url }}" role="menuitem">
+                  <li role="none"><a class="sp-dropdown-link" href="{{ s.url | relative_url }}" role="menuitem">
                     {%- if h.show_icons != false and s.icon %}<i class="ph-bold ph-{{ s.icon }}" aria-hidden="true"></i>{% endif -%}
                     <span>{{ s.title }}</span>
                   </a></li>
@@ -125,39 +125,39 @@
     </nav>
 
     {%- comment -%} ── Actions: search · theme · github star · cta ── {%- endcomment -%}
-    <div class="im-nav-actions">
+    <div class="sp-nav-actions">
       {%- if h.search != false -%}
-      <button class="im-iconbtn" data-im-search-open aria-label="Search (press /)">
+      <button class="sp-iconbtn" data-sp-search-open aria-label="Search (press /)">
         <i class="ph-bold ph-magnifying-glass" aria-hidden="true"></i>
       </button>
       {%- endif -%}
 
       {%- if h.dark_toggle != false -%}
-      <button class="im-iconbtn" data-im-theme-toggle aria-label="Toggle color scheme">
-        <span class="im-icon-light"><i class="ph-bold ph-sun" aria-hidden="true"></i></span>
-        <span class="im-icon-dark"><i class="ph-bold ph-moon" aria-hidden="true"></i></span>
+      <button class="sp-iconbtn" data-sp-theme-toggle aria-label="Toggle color scheme">
+        <span class="sp-icon-light"><i class="ph-bold ph-sun" aria-hidden="true"></i></span>
+        <span class="sp-icon-dark"><i class="ph-bold ph-moon" aria-hidden="true"></i></span>
       </button>
       {%- endif -%}
 
       {%- if h.sponsor.enabled and h.sponsor.url -%}
-      <a class="im-iconbtn im-sponsor" href="{{ h.sponsor.url }}" target="_blank" rel="noopener" aria-label="{{ h.sponsor.label | default: 'Sponsor' }}" title="{{ h.sponsor.label | default: 'Sponsor' }}">
+      <a class="sp-iconbtn sp-sponsor" href="{{ h.sponsor.url }}" target="_blank" rel="noopener" aria-label="{{ h.sponsor.label | default: 'Sponsor' }}" title="{{ h.sponsor.label | default: 'Sponsor' }}">
         <i class="ph-fill ph-heart" aria-hidden="true"></i>
       </a>
       {%- endif -%}
 
       {%- if h.github.enabled and h.github.repo -%}
-      <a class="im-ghstar" href="https://github.com/{{ h.github.repo }}" target="_blank" rel="noopener" aria-label="Star on GitHub"{% if h.github.show_stars %} data-im-ghstars="{{ h.github.repo }}"{% endif %}>
+      <a class="sp-ghstar" href="https://github.com/{{ h.github.repo }}" target="_blank" rel="noopener" aria-label="Star on GitHub"{% if h.github.show_stars %} data-sp-ghstars="{{ h.github.repo }}"{% endif %}>
         <i class="ph-bold ph-github-logo" aria-hidden="true"></i>
-        <span class="im-ghstar-label">Star</span>
-        {%- if h.github.show_stars %}<span class="im-ghstar-count" hidden>0</span>{% endif -%}
+        <span class="sp-ghstar-label">Star</span>
+        {%- if h.github.show_stars %}<span class="sp-ghstar-count" hidden>0</span>{% endif -%}
       </a>
       {%- endif -%}
 
       {%- if h.cta.enabled and h.cta.url -%}
-      <a class="im-btn im-btn-sm im-btn-ink im-nav-cta" href="{{ h.cta.url | relative_url }}">{{ h.cta.label | default: "Contact" }}</a>
+      <a class="sp-btn sp-btn-sm sp-btn-ink sp-nav-cta" href="{{ h.cta.url | relative_url }}">{{ h.cta.label | default: "Contact" }}</a>
       {%- endif -%}
 
-      <button class="im-nav-toggle" data-im-nav-toggle aria-label="Menu" aria-expanded="false" aria-controls="im-nav">
+      <button class="sp-nav-toggle" data-sp-nav-toggle aria-label="Menu" aria-expanded="false" aria-controls="sp-nav">
         <i class="ph-bold ph-list" aria-hidden="true"></i>
       </button>
     </div>

@@ -1,0 +1,183 @@
+// ======================================================================
+// im/_timeline-page.scss — /timeline/ page (timeline.html)
+// A vertical rail of milestone cards (alternating sides on desktop) plus
+// a sticky sidebar. Deliberately prefixed .sp-tl-* — the unprefixed
+// `.timeline` classes belong to the content shortcode component.
+// ======================================================================
+
+.sp-tl-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--sp-space-4) var(--sp-space-5);
+  padding-bottom: var(--sp-space-5);
+  margin-bottom: var(--sp-space-6);
+  border-bottom: 1px solid var(--sp-line);
+
+  .sp-collection-title { margin: 0; font-size: var(--sp-text-3xl); }
+  .sp-collection-desc { margin: var(--sp-space-1) 0 0; color: var(--sp-muted); }
+  .sp-collection-stats { margin: 0 0 0 auto; }
+}
+
+.sp-tl-layout { row-gap: var(--sp-space-7); }
+
+// ---- Rail -------------------------------------------------------------
+.sp-tl-rail {
+  position: relative;
+  list-style: none;
+  margin: 0;
+  padding: 0 0 0 var(--sp-space-6);
+  min-width: 0;
+
+  // The line itself.
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0.45rem;
+    border-left: 2px solid var(--sp-line);
+  }
+}
+
+.sp-tl-year {
+  position: relative;
+  margin: var(--sp-space-4) 0 var(--sp-space-4) calc(var(--sp-space-6) * -1);
+  span {
+    display: inline-flex;
+    align-items: center;
+    padding: var(--sp-space-1) var(--sp-space-4);
+    border-radius: var(--sp-radius-full);
+    background: var(--sp-ink);
+    color: var(--sp-canvas);
+    font-size: var(--sp-text-sm);
+    font-weight: var(--sp-weight-bold);
+    letter-spacing: 0.04em;
+  }
+  &:first-child { margin-top: 0; }
+}
+
+.sp-tl-item {
+  position: relative;
+  margin-bottom: var(--sp-space-6);
+  &:last-child { margin-bottom: 0; }
+}
+.sp-tl-dot {
+  position: absolute;
+  top: 1.15rem;
+  left: calc(var(--sp-space-6) * -1);
+  width: 1rem;
+  height: 1rem;
+  border-radius: var(--sp-radius-full);
+  background: var(--sp-canvas);
+  // The mark carries its entry's collection colour, the way every other
+  // mark in the theme does — not the accent, which belongs to actions.
+  border: 3px solid var(--sp-c-this, var(--sp-ink));
+  box-shadow: 0 0 0 3px var(--sp-canvas);
+}
+
+.sp-tl-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  --sp-hover-bg: var(--sp-surface-2);
+
+  border-radius: var(--sp-radius-xl);
+  background: var(--sp-surface);
+  overflow: hidden;
+  @include sp-hover-card;
+}
+.sp-tl-date {
+  position: absolute;
+  top: var(--sp-space-3);
+  left: var(--sp-space-3);
+  z-index: 1;
+  padding: var(--sp-space-1) var(--sp-space-3);
+  border-radius: var(--sp-radius-full);
+  background: color-mix(in srgb, var(--sp-canvas) 88%, transparent);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid var(--sp-line);
+  font-size: var(--sp-text-xs);
+  font-weight: var(--sp-weight-semibold);
+  font-variant-numeric: tabular-nums;
+  color: var(--sp-ink);
+}
+.sp-tl-media {
+  aspect-ratio: 16 / 9;
+  background: var(--sp-surface-2);
+  a { display: block; height: 100%; }
+  img, iframe, .sp-thumb { display: block; width: 100%; height: 100%; object-fit: cover; border: 0; }
+}
+.sp-tl-body { display: flex; flex-direction: column; gap: var(--sp-space-2); padding: var(--sp-space-4) var(--sp-space-5) var(--sp-space-5); }
+.sp-tl-kicker {
+  display: inline-flex; align-items: center; gap: var(--sp-space-1);
+  font-size: var(--sp-text-xs); font-weight: var(--sp-weight-semibold);
+  letter-spacing: 0.08em; text-transform: uppercase; color: var(--sp-muted);
+  i { color: var(--sp-faint); }
+}
+.sp-tl-title {
+  margin: 0; font-size: var(--sp-text-lg); line-height: 1.25;
+  a { color: var(--sp-ink); text-decoration: none; &:hover { text-decoration: underline; } }
+}
+.sp-tl-text { margin: 0; font-size: var(--sp-text-sm); color: var(--sp-muted); }
+.sp-tl-foot { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--sp-space-2) var(--sp-space-3); margin-top: var(--sp-space-2); }
+.sp-tl-tags { display: flex; flex-wrap: wrap; gap: var(--sp-space-2); font-size: var(--sp-text-xs); color: var(--sp-faint); }
+.sp-tl-more { font-size: var(--sp-text-sm); font-weight: var(--sp-weight-medium); }
+
+// Desktop: centre the line, alternate cards left / right of it.
+@include mq($bp-lg) {
+  .sp-tl-rail {
+    padding-left: 0;
+    &::before { left: 50%; transform: translateX(-50%); }
+  }
+  .sp-tl-year { margin-left: 0; text-align: center; }
+  .sp-tl-item {
+    width: calc(50% - var(--sp-space-6));
+    &:nth-of-type(odd)  { margin-right: auto; }
+    &:nth-of-type(even) { margin-left: auto; }
+  }
+  .sp-tl-dot { left: auto; top: 1.4rem; }
+  .sp-tl-item:nth-of-type(odd)  .sp-tl-dot { right: calc(var(--sp-space-6) * -1 - 0.5rem); }
+  .sp-tl-item:nth-of-type(even) .sp-tl-dot { left: calc(var(--sp-space-6) * -1 - 0.5rem); }
+  // Short connector from the card edge to the dot.
+  .sp-tl-item::after {
+    content: "";
+    position: absolute;
+    top: 1.9rem;
+    width: var(--sp-space-6);
+    border-top: 1px dashed var(--sp-line);
+  }
+  .sp-tl-item:nth-of-type(odd)::after  { right: calc(var(--sp-space-6) * -1); }
+  .sp-tl-item:nth-of-type(even)::after { left: calc(var(--sp-space-6) * -1); }
+}
+
+// ---- Sidebar ----------------------------------------------------------
+.sp-tl-aside { min-width: 0; }
+.sp-tl-aside-sticky {
+  display: flex; flex-direction: column; gap: var(--sp-space-4);
+  @include mq($bp-lg) { position: sticky; top: calc(var(--sp-navbar-height) + var(--sp-space-5)); }
+}
+.sp-tl-widget { gap: var(--sp-space-3); padding: var(--sp-space-5); box-shadow: none; }
+.sp-tl-widget-title {
+  display: flex; align-items: center; gap: var(--sp-space-2);
+  margin: 0;
+  font-size: var(--sp-text-xs); font-weight: var(--sp-weight-semibold);
+  letter-spacing: 0.08em; text-transform: uppercase; color: var(--sp-faint);
+  i { color: var(--sp-muted); }
+}
+.sp-tl-years, .sp-tl-colls {
+  list-style: none; margin: 0; padding: 0;
+  display: flex; flex-direction: column; gap: var(--sp-space-1);
+  font-size: var(--sp-text-sm);
+  li { display: flex; align-items: center; justify-content: space-between; gap: var(--sp-space-2); }
+  a {
+    display: inline-flex; align-items: center; gap: var(--sp-space-2);
+    color: var(--sp-body); text-decoration: none;
+    padding: var(--sp-space-1) 0;
+    &:hover { color: var(--sp-ink); }
+    i { color: var(--sp-faint); }
+  }
+}
+.sp-tl-years li a { justify-content: space-between; width: 100%; font-variant-numeric: tabular-nums; font-weight: var(--sp-weight-medium); }
+.sp-tl-note p { margin: 0; font-size: var(--sp-text-sm); color: var(--sp-muted); code { font-size: 0.85em; } }

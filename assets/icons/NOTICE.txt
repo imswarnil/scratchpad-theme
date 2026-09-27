@@ -9,7 +9,7 @@ Most of the theme's icons are from Lucide (https://lucide.dev), ISC licensed:
     purpose with or without fee is hereby granted, provided that the above
     copyright notice and this permission notice appear in all copies.
 
-They are compiled into _sass/im/base/_icons.scss by tools/icons/build.mjs —
+They are compiled into _sass/scratchpad/base/_icons.scss by tools/icons/build.mjs —
 only the icons this theme actually uses, as inline SVG in custom properties,
 so a page load fetches nothing from anyone else.
 

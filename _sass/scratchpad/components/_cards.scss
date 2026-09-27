@@ -1,0 +1,543 @@
+// ======================================================================
+// im/_cards.scss — the per-collection cards
+//   .sp-ecard   editorial post card          (cards/blog.html)
+//   .sp-rcard   GitHub-repo-style project    (cards/portfolio.html)
+//   .sp-vcard   video-player-styled          (cards/video.html)
+//   .sp-ccard   VS Code-window snippet       (cards/snippet.html)
+//   .sp-chcard  chat-window prompt           (cards/prompt.html)
+// plus the portfolio filter sidebar, the /videos/ video band and the
+// single-project repo header. Shared hover/surface treatment first.
+// ======================================================================
+
+// ---- The two shapes a card takes --------------------------------------
+// A card is never a bordered box with a drop shadow: the system rests
+// nothing on a shadow. It is either BARE — a picture and some words with
+// nothing round them — or a HAIRLINE, an outline whose line is drawn as an
+// inset shadow so it costs no layout. Both answer the same way: they FILL.
+
+// BARE. There is no box to fill, so the fill is a panel drawn BEHIND the
+// card, bleeding past its edges. Nothing in the layout moves, nothing is
+// padded at rest, and the card still lines up with the grid it sits in.
+// Only one card is hovered at a time, so two panels overlapping in a tight
+// gap is not a situation that happens.
+%sp-cardbare {
+  --sp-card-bleed: 1rem;
+  --sp-card-radius: var(--sp-radius-xl);
+
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-space-3);
+  min-width: 0;
+  height: 100%;
+  isolation: isolate;
+
+  &::before {
+    content: "";
+    position: absolute;
+    inset: calc(var(--sp-card-bleed) * -1);
+    z-index: -1;
+    border-radius: calc(var(--sp-card-radius) + var(--sp-card-bleed) * 0.75);
+    background: var(--sp-hover-bg);
+    opacity: 0;
+    transition: opacity var(--sp-duration-fast) var(--sp-ease-out);
+    pointer-events: none;
+  }
+
+  &:is(:hover, :focus-within)::before { opacity: 1; }
+}
+
+// HAIRLINE. Transparent at rest, the line inside it, the fill on hover.
+%sp-cardhairline {
+  --sp-card-radius: var(--sp-radius-lg);
+  --sp-hover-bg: var(--sp-surface);
+
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-space-3);
+  min-width: 0;
+  height: 100%;
+  padding: 1.375rem;
+  border-radius: var(--sp-card-radius);
+  background: transparent;
+  box-shadow: inset 0 0 0 1px var(--sp-line);
+  color: var(--sp-body);
+  transition: background-color var(--sp-duration-fast) var(--sp-ease-out);
+
+  &:is(:hover, :focus-within) { background: var(--sp-hover-bg); }
+}
+
+// ONE movement, shared by every card and every filled button in the theme:
+// a single pixel, and the hairline of depth that goes with it.
+%sp-cardlift {
+  @media (hover: hover) and (prefers-reduced-motion: no-preference) {
+    transition:
+      background-color var(--sp-duration-fast) var(--sp-ease-out),
+      opacity var(--sp-duration-fast) var(--sp-ease-out),
+      translate var(--sp-duration-fast) var(--sp-ease-out),
+      box-shadow var(--sp-duration-fast) var(--sp-ease-out);
+
+    &:is(:hover, :focus-within) {
+      translate: 0 -1px;
+      box-shadow: var(--sp-card-hover-shadow);
+    }
+  }
+}
+
+// A card's picture rounds itself — there is no box clipping it any more.
+// It does NOT grow on hover: a feed of twenty cards each twitching a
+// photograph is a page nobody can read.
+%sp-cardmedia {
+  position: relative;
+  display: block;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  border-radius: var(--sp-card-radius, var(--sp-radius-xl));
+  background: var(--sp-surface);
+  isolation: isolate;
+
+  img, .sp-thumb { width: 100%; height: 100%; object-fit: cover; display: block; }
+}
+
+%sp-cardbody { display: flex; flex-direction: column; gap: var(--sp-space-2); min-width: 0; flex: 1; }
+
+%sp-cardtitle {
+  margin: 0;
+  font-size: var(--sp-text-h4);
+  font-weight: var(--sp-weight-semibold);
+  letter-spacing: var(--sp-tracking-tight);
+  line-height: var(--sp-leading-h4);
+  color: var(--sp-ink);
+  a { color: inherit; text-decoration: none; }
+}
+
+// One line-under-the-title, every card: the sentence on a card is the same
+// size and leading everywhere, so a grid of mixed collections reads as one
+// typeface and not as five.
+%sp-cardexcerpt {
+  margin: 0;
+  font-size: var(--sp-text-sm);
+  line-height: 1.55;
+  color: var(--sp-body);
+  text-wrap: pretty;
+  display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;
+}
+
+%sp-cardfoot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-space-2) var(--sp-space-3);
+  margin-top: auto;
+  padding-top: var(--sp-space-3);
+  font-size: var(--sp-text-xs);
+  color: var(--sp-muted);
+}
+
+%sp-cardtags {
+  display: flex; flex-wrap: wrap; gap: var(--sp-space-2);
+  font-size: var(--sp-text-xs); color: var(--sp-muted);
+}
+
+.sp-dot { color: var(--sp-faint); }
+
+// The card's action is a LINK whose arrow leans the way it goes, not a
+// button: a feed of twenty pill buttons is a page of twenty primary
+// actions. The lean belongs to the link, so it answers when the card is
+// hovered as well as when the link itself is.
+:is(.sp-ecard, .sp-rcard, .sp-vcard, .sp-ccard, .sp-chcard):is(:hover, :focus-within) .sp-card-cta > i {
+  translate: 3px 0;
+}
+
+// ---- Editorial post card ----------------------------------------------
+.sp-ecard { @extend %sp-cardbare; @extend %sp-cardlift; }
+.sp-ecard-media { @extend %sp-cardmedia; }
+.sp-ecard-body { @extend %sp-cardbody; }
+.sp-ecard-kicker {
+  display: flex; align-items: center; gap: var(--sp-space-2);
+  font-size: var(--sp-text-xs); color: var(--sp-muted);
+}
+// The kicker wears its collection's colour, the way every chip in the
+// system does — one hue per collection, everywhere it appears.
+.sp-ecard-type {
+  font-weight: var(--sp-weight-semibold);
+  letter-spacing: var(--sp-tracking-wide);
+  text-transform: uppercase;
+  color: color-mix(in oklab, var(--sp-c-this, var(--sp-c-posts)) 72%, var(--sp-ink));
+}
+.sp-ecard-title { @extend %sp-cardtitle; font-size: var(--sp-text-h3); line-height: var(--sp-leading-h3); }
+.sp-ecard:is(:hover, :focus-within) .sp-ecard-title a { color: var(--sp-accent); }
+.sp-ecard-excerpt { @extend %sp-cardexcerpt; }
+.sp-ecard-author {
+  display: flex; align-items: center; gap: var(--sp-space-2);
+  font-size: var(--sp-text-xs); color: var(--sp-muted);
+  img { width: 1.5rem; height: 1.5rem; border-radius: var(--sp-radius-full); object-fit: cover; }
+  .sp-ecard-author-name { color: var(--sp-ink); font-weight: var(--sp-weight-medium); }
+}
+.sp-ecard-foot { @extend %sp-cardfoot; }
+.sp-ecard-tags { @extend %sp-cardtags; }
+
+// ---- GitHub-style project card ----------------------------------------
+.sp-rcard { @extend %sp-cardhairline; @extend %sp-cardlift; gap: var(--sp-space-4); }
+.sp-rcard-media {
+  @extend %sp-cardmedia;
+  aspect-ratio: 2 / 1;
+  // The picture sits inside the hairline, so it pulls out to its edge.
+  margin: calc(1.375rem * -1) calc(1.375rem * -1) 0;
+  border-radius: var(--sp-card-radius) var(--sp-card-radius) 0 0;
+}
+.sp-rcard-body { @extend %sp-cardbody; gap: var(--sp-space-2); }
+.sp-rcard-head {
+  display: flex; align-items: center; gap: var(--sp-space-2);
+  font-size: var(--sp-text-sm); color: var(--sp-muted);
+  > i { flex: 0 0 auto; color: var(--sp-c-this, var(--sp-c-portfolio)); }
+}
+.sp-rcard-slug {
+  min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  color: var(--sp-muted); text-decoration: none;
+  strong { color: var(--sp-ink); font-weight: var(--sp-weight-semibold); }
+  &:hover strong { text-decoration: underline; }
+}
+.sp-rcard-kind {
+  margin-left: auto; flex: 0 0 auto;
+  padding: 0.1rem var(--sp-space-2);
+  border-radius: var(--sp-radius-full);
+  box-shadow: inset 0 0 0 1px var(--sp-line);
+  font-size: var(--sp-text-xs); font-weight: var(--sp-weight-medium);
+  text-transform: capitalize; color: var(--sp-muted);
+}
+.sp-rcard-title { @extend %sp-cardtitle; }
+.sp-rcard-desc { @extend %sp-cardexcerpt; -webkit-line-clamp: 2; }
+.sp-rcard-topics {
+  display: flex; flex-wrap: wrap; gap: var(--sp-space-1);
+}
+// A topic chip is the collection's hue over the current canvas — the same
+// tint a tag, a badge and a generated cover use.
+.sp-rcard-topic {
+  padding: 0.15rem var(--sp-space-2);
+  border-radius: var(--sp-radius-full);
+  background: color-mix(in oklab, var(--sp-c-this, var(--sp-c-portfolio)) 12%, var(--sp-canvas));
+  color: color-mix(in oklab, var(--sp-c-this, var(--sp-c-portfolio)) 70%, var(--sp-ink));
+  font-size: var(--sp-text-xs); font-weight: var(--sp-weight-medium);
+}
+.sp-rcard-meta {
+  display: flex; flex-wrap: wrap; align-items: center; gap: var(--sp-space-1) var(--sp-space-4);
+  font-size: var(--sp-text-xs); color: var(--sp-muted);
+  i { margin-right: 0.15rem; }
+}
+.sp-rcard-lang { display: inline-flex; align-items: center; gap: var(--sp-space-2); }
+.sp-lang-dot {
+  width: 0.7rem; height: 0.7rem; border-radius: var(--sp-radius-full);
+  background: var(--sp-faint);
+  // GitHub's language colours for the common ones; anything else stays neutral.
+  [data-lang="javascript"] &, [data-lang="js"] & { background: #f1e05a; }
+  [data-lang="typescript"] &, [data-lang="ts"] & { background: #3178c6; }
+  [data-lang="python"] &   { background: #3572a5; }
+  [data-lang="ruby"] &     { background: #701516; }
+  [data-lang="scss"] &     { background: #c6538c; }
+  [data-lang="css"] &      { background: #663399; }
+  [data-lang="html"] &     { background: #e34c26; }
+  [data-lang="liquid"] &   { background: #67b8de; }
+  [data-lang="shell"] &, [data-lang="bash"] & { background: #89e051; }
+  [data-lang="sql"] &, [data-lang="saql"] & { background: #e38c00; }
+  [data-lang="apex"] &     { background: #1797c0; }
+  [data-lang="go"] &       { background: #00add8; }
+  [data-lang="rust"] &     { background: #dea584; }
+}
+.sp-rcard-foot { @extend %sp-cardfoot; justify-content: flex-start; }
+
+// ---- Video-player card ------------------------------------------------
+.sp-vcard { @extend %sp-cardbare; @extend %sp-cardlift; --sp-card-radius: var(--sp-radius-lg); }
+.sp-vcard-screen {
+  @extend %sp-cardmedia;
+  aspect-ratio: 16 / 9;
+  background: #000;
+}
+// The play mark is the one thing on a thumbnail that may answer, because
+// it IS the affordance: it fills, it does not grow.
+.sp-vcard-play {
+  position: absolute; inset: 0; display: grid; place-items: center; color: var(--sp-on-media);
+  i {
+    display: grid; place-items: center;
+    width: 3.5rem; height: 3.5rem;
+    padding-left: 0.2rem;
+    border-radius: var(--sp-radius-full);
+    background: var(--sp-glass);
+    box-shadow: inset 0 0 0 1px var(--sp-glass-light);
+    font-size: 1.4rem;
+    transition: background-color var(--sp-duration-fast) var(--sp-ease-out);
+  }
+  .sp-vcard:is(:hover, :focus-within) & i { background: var(--sp-accent); color: var(--sp-on-accent); }
+}
+.sp-vcard-duration {
+  position: absolute; bottom: var(--sp-space-3); right: var(--sp-space-3);
+  padding: 0.1rem var(--sp-space-2); border-radius: var(--sp-radius-sm);
+  background: var(--sp-glass); color: var(--sp-on-media);
+  font-size: var(--sp-text-xs); font-weight: var(--sp-weight-semibold); font-variant-numeric: tabular-nums;
+}
+// The player's scrubber: a track along the bottom edge with a "played" fill.
+// How far through a viewer got, drawn along the foot of the thumbnail.
+// The width is the DATA — it does not move on hover, because the number
+// does not change when a pointer arrives.
+.sp-vcard-bar {
+  position: absolute; left: 0; right: 0; bottom: 0; height: 3px;
+  background: var(--sp-glass-light);
+
+  > span { display: block; height: 100%; background: var(--sp-c-videos); }
+}
+.sp-vcard-body { @extend %sp-cardbody; gap: var(--sp-space-2); }
+.sp-vcard-title { @extend %sp-cardtitle; }
+.sp-vcard:is(:hover, :focus-within) .sp-vcard-title a { color: var(--sp-accent); }
+.sp-vcard-meta {
+  display: flex; align-items: center; gap: var(--sp-space-2);
+  font-size: var(--sp-text-xs); color: var(--sp-muted);
+  img { width: 1.5rem; height: 1.5rem; border-radius: var(--sp-radius-full); object-fit: cover; }
+}
+.sp-vcard-excerpt { @extend %sp-cardexcerpt; -webkit-line-clamp: 2; }
+.sp-vcard-foot { @extend %sp-cardfoot; }
+.sp-vcard-tags { @extend %sp-cardtags; }
+
+// ---- VS Code-window snippet card --------------------------------------
+// The editor is deliberately dark in both themes — it's a window, not a
+// surface — so its colours are fixed rather than tokens.
+// The snippet card: what the code is FOR above the window, the window under
+// it — the sentence is what decides whether the code is worth reading. The
+// window is drawn in the system's own --sp-code-* colours, not in any
+// editor's palette.
+.sp-ccard { @extend %sp-cardbare; @extend %sp-cardlift; --sp-card-radius: var(--sp-radius-lg); }
+.sp-ccard-window {
+  display: block; text-decoration: none; color: inherit;
+  overflow: hidden;
+  border-radius: var(--sp-card-radius);
+  background: var(--sp-code-bg);
+  box-shadow: inset 0 0 0 1px var(--sp-code-line);
+  color-scheme: dark;
+}
+.sp-ccard-titlebar {
+  display: flex; align-items: center; gap: var(--sp-space-3);
+  padding: var(--sp-space-2) var(--sp-space-3);
+  border-bottom: 1px solid var(--sp-code-line);
+  background: color-mix(in oklab, var(--sp-code-bg) 82%, #000);
+  font-size: var(--sp-text-xs); color: var(--sp-code-muted);
+}
+.sp-ccard-lights {
+  display: inline-flex; gap: 6px;
+  i { width: 11px; height: 11px; border-radius: var(--sp-radius-full); }
+  i:nth-child(1) { background: #ff5f57; }
+  i:nth-child(2) { background: #febc2e; }
+  i:nth-child(3) { background: #28c840; }
+}
+// (The fake tab is gone — see cards/snippet.html. Kept for anyone whose
+// own card markup still uses it.)
+.sp-ccard-tab {
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: inline-flex; align-items: center; gap: var(--sp-space-1);
+  padding: 0.2rem var(--sp-space-2);
+  background: var(--sp-code-bg);
+  box-shadow: inset 0 1px 0 var(--sp-code-fg);
+  color: var(--sp-code-fg);
+  font-family: var(--sp-font-mono); font-size: var(--sp-text-xs);
+  i { color: var(--sp-c-snippets); }
+}
+.sp-ccard-lang {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-space-1);
+  white-space: nowrap;
+  font-family: var(--sp-font-mono);
+  text-transform: uppercase;
+  letter-spacing: var(--sp-tracking-wide);
+  color: var(--sp-code-muted);
+}
+
+// The one control the card needs: the code, on the clipboard, without
+// opening anything.
+.sp-ccard-copy {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-space-1);
+  margin-left: auto;
+  padding: 0.15rem var(--sp-space-2);
+  border: 0;
+  border-radius: var(--sp-radius-full);
+  background: transparent;
+  color: var(--sp-code-muted);
+  font: inherit;
+  font-size: var(--sp-text-xs);
+  cursor: pointer;
+  transition: background-color var(--sp-duration-instant), color var(--sp-duration-instant);
+
+  &:hover { background: var(--sp-code-hover); color: var(--sp-code-fg); }
+}
+.sp-ccard-editor {
+  margin: 0; padding: var(--sp-space-3) 0;
+  // `white-space: pre` below makes one line of code the min-content width
+  // of this whole card. Without min-width:0 that width wins on a phone.
+  min-width: 0;
+  overflow: hidden;
+  font-family: var(--sp-font-mono); font-size: var(--sp-text-xs); line-height: 1.7;
+  color: var(--sp-code-fg); background: var(--sp-code-bg);
+  counter-reset: ln;
+  code { display: block; }
+}
+.sp-ccard-line {
+  display: block; white-space: pre; overflow: hidden; text-overflow: ellipsis;
+  padding-right: var(--sp-space-3);
+  counter-increment: ln;
+  &::before {
+    content: counter(ln);
+    display: inline-block; width: 2.6rem; padding-right: var(--sp-space-3);
+    text-align: right; color: var(--sp-code-comment); user-select: none;
+  }
+  &.sp-ccard-more { color: var(--sp-code-comment); }
+}
+.sp-ccard-body { @extend %sp-cardbody; gap: var(--sp-space-2); }
+.sp-ccard-title { @extend %sp-cardtitle; font-family: var(--sp-font-mono); font-size: var(--sp-text-h5); line-height: var(--sp-leading-h5); }
+.sp-ccard:is(:hover, :focus-within) .sp-ccard-title a { color: var(--sp-accent); }
+.sp-ccard-excerpt { @extend %sp-cardexcerpt; -webkit-line-clamp: 2; }
+.sp-ccard-foot { @extend %sp-cardfoot; }
+.sp-ccard-badge, .sp-chcard-badge {
+  display: inline-flex; align-items: center; gap: var(--sp-space-1);
+  font-size: var(--sp-text-xs); color: var(--sp-muted);
+}
+.sp-ccard-actions, .sp-chcard-actions { display: inline-flex; flex-wrap: wrap; gap: var(--sp-space-2); }
+
+// ---- Chat-window prompt card ------------------------------------------
+// A prompt printed as a paragraph is indistinguishable from prose ABOUT a
+// prompt. Printed as the turn it is, it is obvious which part gets pasted.
+// The window is this system's own surfaces, radii and type — not a picture
+// of anybody's product.
+.sp-chcard { @extend %sp-cardbare; @extend %sp-cardlift; }
+.sp-chcard-window {
+  display: block; text-decoration: none; color: inherit;
+  overflow: hidden;
+  border-radius: var(--sp-card-radius);
+  background: var(--sp-canvas);
+  box-shadow: inset 0 0 0 1px var(--sp-line);
+}
+.sp-chcard-head {
+  display: flex; align-items: center; gap: var(--sp-space-2);
+  padding: var(--sp-space-2) var(--sp-space-3);
+  border-bottom: 1px solid var(--sp-line);
+  background: var(--sp-surface);
+  font-size: var(--sp-text-xs);
+}
+.sp-chcard-avatar {
+  display: grid; place-items: center; width: 1.6rem; height: 1.6rem;
+  border-radius: var(--sp-radius-full);
+  background: var(--sp-c-prompts); color: var(--sp-on-accent); font-size: 0.8rem;
+}
+.sp-chcard-name { font-weight: var(--sp-weight-semibold); color: var(--sp-ink); }
+.sp-chcard-status {
+  margin-left: auto; display: inline-flex; align-items: center; gap: var(--sp-space-1); color: var(--sp-muted);
+  i { width: 0.5rem; height: 0.5rem; border-radius: var(--sp-radius-full); background: var(--sp-success); }
+}
+.sp-chcard-thread { display: flex; flex-direction: column; gap: var(--sp-space-2); padding: var(--sp-space-3); min-height: 7.5rem; }
+.sp-chcard-msg {
+  max-width: 88%;
+  padding: var(--sp-space-2) var(--sp-space-3);
+  border-radius: var(--sp-radius-lg);
+  font-size: var(--sp-text-sm); line-height: 1.55;
+  p { margin: 0; }
+  &--user { align-self: flex-end; background: var(--sp-ink); color: var(--sp-canvas); border-bottom-right-radius: var(--sp-radius-xs); }
+  &--bot  { align-self: flex-start; background: var(--sp-surface); border-bottom-left-radius: var(--sp-radius-xs); }
+}
+.sp-chcard-typing {
+  display: inline-flex; gap: 4px; padding: 0.15rem 0;
+  i { width: 6px; height: 6px; border-radius: var(--sp-radius-full); background: var(--sp-faint); }
+  @media (prefers-reduced-motion: no-preference) {
+    i { animation: sp-typing 1.2s ease-in-out infinite; }
+    i:nth-child(2) { animation-delay: 0.15s; }
+    i:nth-child(3) { animation-delay: 0.3s; }
+  }
+}
+@keyframes sp-typing { 0%, 60%, 100% { transform: translateY(0); opacity: 0.5; } 30% { transform: translateY(-4px); opacity: 1; } }
+.sp-chcard-body { @extend %sp-cardbody; gap: var(--sp-space-2); }
+.sp-chcard-title { @extend %sp-cardtitle; }
+.sp-chcard:is(:hover, :focus-within) .sp-chcard-title a { color: var(--sp-accent); }
+.sp-chcard-excerpt { @extend %sp-cardexcerpt; -webkit-line-clamp: 2; }
+.sp-chcard-foot { @extend %sp-cardfoot; }
+
+// ---- Portfolio filter sidebar -----------------------------------------
+.sp-listing { align-items: start; }
+.sp-filter-sticky {
+  @include mq($bp-lg) {
+    position: sticky;
+    top: calc(var(--sp-navbar-height) + var(--sp-space-4));
+  }
+}
+.sp-filter-head {
+  display: flex; align-items: center; justify-content: space-between; gap: var(--sp-space-2);
+  margin-bottom: var(--sp-space-3);
+  font-size: var(--sp-text-xs); color: var(--sp-muted);
+}
+.sp-filter-count { font-variant-numeric: tabular-nums; }
+.sp-filter-clear {
+  display: inline-flex; align-items: center; gap: var(--sp-space-1);
+  padding: 0.15rem var(--sp-space-2);
+  border: 0; border-radius: var(--sp-radius-full);
+  box-shadow: inset 0 0 0 1px var(--sp-line);
+  background: transparent; color: var(--sp-ink);
+  font-size: var(--sp-text-xs); cursor: pointer;
+  transition: background-color var(--sp-duration-instant);
+  &:hover { background: var(--sp-hover-bg); }
+}
+.sp-filter-group { margin-bottom: var(--sp-space-4); }
+.sp-filter-title {
+  margin: 0 0 var(--sp-space-2);
+  font-size: var(--sp-text-xs); font-weight: var(--sp-weight-semibold);
+  letter-spacing: var(--sp-tracking-wide); text-transform: uppercase; color: var(--sp-faint);
+}
+.sp-filter-chips { display: flex; flex-wrap: wrap; gap: var(--sp-space-2); }
+// A chip has THREE steps and they are the system's three: a hairline at
+// rest, the hover fill when it is pointed at, the current fill with a bolder
+// label when it is the one chosen. Filled at rest there would be nowhere
+// left for the other two to go, and a sharpening border is not a step.
+.sp-filter-chip {
+  display: inline-flex; align-items: center; gap: var(--sp-space-2);
+  min-height: 1.75rem;
+  padding: 0 var(--sp-space-3);
+  border: 0; border-radius: var(--sp-radius-full);
+  box-shadow: inset 0 0 0 1px var(--sp-line);
+  background: transparent; color: var(--sp-ink);
+  font-size: var(--sp-text-xs); font-weight: var(--sp-weight-medium); text-transform: capitalize;
+  cursor: pointer;
+  transition: background-color var(--sp-duration-instant), color var(--sp-duration-instant);
+  &:hover { background: var(--sp-hover-bg); color: var(--sp-ink); }
+  &.is-active {
+    background: var(--sp-current-bg);
+    color: var(--sp-current-fg);
+    font-weight: var(--sp-current-weight);
+    box-shadow: none;
+  }
+  .sp-filter-n { font-variant-numeric: tabular-nums; color: var(--sp-muted); }
+}
+// Below lg the sidebar sits above the grid as horizontally scrolling chip rows.
+@include mq-down($bp-lg) {
+  .sp-filter { margin-bottom: var(--sp-space-4); }
+  .sp-filter-chips { flex-wrap: nowrap; overflow-x: auto; padding-bottom: var(--sp-space-1); scrollbar-width: thin; }
+  .sp-filter-chip { flex: 0 0 auto; }
+}
+// Two-up grid next to the sidebar (three would be too tight in 9 columns).
+.sp-cards--2 { @include mq($bp-lg) { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+
+// ---- /videos/ background-video band -----------------------------------
+
+// ---- Single project: GitHub-style header ------------------------------
+.sp-repo-head {
+  display: flex; flex-direction: column; gap: var(--sp-space-3);
+  margin: 0 0 var(--sp-space-5);
+  padding: 1.375rem;
+  border-radius: var(--sp-radius-lg);
+  box-shadow: inset 0 0 0 1px var(--sp-line);
+}
+.sp-repo-head-row { display: flex; align-items: center; flex-wrap: wrap; gap: var(--sp-space-2); font-size: var(--sp-text-base); color: var(--sp-muted); }
+.sp-repo-head-row .sp-rcard-kind { margin-left: 0; }
+.sp-repo-year { font-size: var(--sp-text-xs); color: var(--sp-muted); }
+.sp-repo-summary { margin: 0; font-size: var(--sp-text-lg); color: var(--sp-body); }
+.sp-repo-actions { display: flex; flex-wrap: wrap; gap: var(--sp-space-2); margin-top: var(--sp-space-2); }

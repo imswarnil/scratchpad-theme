@@ -1,0 +1,446 @@
+// ======================================================================
+// im/_pages.scss — homepage sections + the standalone pages built on the
+// 12-column grid (about, contact, now). Section heads, skill pills, the
+// CTA band, page headers, photo/story rows, the form, and the sticky
+// sidebars. Everything sits on the tokens; nothing here hides content
+// for animation — reveals are the existing .sp-reveal observer.
+// ======================================================================
+
+// ---- Section rhythm ----------------------------------------------------
+.sp-sec {
+  padding-block: var(--sp-space-7);
+  border-top: 1px solid var(--sp-line);
+  @include mq($bp-lg) { padding-block: var(--sp-space-8); }
+}
+.sp-sec-body { margin-top: var(--sp-space-5); }
+
+.sp-sec-head {
+  align-items: end;
+  row-gap: var(--sp-space-2);
+}
+// A section's kicker is a LABEL, so it is set in the mono face, and it
+// wears the colour of the collection the section is about — one hue per
+// collection, in the kicker, the chips, the cover art and the cards.
+.sp-sec-eyebrow {
+  display: inline-block;
+  margin-bottom: var(--sp-space-2);
+  font-family: var(--sp-font-mono);
+  font-size: var(--sp-text-xs);
+  font-weight: var(--sp-weight-medium);
+  letter-spacing: var(--sp-tracking-wide);
+  text-transform: uppercase;
+  color: color-mix(in oklab, var(--sp-c-this, var(--sp-c-current)) 72%, var(--sp-muted));
+}
+.sp-sec-title {
+  margin: 0;
+  font-size: var(--sp-text-h1);
+  line-height: var(--sp-leading-h1);
+  letter-spacing: var(--sp-tracking-tight);
+}
+// "All work →" is a call to action, so its arrow leans, like every other
+// one in the theme.
+.sp-sec-head-link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-space-2);
+  font-size: var(--sp-text-sm);
+  font-weight: var(--sp-weight-semibold);
+  color: var(--sp-ink);
+  text-decoration: none;
+  @include mq($bp-md) { justify-content: flex-end; padding-bottom: var(--sp-space-1); }
+  i { font-size: 0.9em; transition: translate var(--sp-duration-instant) var(--sp-ease-out); }
+  &:hover { color: var(--sp-accent); }
+  &:hover i { translate: 3px 0; }
+}
+
+// ---- Skill pills (utility/skills.html) ---------------------------------
+.sp-skills { display: flex; flex-direction: column; gap: var(--sp-space-4); }
+.sp-skills-row {
+  display: grid;
+  gap: var(--sp-space-2);
+  @include mq($bp-md) { grid-template-columns: 8rem minmax(0, 1fr); align-items: start; }
+}
+.sp-skills-level {
+  padding-top: var(--sp-space-2);
+  font-size: var(--sp-text-xs);
+  font-weight: var(--sp-weight-semibold);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--sp-faint);
+}
+.sp-skills-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-space-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.sp-skill {
+  position: relative;
+  overflow: hidden;
+  padding: var(--sp-space-2) var(--sp-space-3) calc(var(--sp-space-2) + 3px);
+  border-radius: var(--sp-radius-full);
+  box-shadow: inset 0 0 0 1px var(--sp-line);
+  font-size: var(--sp-text-sm);
+  font-weight: var(--sp-weight-medium);
+  color: var(--sp-ink);
+  @include sp-hover-fill;
+}
+// A hairline along the pill's bottom edge, proportional to the skill's
+// `percent` — a quiet level indicator, not a chart.
+.sp-skill-bar {
+  position: absolute;
+  left: var(--sp-space-3);
+  right: var(--sp-space-3);
+  bottom: 0;
+  height: 2px;
+  border-radius: var(--sp-radius-full);
+  background: linear-gradient(to right, var(--sp-ink) var(--sp-skill, 70%), var(--sp-line) var(--sp-skill, 70%));
+}
+.sp-skills-note .sp-flink { display: inline-flex; align-items: center; gap: var(--sp-space-1); font-size: var(--sp-text-sm); font-weight: var(--sp-weight-medium); }
+
+// ---- CTA band ------------------------------------------------------------
+.sp-cta-band {
+  align-items: center;
+  padding: var(--sp-space-6);
+  border: 1px solid var(--sp-line);
+  border-radius: var(--sp-radius-2xl);
+  background:
+    radial-gradient(120% 140% at 100% 0%, color-mix(in srgb, var(--sp-accent) 10%, transparent), transparent 60%),
+    var(--sp-surface);
+  @include mq($bp-lg) { padding: var(--sp-space-8); }
+}
+.sp-cta-band-title {
+  margin: 0 0 var(--sp-space-3);
+  font-size: clamp(var(--sp-text-2xl), 3.4vw, var(--sp-text-4xl));
+  letter-spacing: -0.025em;
+  line-height: 1.1;
+  text-wrap: balance;
+}
+.sp-cta-band-text { margin: 0; max-width: 56ch; font-size: var(--sp-text-lg); color: var(--sp-muted); }
+.sp-cta-band-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-space-3);
+  @include mq($bp-lg) { flex-direction: column; align-items: stretch; .sp-btn { justify-content: center; } }
+}
+.sp-cta-band-email { align-self: center; font-size: var(--sp-text-sm); color: var(--sp-muted); }
+
+// ---- Standalone pages (about / contact / now) -----------------------------
+.sp-pg-head {
+  align-items: end;
+  padding-block: var(--sp-space-6) var(--sp-space-7);
+  @include mq($bp-lg) { padding-block: var(--sp-space-7) var(--sp-space-8); }
+}
+.sp-pg-title {
+  margin: 0 0 var(--sp-space-4);
+  font-size: clamp(var(--sp-text-4xl), 5.2vw, var(--sp-text-5xl));
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+  text-wrap: balance;
+}
+.sp-pg-lede {
+  margin: 0;
+  max-width: 60ch;
+  font-size: var(--sp-text-lg);
+  line-height: var(--sp-leading-base);
+  color: var(--sp-muted);
+}
+.sp-pg-head-aside { @include mq($bp-lg) { padding-bottom: var(--sp-space-2); } }
+
+.sp-pg-facts {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-space-3);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: var(--sp-text-sm);
+  color: var(--sp-muted);
+  li { display: flex; align-items: flex-start; gap: var(--sp-space-2); }
+  i { flex: 0 0 auto; margin-top: 0.2em; color: var(--sp-faint); }
+  &.sp-card { gap: var(--sp-space-3); }
+}
+
+.sp-pg-row { padding-block: var(--sp-space-4) var(--sp-space-7); align-items: start; }
+
+.sp-pg-photo {
+  margin: 0;
+  img {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    border-radius: var(--sp-radius-2xl);
+    box-shadow: var(--sp-shadow-lg);
+  }
+  figcaption {
+    margin-top: var(--sp-space-3);
+    font-family: "Caveat", ui-rounded, cursive;
+    font-size: 1.3rem;
+    color: var(--sp-muted);
+    transform: rotate(-1deg);
+    transform-origin: left;
+  }
+  @include mq($bp-lg) { position: sticky; top: calc(var(--sp-navbar-height) + var(--sp-space-5)); }
+}
+.sp-pg-story {
+  h2 { margin-top: 0; font-size: var(--sp-text-2xl); letter-spacing: -0.02em; }
+  h2 + p, p + h2 { margin-top: var(--sp-space-4); }
+  h2:not(:first-child) { margin-top: var(--sp-space-6); }
+  ul { padding-left: 1.1rem; }
+  li + li { margin-top: var(--sp-space-2); }
+}
+
+// "How I work" steps
+.sp-pg-step { position: relative; gap: var(--sp-space-3); }
+.sp-pg-step-num {
+  position: absolute;
+  top: var(--sp-space-4);
+  right: var(--sp-space-5);
+  font-size: var(--sp-text-3xl);
+  font-weight: var(--sp-weight-bold);
+  letter-spacing: -0.04em;
+  color: transparent;
+  -webkit-text-stroke: 1px var(--sp-line);
+}
+
+// Social tiles
+.sp-pg-social {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-space-1);
+  --sp-hover-bg: var(--sp-surface-2);
+
+  padding: 1.25rem;
+  border-radius: var(--sp-radius-xl);
+  background: var(--sp-surface);
+  color: var(--sp-ink);
+  text-decoration: none;
+  @include sp-hover-card($shadow: false);
+  i { font-size: 1.4rem; margin-bottom: var(--sp-space-2); color: var(--sp-muted); }
+  &:hover i { color: var(--sp-accent); }
+}
+.sp-pg-social-name { font-weight: var(--sp-weight-semibold); }
+.sp-pg-social-url { font-size: var(--sp-text-xs); color: var(--sp-muted); overflow-wrap: anywhere; }
+
+// Sticky sidebar stack (contact, now)
+.sp-pg-aside {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-space-4);
+  @include mq($bp-lg) { position: sticky; top: calc(var(--sp-navbar-height) + var(--sp-space-5)); }
+  .sp-card { gap: var(--sp-space-3); }
+  .sp-btn { align-self: flex-start; }
+}
+.sp-pg-aside-big { font-size: var(--sp-text-lg); font-weight: var(--sp-weight-semibold); overflow-wrap: anywhere; }
+.sp-pg-aside-social .sp-footer-social { margin-top: var(--sp-space-2); }
+
+// ---- Contact form ----------------------------------------------------------
+.sp-form { gap: var(--sp-space-5); }
+.sp-form-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-space-3);
+  .sp-card-title { margin: 0; }
+}
+.sp-form-grid {
+  display: grid;
+  gap: var(--sp-space-4);
+  @include mq($bp-md) { grid-template-columns: 1fr 1fr; }
+}
+.sp-field { display: flex; flex-direction: column; gap: var(--sp-space-2); }
+.sp-field-full { @include mq($bp-md) { grid-column: 1 / -1; } }
+.sp-field-label { font-size: var(--sp-text-sm); font-weight: var(--sp-weight-medium); color: var(--sp-ink); }
+.sp-input {
+  width: 100%;
+  padding: var(--sp-space-3) var(--sp-space-4);
+  border: 1px solid var(--sp-line);
+  border-radius: var(--sp-radius-lg);
+  background: var(--sp-canvas);
+  color: var(--sp-ink);
+  font: inherit;
+  font-size: var(--sp-text-sm);
+  transition: border-color var(--sp-duration-fast) var(--sp-ease-out), box-shadow var(--sp-duration-fast) var(--sp-ease-out);
+  &::placeholder { color: var(--sp-faint); }
+  &:focus-visible {
+    outline: none;
+    border-color: var(--sp-ink);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--sp-ink) 12%, transparent);
+  }
+}
+textarea.sp-input { resize: vertical; min-height: 8rem; }
+select.sp-input { cursor: pointer; }
+.sp-form-foot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--sp-space-4);
+}
+.sp-form-note { font-size: var(--sp-text-xs); color: var(--sp-faint); }
+
+// ---- Now page --------------------------------------------------------------
+.sp-now { display: flex; flex-direction: column; gap: var(--sp-space-3); }
+.sp-now-sec {
+  padding: 1.25rem;
+  border-radius: var(--sp-radius-xl);
+  background: var(--sp-surface);
+  scroll-margin-top: calc(var(--sp-navbar-height) + var(--sp-space-4));
+  > p { margin: 0; color: var(--sp-muted); }
+}
+.sp-now-sec--muted { background: transparent; box-shadow: inset 0 0 0 1px var(--sp-line); }
+.sp-now-sec-head {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-space-3);
+  margin-bottom: var(--sp-space-4);
+  h2 { margin: 0; font-size: var(--sp-text-xl); letter-spacing: -0.01em; }
+  time { margin-left: auto; font-size: var(--sp-text-xs); color: var(--sp-faint); }
+  .sp-card-icon { margin: 0; }
+}
+.sp-now-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-space-3);
+  li {
+    position: relative;
+    padding-left: var(--sp-space-5);
+    color: var(--sp-body);
+    line-height: var(--sp-leading-base);
+    &::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0.7em;
+      width: 0.5rem;
+      height: 0.5rem;
+      border-radius: var(--sp-radius-full);
+      background: var(--sp-ink);
+    }
+  }
+  strong { color: var(--sp-ink); }
+}
+.sp-now-nav {
+  gap: var(--sp-space-2);
+  .sp-sec-eyebrow { margin-bottom: var(--sp-space-1); }
+  .sp-flink { align-self: flex-start; font-size: var(--sp-text-sm); }
+}
+
+// ======================================================================
+// /about/ — the story, in chapters
+// ----------------------------------------------------------------------
+// A rail of years on the left that marks where you are, the chapters
+// stacked on the right. The rail is sticky because the point of it is
+// orientation: it has to be there when you are three chapters down.
+// ======================================================================
+.sp-story {
+  display: grid;
+  gap: var(--sp-space-7);
+  margin-block: var(--sp-section-gap);
+
+  @include mq($bp-lg) {
+    grid-template-columns: minmax(0, 4fr) minmax(0, 8fr);
+    gap: clamp(2rem, 5vw, 4rem);
+    align-items: start;
+  }
+}
+
+.sp-story-rail {
+  @include mq($bp-lg) {
+    position: sticky;
+    top: calc(var(--sp-navbar-height) + var(--sp-space-5));
+  }
+}
+.sp-story-rail-title {
+  margin: 0 0 var(--sp-space-4);
+  font-family: var(--sp-font-mono);
+  font-size: var(--sp-text-xs);
+  font-weight: var(--sp-weight-medium);
+  letter-spacing: var(--sp-tracking-wide);
+  text-transform: uppercase;
+  color: var(--sp-faint);
+}
+
+.sp-story-rail-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+
+  a {
+    display: grid;
+    grid-template-columns: 3.5rem minmax(0, 1fr);
+    gap: var(--sp-space-3);
+    align-items: baseline;
+    padding: var(--sp-space-2) var(--sp-space-3);
+    border-left: 2px solid transparent;
+    border-radius: 0 var(--sp-radius-sm) var(--sp-radius-sm) 0;
+    color: var(--sp-muted);
+    text-decoration: none;
+    transition: background-color var(--sp-duration-instant), color var(--sp-duration-instant);
+
+    &:hover { background: var(--sp-hover-bg); color: var(--sp-ink); }
+
+    // The chapter you are reading wears the theme's one CURRENT state —
+    // a fill and a bolder label, marked on the rule at its left.
+    &.is-current {
+      background: var(--sp-current-bg);
+      border-left-color: var(--sp-ink);
+      color: var(--sp-current-fg);
+      font-weight: var(--sp-current-weight);
+    }
+  }
+}
+.sp-story-year {
+  font-family: var(--sp-font-mono);
+  font-size: var(--sp-text-xs);
+  color: var(--sp-faint);
+  font-variant-numeric: tabular-nums;
+}
+.sp-story-label { min-width: 0; font-size: var(--sp-text-sm); }
+
+.sp-story-body { display: flex; flex-direction: column; gap: var(--sp-section-gap); min-width: 0; }
+
+.sp-story-photo {
+  margin: 0;
+
+  img {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    border-radius: var(--sp-radius-2xl);
+    background: var(--sp-surface);
+  }
+  figcaption {
+    margin-top: var(--sp-space-3);
+    color: var(--sp-muted);
+    font-size: var(--sp-text-sm);
+    text-align: center;
+  }
+}
+
+.sp-story-ch {
+  scroll-margin-top: calc(var(--sp-navbar-height) + var(--sp-space-6));
+
+  .sp-prose { max-width: 62ch; }
+}
+.sp-story-ch-year {
+  margin: 0 0 var(--sp-space-1);
+  font-family: var(--sp-font-mono);
+  font-size: var(--sp-text-xs);
+  letter-spacing: var(--sp-tracking-wide);
+  color: var(--sp-c-current, var(--sp-accent));
+}
+.sp-story-ch-title {
+  margin: 0 0 var(--sp-space-3);
+  font-size: var(--sp-text-h2);
+  line-height: var(--sp-leading-h2);
+  letter-spacing: var(--sp-tracking-tight);
+}

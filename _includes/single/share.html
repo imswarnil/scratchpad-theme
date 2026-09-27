@@ -5,14 +5,14 @@
 {%- endcomment -%}
 {%- assign u = page.url | absolute_url -%}
 {%- assign t = page.title | uri_escape -%}
-<div class="im-share" role="group" aria-label="Share this page">
-  <span class="im-share-label"><i class="ph-bold ph-share-network" aria-hidden="true"></i> Share</span>
-  <a class="im-share-btn" href="https://twitter.com/intent/tweet?url={{ u | uri_escape }}&text={{ t }}" target="_blank" rel="noopener" aria-label="Share on X"><i class="ph-bold ph-x-logo" aria-hidden="true"></i></a>
-  <a class="im-share-btn" href="https://www.linkedin.com/sharing/share-offsite/?url={{ u | uri_escape }}" target="_blank" rel="noopener" aria-label="Share on LinkedIn"><i class="ph-bold ph-linkedin-logo" aria-hidden="true"></i></a>
-  <a class="im-share-btn" href="https://www.facebook.com/sharer/sharer.php?u={{ u | uri_escape }}" target="_blank" rel="noopener" aria-label="Share on Facebook"><i class="ph-bold ph-facebook-logo" aria-hidden="true"></i></a>
-  <a class="im-share-btn" href="https://api.whatsapp.com/send?text={{ t }}%20{{ u | uri_escape }}" target="_blank" rel="noopener" aria-label="Share on WhatsApp"><i class="ph-bold ph-whatsapp-logo" aria-hidden="true"></i></a>
-  <a class="im-share-btn" href="https://t.me/share/url?url={{ u | uri_escape }}&text={{ t }}" target="_blank" rel="noopener" aria-label="Share on Telegram"><i class="ph-bold ph-telegram-logo" aria-hidden="true"></i></a>
-  <a class="im-share-btn" href="https://reddit.com/submit?url={{ u | uri_escape }}&title={{ t }}" target="_blank" rel="noopener" aria-label="Share on Reddit"><i class="ph-bold ph-reddit-logo" aria-hidden="true"></i></a>
-  <a class="im-share-btn" href="mailto:?subject={{ t }}&body={{ u | uri_escape }}" aria-label="Share by email"><i class="ph-bold ph-envelope" aria-hidden="true"></i></a>
-  <button class="im-share-btn" type="button" data-im-copy="{{ u }}" aria-label="Copy link"><i class="ph-bold ph-link" aria-hidden="true"></i></button>
+<div class="sp-share" role="group" aria-label="Share this page">
+  <span class="sp-share-label"><i class="ph-bold ph-share-network" aria-hidden="true"></i> Share</span>
+  <a class="sp-share-btn" href="https://twitter.com/intent/tweet?url={{ u | uri_escape }}&text={{ t }}" target="_blank" rel="noopener" aria-label="Share on X"><i class="ph-bold ph-x-logo" aria-hidden="true"></i></a>
+  <a class="sp-share-btn" href="https://www.linkedin.com/sharing/share-offsite/?url={{ u | uri_escape }}" target="_blank" rel="noopener" aria-label="Share on LinkedIn"><i class="ph-bold ph-linkedin-logo" aria-hidden="true"></i></a>
+  <a class="sp-share-btn" href="https://www.facebook.com/sharer/sharer.php?u={{ u | uri_escape }}" target="_blank" rel="noopener" aria-label="Share on Facebook"><i class="ph-bold ph-facebook-logo" aria-hidden="true"></i></a>
+  <a class="sp-share-btn" href="https://api.whatsapp.com/send?text={{ t }}%20{{ u | uri_escape }}" target="_blank" rel="noopener" aria-label="Share on WhatsApp"><i class="ph-bold ph-whatsapp-logo" aria-hidden="true"></i></a>
+  <a class="sp-share-btn" href="https://t.me/share/url?url={{ u | uri_escape }}&text={{ t }}" target="_blank" rel="noopener" aria-label="Share on Telegram"><i class="ph-bold ph-telegram-logo" aria-hidden="true"></i></a>
+  <a class="sp-share-btn" href="https://reddit.com/submit?url={{ u | uri_escape }}&title={{ t }}" target="_blank" rel="noopener" aria-label="Share on Reddit"><i class="ph-bold ph-reddit-logo" aria-hidden="true"></i></a>
+  <a class="sp-share-btn" href="mailto:?subject={{ t }}&body={{ u | uri_escape }}" aria-label="Share by email"><i class="ph-bold ph-envelope" aria-hidden="true"></i></a>
+  <button class="sp-share-btn" type="button" data-sp-copy="{{ u }}" aria-label="Copy link"><i class="ph-bold ph-link" aria-hidden="true"></i></button>
 </div>

@@ -8,14 +8,14 @@
 {%- assign first = lessons | first -%}
 {%- assign minutes = 0 -%}
 {%- for l in lessons -%}{%- assign minutes = minutes | plus: l.minutes -%}{%- endfor -%}
-<header class="im-coursehero" style="--im-c-this: var(--im-c-courses, var(--im-accent));">
-  <span class="im-coursehero-art im-pattern-dots" aria-hidden="true"></span>
-  <div class="im-coursehero-copy">
-    <p class="im-caption" data-index="{{ lessons.size }}">Course</p>
-    <h1 class="im-coursehero-title">{{ page.title }}</h1>
-    {%- if page.description %}<p class="im-coursehero-text">{{ page.description }}</p>{% endif -%}
+<header class="sp-coursehero" style="--sp-c-this: var(--sp-c-courses, var(--sp-accent));">
+  <span class="sp-coursehero-art sp-pattern-dots" aria-hidden="true"></span>
+  <div class="sp-coursehero-copy">
+    <p class="sp-caption" data-index="{{ lessons.size }}">Course</p>
+    <h1 class="sp-coursehero-title">{{ page.title }}</h1>
+    {%- if page.description %}<p class="sp-coursehero-text">{{ page.description }}</p>{% endif -%}
 
-    <dl class="im-coursehero-stats">
+    <dl class="sp-coursehero-stats">
       {%- if page.level -%}<div><dt>Level</dt><dd>{{ page.level }}</dd></div>{%- endif -%}
       {%- if lessons.size > 0 -%}<div><dt>Lessons</dt><dd>{{ lessons.size }}</dd></div>{%- endif -%}
       {%- if minutes > 0 -%}
@@ -26,8 +26,8 @@
     </dl>
 
     {%- if first -%}
-    <p class="im-coursehero-actions">
-      <a class="im-btn im-btn-primary im-btn-lg" href="{{ first.url | relative_url }}">
+    <p class="sp-coursehero-actions">
+      <a class="sp-btn sp-btn-primary sp-btn-lg" href="{{ first.url | relative_url }}">
         <i class="ph-fill ph-play" aria-hidden="true"></i> Start lesson 1
       </a>
     </p>

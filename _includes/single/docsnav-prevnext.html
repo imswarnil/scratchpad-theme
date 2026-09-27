@@ -9,8 +9,8 @@
   {%- endif -%}
 {%- endfor -%}
 {%- if prev or next -%}
-<nav class="im-postnav" aria-label="Documentation">
-  {%- if prev %}<a href="{{ prev.url | relative_url }}"><span class="im-postnav-label">Previous</span><span class="im-postnav-title">{{ prev.title }}</span></a>{% endif -%}
-  {%- if next %}<a class="im-postnav-next" href="{{ next.url | relative_url }}"><span class="im-postnav-label">Next</span><span class="im-postnav-title">{{ next.title }}</span></a>{% endif -%}
+<nav class="sp-postnav" aria-label="Documentation">
+  {%- if prev %}<a href="{{ prev.url | relative_url }}"><span class="sp-postnav-label">Previous</span><span class="sp-postnav-title">{{ prev.title }}</span></a>{% endif -%}
+  {%- if next %}<a class="sp-postnav-next" href="{{ next.url | relative_url }}"><span class="sp-postnav-label">Next</span><span class="sp-postnav-title">{{ next.title }}</span></a>{% endif -%}
 </nav>
 {%- endif -%}

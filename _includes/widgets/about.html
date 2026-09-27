@@ -1,7 +1,7 @@
-<section class="im-widget im-widget-author">
-  <img class="im-widget-avatar" src="{{ site.avatarurl | relative_url }}" alt="" width="44" height="44">
-  <h2 class="im-widget-title">{{ site.author | default: site.title }}</h2>
-  <p class="im-widget-text">{{ site.description | strip_html | truncate: 130 }}</p>
+<section class="sp-widget sp-widget-author">
+  <img class="sp-widget-avatar" src="{{ site.avatarurl | relative_url }}" alt="" width="44" height="44">
+  <h2 class="sp-widget-title">{{ site.author | default: site.title }}</h2>
+  <p class="sp-widget-text">{{ site.description | strip_html | truncate: 130 }}</p>
   {% include social-row.html %}
-  <a class="im-btn im-btn-sm im-btn-outline im-w-full" href="{{ '/about/' | relative_url }}">About me</a>
+  <a class="sp-btn sp-btn-sm sp-btn-outline sp-w-full" href="{{ '/about/' | relative_url }}">About me</a>
 </section>

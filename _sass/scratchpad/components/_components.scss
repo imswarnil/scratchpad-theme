@@ -1,0 +1,359 @@
+// ======================================================================
+// im/components/_components.scss — the core four
+// ----------------------------------------------------------------------
+// Button, card, badge, alert. Every other component in Scratchpad is built
+// out of these; nothing here knows about a page.
+//
+// THE INTERACTIONS (there are two, and they are the Im Design System's):
+//   HOVER   the thing FILLS. Nothing sharpens a border, nothing grows 3%.
+//           A filled button lifts one pixel and casts a hairline; a ghost
+//           or outline button has nothing to lift, so it only fills.
+//   PRESS   it gives, and it gives at once (scale 0.97, no transition).
+// A trailing icon leans the way the button is going. That is the whole
+// vocabulary — resist adding a third.
+// ======================================================================
+
+// ---- Buttons ----------------------------------------------------------
+.sp-btn {
+  // Every variant is these four values and nothing else, so a new variant is
+  // four lines and never a second copy of the box.
+  --sp-btn-bg: var(--sp-surface);
+  --sp-btn-fg: var(--sp-ink);
+  --sp-btn-bg-hover: var(--sp-surface-2);
+  --sp-btn-fg-hover: var(--sp-ink);
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-space-2);
+  min-height: 2.5rem;
+  padding: 0 1.125rem;
+  border: 0;
+  border-radius: var(--sp-radius-full);
+  background: var(--sp-btn-bg);
+  color: var(--sp-btn-fg);
+  font-family: var(--sp-font-body);
+  font-size: var(--sp-text-sm);
+  font-weight: var(--sp-weight-semibold);
+  line-height: 1.2;
+  text-align: center;
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+  user-select: none;
+  transition:
+    background-color var(--sp-duration-instant),
+    color var(--sp-duration-instant),
+    opacity var(--sp-duration-instant),
+    scale var(--sp-duration-instant),
+    translate var(--sp-duration-instant),
+    box-shadow var(--sp-duration-instant);
+
+  &:hover,
+  &:focus-visible,
+  &[aria-expanded="true"] {
+    background: var(--sp-btn-bg-hover);
+    color: var(--sp-btn-fg-hover);
+  }
+
+  // A FILLED button lifts a pixel under the pointer and casts a hairline,
+  // the way a card does — the one movement the whole system shares. A ghost
+  // or outline button has nothing to lift, so it only fills. Never on a
+  // touch screen, where :hover sticks after the tap.
+  @media (hover: hover) {
+    &:not(.sp-btn-ghost, .sp-btn-outline, :disabled, [disabled], [aria-disabled="true"]):hover {
+      translate: 0 -1px;
+      box-shadow: var(--sp-shadow-sm);
+    }
+  }
+
+  &:active { translate: 0; scale: 0.97; box-shadow: none; transition-duration: 0s; }
+  &:disabled,
+  &[disabled],
+  &[aria-disabled="true"] {
+    opacity: var(--sp-opacity-disabled);
+    cursor: not-allowed;
+    translate: 0;
+    scale: 1;
+    box-shadow: none;
+  }
+
+  > svg { width: 1.05em; height: 1.05em; flex: 0 0 auto; }
+  > i { transition: translate var(--sp-duration-fast) var(--sp-ease-out); }
+
+  // THE button interaction: a TRAILING icon leans the way the button goes.
+  &:hover > i:last-child:not(:first-child) { translate: 0.1875rem 0; }
+}
+
+// The one accent-filled button. Use it for the single most important action
+// on a page and nowhere else — two primaries is no primary. It hovers to
+// INK rather than to a lighter accent: the accent is already the loudest
+// thing on the page, so "more" has to be a change of colour, not of volume.
+.sp-btn-primary {
+  --sp-btn-bg: var(--sp-accent);
+  --sp-btn-fg: var(--sp-on-accent);
+  --sp-btn-bg-hover: var(--sp-ink);
+  --sp-btn-fg-hover: var(--sp-canvas);
+
+  // Held down it is the accent two steps darker, not the ink it hovers to.
+  &:active { --sp-btn-bg-hover: var(--sp-accent-active); --sp-btn-fg-hover: var(--sp-on-accent); }
+}
+
+// The quiet-but-solid one: black on white, white on black. This is what a
+// page's second action wears, and what most of the theme's CTAs are.
+.sp-btn-ink {
+  --sp-btn-bg: var(--sp-ink);
+  --sp-btn-fg: var(--sp-canvas);
+  --sp-btn-bg-hover: var(--sp-accent);
+  --sp-btn-fg-hover: var(--sp-on-accent);
+}
+
+.sp-btn-outline {
+  --sp-btn-bg: transparent;
+  --sp-btn-bg-hover: var(--sp-surface);
+  --sp-btn-fg: var(--sp-ink);
+  --sp-btn-fg-hover: var(--sp-ink);
+
+  box-shadow: inset 0 0 0 1px var(--sp-line);
+}
+
+.sp-btn-ghost {
+  --sp-btn-bg: transparent;
+  --sp-btn-fg: var(--sp-muted);
+  --sp-btn-bg-hover: var(--sp-surface-2);
+  --sp-btn-fg-hover: var(--sp-ink);
+}
+
+// `muted` is what the default already is; kept so old markup still reads.
+.sp-btn-muted { --sp-btn-bg: var(--sp-surface); --sp-btn-fg: var(--sp-ink); }
+
+// Sizes
+.sp-btn-sm { min-height: 2rem; padding-inline: var(--sp-space-4); font-size: var(--sp-text-xs); }
+.sp-btn-lg { min-height: 3rem; padding-inline: var(--sp-space-6); font-size: var(--sp-text-base); }
+.sp-btn-block { display: flex; width: 100%; }
+.sp-btn-icon { padding: var(--sp-space-3); border-radius: var(--sp-radius-full); aspect-ratio: 1; min-height: 2.5rem; }
+
+// ---- Cards ------------------------------------------------------------
+// A card is a SURFACE, not a box: a filled panel with no border and no
+// resting shadow. The hairline variants draw their line as an inset shadow
+// so the line never takes a pixel of layout.
+.sp-card {
+  --sp-card-pad: 1.25rem;
+  --sp-card-radius: var(--sp-radius-xl);
+  --sp-card-bg: var(--sp-surface);
+  --sp-card-gap: var(--sp-space-4);
+  // A card already sits on --sp-surface, so its hover steps one deeper.
+  --sp-hover-bg: var(--sp-surface-2);
+
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-card-gap);
+  min-width: 0;
+  padding: var(--sp-card-pad);
+  border-radius: var(--sp-card-radius);
+  background: var(--sp-card-bg);
+  color: var(--sp-body);
+
+  > :last-child { margin-bottom: 0; }
+}
+
+// THE hover, and there is one: the card FILLS. Nothing sharpens a border,
+// nothing grows three per cent. It lifts the single pixel a filled button
+// lifts and casts the same hairline — one movement for the whole system —
+// and it lifts only for a real pointer, because on a touch screen :hover
+// sticks after the tap and the card stays raised.
+.sp-card-link {
+  cursor: pointer;
+  transition: background-color var(--sp-duration-fast) var(--sp-ease-out);
+
+  &:is(:hover, :focus-within) { --sp-card-bg: var(--sp-hover-bg); }
+
+  @media (hover: hover) and (prefers-reduced-motion: no-preference) {
+    transition:
+      background-color var(--sp-duration-fast) var(--sp-ease-out),
+      translate var(--sp-duration-fast) var(--sp-ease-out),
+      box-shadow var(--sp-duration-fast) var(--sp-ease-out);
+
+    &:is(:hover, :focus-within) {
+      translate: 0 -1px;
+      box-shadow: var(--sp-card-hover-shadow);
+    }
+  }
+}
+
+// A hairline card: no fill at rest, the line drawn inside, and the fill
+// arrives on hover. This is the shape a repo card and a panel of settings
+// take — anything that should read as an outline rather than as a slab.
+.sp-card-outline {
+  --sp-card-bg: transparent;
+  --sp-hover-bg: var(--sp-surface);
+
+  box-shadow: inset 0 0 0 1px var(--sp-line);
+}
+.sp-card-flat   { --sp-card-bg: transparent; box-shadow: none; }
+.sp-card-dashed {
+  --sp-card-bg: transparent;
+  --sp-hover-bg: var(--sp-surface);
+
+  box-shadow: none;
+  border: 1px dashed var(--sp-line);
+}
+.sp-card-muted  { --sp-card-bg: var(--sp-surface-2); --sp-hover-bg: var(--sp-surface-3); }
+
+.sp-card-media {
+  margin: calc(var(--sp-card-pad) * -1) calc(var(--sp-card-pad) * -1) 0;
+  border-radius: var(--sp-card-radius) var(--sp-card-radius) 0 0;
+  overflow: hidden;
+  aspect-ratio: var(--sp-card-ratio, 16 / 10);
+  background: var(--sp-surface-2);
+
+  img, video { width: 100%; height: 100%; object-fit: cover; }
+}
+
+.sp-card-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: var(--sp-radius-md);
+  background: var(--sp-surface-2);
+  color: var(--sp-ink);
+  font-size: var(--sp-text-h3);
+}
+
+// The eyebrow over a card's title: small, quiet, and the collection's own
+// colour when one is in scope.
+.sp-card-eyebrow {
+  margin: 0;
+  color: color-mix(in oklab, var(--sp-c-this, var(--sp-c-current)) 72%, var(--sp-muted));
+  font-size: var(--sp-text-xs);
+  font-weight: var(--sp-weight-semibold);
+  letter-spacing: var(--sp-tracking-wide);
+  text-transform: uppercase;
+}
+
+.sp-card-title {
+  margin: 0;
+  font-size: var(--sp-text-h4);
+  line-height: var(--sp-leading-h4);
+  font-weight: var(--sp-weight-semibold);
+  letter-spacing: var(--sp-tracking-tight);
+  color: var(--sp-ink);
+}
+.sp-card-subtitle {
+  margin: calc(var(--sp-space-2) * -1) 0 0;
+  font-size: var(--sp-text-sm);
+  font-weight: var(--sp-weight-medium);
+  color: var(--sp-muted);
+}
+.sp-card-body,
+.sp-card-text {
+  margin: 0;
+  color: var(--sp-body);
+}
+.sp-card-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--sp-space-3);
+  font-size: var(--sp-text-sm);
+  color: var(--sp-muted);
+
+  a { color: inherit; text-decoration: none; &:hover { color: var(--sp-ink); } }
+}
+.sp-card-footer {
+  margin-top: auto;
+  padding-top: var(--sp-space-4);
+  display: flex;
+  align-items: center;
+  gap: var(--sp-space-3);
+}
+
+// The other signature: a call to action whose arrow LEANS the way it goes.
+// It belongs to the link, not to the box, so it moves when the card is
+// hovered as well as when the link itself is.
+.sp-card-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-space-2);
+  color: var(--sp-ink);
+  font-size: var(--sp-text-sm);
+  font-weight: var(--sp-weight-semibold);
+  text-decoration: none;
+
+  > i { transition: translate var(--sp-duration-instant) var(--sp-ease-out); }
+  &:hover { color: var(--sp-accent); }
+}
+.sp-card:hover .sp-card-cta > i,
+.sp-card-cta:hover > i { translate: 3px 0; }
+
+// ---- The social icon row (shared: hero, bar, footer) ------------------
+.sp-social-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-space-1);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+
+  a {
+    display: grid;
+    place-items: center;
+    width: 2.25rem;
+    height: 2.25rem;
+    border-radius: var(--sp-radius-full);
+    color: var(--sp-muted);
+    font-size: 1.15rem;
+    text-decoration: none;
+    @include sp-hover-fill;
+  }
+}
+
+// ---- Badge / pill -----------------------------------------------------
+.sp-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-space-2);
+  padding: var(--sp-space-1) var(--sp-space-3);
+  border-radius: var(--sp-radius-full);
+  background: var(--sp-surface);
+  color: var(--sp-ink);
+  font-size: var(--sp-text-xs);
+  font-weight: var(--sp-weight-semibold);
+  line-height: 1.4;
+}
+.sp-badge-accent  { background: var(--sp-accent);  color: var(--sp-on-accent); }
+.sp-badge-success { background: var(--sp-success); color: #fff; }
+.sp-badge-warning { background: var(--sp-warning); color: #fff; }
+.sp-badge-danger  { background: var(--sp-danger);  color: #fff; }
+.sp-badge-outline { background: transparent; border: 1px solid var(--sp-line); color: var(--sp-muted); }
+
+// A COLLECTION badge wears its collection's colour — the same hue its
+// cards, its chips and its generated covers use. `--sp-c-current` is set
+// on <body> by the default layout, so a badge inside a collection page
+// needs no modifier at all.
+.sp-badge-collection {
+  background: color-mix(in oklab, var(--sp-c-current) 12%, var(--sp-canvas));
+  color: color-mix(in oklab, var(--sp-c-current) 72%, var(--sp-ink));
+  box-shadow: inset 0 0 0 1px color-mix(in oklab, var(--sp-c-current) 26%, transparent);
+}
+
+// ---- Alert / callout --------------------------------------------------
+.sp-alert {
+  display: flex;
+  gap: var(--sp-space-3);
+  padding: var(--sp-space-4) var(--sp-space-5);
+  border: 1px solid var(--sp-line);
+  border-left-width: 3px;
+  border-radius: var(--sp-radius-lg);
+  background: var(--sp-surface);
+  color: var(--sp-body);
+
+  > :last-child { margin-bottom: 0; }
+}
+.sp-alert-success { border-left-color: var(--sp-success); }
+.sp-alert-warning { border-left-color: var(--sp-warning); }
+.sp-alert-danger  { border-left-color: var(--sp-danger); }
+.sp-alert-accent  { border-left-color: var(--sp-accent); }

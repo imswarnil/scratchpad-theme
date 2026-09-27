@@ -1,11 +1,11 @@
 @charset "utf-8";
 
 // ======================================================================
-// IM CSS  —  the design framework powering imswarnil.com
+// Scratchpad CSS  —  the design framework powering imswarnil.com
 // ----------------------------------------------------------------------
 // A single, self-contained layer. Build-time SCSS config feeds runtime
-// --im-* custom properties; everything else is plain, themeable CSS.
-// See _sass/im/_index.scss for the import order.
+// --sp-* custom properties; everything else is plain, themeable CSS.
+// See _sass/scratchpad/_index.scss for the import order.
 // ======================================================================
 
-@import "im/index";
+@import "scratchpad/index";

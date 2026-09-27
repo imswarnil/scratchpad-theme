@@ -8,23 +8,23 @@
 {%- assign mins = it.read_time -%}
 {%- unless mins %}{% assign mins = it.content | strip_html | number_of_words | divided_by: 200 | at_least: 1 %}{% endunless -%}
 {%- assign snip = it.excerpt | default: it.description -%}
-<article class="im-ecard" style="--im-c-this: var(--im-c-{{ it.collection }}, var(--im-accent));">
-  <a class="im-ecard-media" href="{{ it.url | relative_url }}" tabindex="-1" aria-hidden="true">
+<article class="sp-ecard" style="--sp-c-this: var(--sp-c-{{ it.collection }}, var(--sp-accent));">
+  <a class="sp-ecard-media" href="{{ it.url | relative_url }}" tabindex="-1" aria-hidden="true">
     {%- if cover and cover != "" -%}<img src="{{ cover | relative_url }}" alt="" loading="lazy" width="1200" height="675">
     {%- else -%}{%- include utility/thumb.html item=it -%}{%- endif -%}
   </a>
-  <div class="im-ecard-body">
-    <div class="im-ecard-kicker"><span class="im-ecard-type">Post</span><span class="im-dot">·</span><span>{{ mins }} min read</span></div>
-    <h3 class="im-ecard-title"><a href="{{ it.url | relative_url }}">{{ it.title }}</a></h3>
-    {%- if snip %}<p class="im-ecard-excerpt">{{ snip | strip_html | truncate: 150 }}</p>{% endif -%}
-    <div class="im-ecard-author">
+  <div class="sp-ecard-body">
+    <div class="sp-ecard-kicker"><span class="sp-ecard-type">Post</span><span class="sp-dot">·</span><span>{{ mins }} min read</span></div>
+    <h3 class="sp-ecard-title"><a href="{{ it.url | relative_url }}">{{ it.title }}</a></h3>
+    {%- if snip %}<p class="sp-ecard-excerpt">{{ snip | strip_html | truncate: 150 }}</p>{% endif -%}
+    <div class="sp-ecard-author">
       <img src="{{ it.author_avatar | default: site.avatarurl | relative_url }}" alt="" width="28" height="28" loading="lazy">
-      <span class="im-ecard-author-name">{{ it.author | default: site.author | default: site.title }}</span>
-      {%- if it.date %}<span class="im-dot">·</span><time datetime="{{ it.date | date_to_xmlschema }}">{{ it.date | date: "%b %-d, %Y" }}</time>{% endif -%}
+      <span class="sp-ecard-author-name">{{ it.author | default: site.author | default: site.title }}</span>
+      {%- if it.date %}<span class="sp-dot">·</span><time datetime="{{ it.date | date_to_xmlschema }}">{{ it.date | date: "%b %-d, %Y" }}</time>{% endif -%}
     </div>
-    <div class="im-ecard-foot">
-      {%- if it.tags.size > 0 -%}<div class="im-ecard-tags">{%- for t in it.tags limit: 3 -%}<span>#{{ t }}</span>{%- endfor -%}</div>{%- endif -%}
-      <a class="im-card-cta im-ecard-cta" href="{{ it.url | relative_url }}">Read article <i class="ph-bold ph-arrow-right" aria-hidden="true"></i></a>
+    <div class="sp-ecard-foot">
+      {%- if it.tags.size > 0 -%}<div class="sp-ecard-tags">{%- for t in it.tags limit: 3 -%}<span>#{{ t }}</span>{%- endfor -%}</div>{%- endif -%}
+      <a class="sp-card-cta sp-ecard-cta" href="{{ it.url | relative_url }}">Read article <i class="ph-bold ph-arrow-right" aria-hidden="true"></i></a>
     </div>
   </div>
 </article>

@@ -1,13 +1,13 @@
 {%- comment -%} A newsletter issue: number, date, subject line, preview. {%- endcomment -%}
 {%- assign it = include.item -%}
-<article class="im-issue" style="--im-c-this: var(--im-c-{{ it.collection }}, var(--im-accent));">
-  <a class="im-issue-link" href="{{ it.url | relative_url }}">
-    <span class="im-issue-n">{%- if it.issue %}№ {{ it.issue }}{% else %}<i class="ph-bold ph-envelope-simple" aria-hidden="true"></i>{% endif -%}</span>
-    <span class="im-issue-body">
-      <span class="im-issue-title">{{ it.title }}</span>
+<article class="sp-issue" style="--sp-c-this: var(--sp-c-{{ it.collection }}, var(--sp-accent));">
+  <a class="sp-issue-link" href="{{ it.url | relative_url }}">
+    <span class="sp-issue-n">{%- if it.issue %}№ {{ it.issue }}{% else %}<i class="ph-bold ph-envelope-simple" aria-hidden="true"></i>{% endif -%}</span>
+    <span class="sp-issue-body">
+      <span class="sp-issue-title">{{ it.title }}</span>
       {%- assign snip = it.description | default: it.excerpt -%}
-      {%- if snip and snip != "" %}<span class="im-issue-text">{{ snip | strip_html | truncate: 140 }}</span>{% endif -%}
+      {%- if snip and snip != "" %}<span class="sp-issue-text">{{ snip | strip_html | truncate: 140 }}</span>{% endif -%}
     </span>
-    {%- if it.date %}<time class="im-issue-date" datetime="{{ it.date | date_to_xmlschema }}">{{ it.date | date: "%b %Y" }}</time>{% endif -%}
+    {%- if it.date %}<time class="sp-issue-date" datetime="{{ it.date | date_to_xmlschema }}">{{ it.date | date: "%b %Y" }}</time>{% endif -%}
   </a>
 </article>

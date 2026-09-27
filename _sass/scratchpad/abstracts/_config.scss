@@ -1,0 +1,162 @@
+// ======================================================================
+// im/abstracts/_config.scss — build-time configuration (SCSS only)
+// ----------------------------------------------------------------------
+// Breakpoints, helper mixins and the handful of SCSS maps the utility
+// generator loops over. NOTHING here reaches the browser directly: the
+// runtime contract is the `--sp-*` custom properties emitted by
+// tokens/_tokens.scss, which is the single source of truth for values.
+//
+// Scratchpad follows the Im Design System (design.imswarnil.com). The values
+// below mirror that system's primitives so a build-time loop and a runtime
+// token can never disagree.
+// ======================================================================
+@use "sass:map";
+@use "sass:math";
+
+// ---- Breakpoints ------------------------------------------------------
+// Four steps, plus one for the very wide screens the ad rails need.
+$bp-sm:  540px;
+$bp-md:  768px;
+$bp-lg:  992px;
+$bp-xl:  1200px;
+$bp-2xl: 1500px;
+
+@mixin mq($bp)      { @media (min-width: $bp)       { @content; } }
+@mixin mq-down($bp) { @media (max-width: $bp - 1px) { @content; } }
+
+// ---- Layers -----------------------------------------------------------
+// Five steps, the Im Design System's own ladder: something raised in the
+// page, something sticky, the bar, a menu or a card that floats, a modal
+// over everything. Small numbers on purpose — a magic 9999 is a bug.
+$z-raised: 10;
+$z-sticky: 20;
+$z-bar:    40;
+$z-menu:   50;
+$z-modal:  60;
+
+// Legacy aliases (pre-Scratchpad names, still used in a few partials).
+$z-header:  $z-bar;
+$z-overlay: $z-menu;
+$z-toast:   $z-modal;
+
+// ---- Typography -------------------------------------------------------
+// Geist, Geist Mono — nothing else, exactly as the design system specifies.
+$ff-body: "Geist", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+$ff-head: $ff-body;
+$ff-mono: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, "Liberation Mono", Consolas, monospace;
+
+$fw-regular:  400;
+$fw-medium:   500;
+$fw-semibold: 600;
+$fw-bold:     700;
+
+$lh-tight: 1.2;
+$lh-base:  1.6;
+
+// ---- Layout -----------------------------------------------------------
+$container-gutter: 1.25rem;
+$navbar-height:    3.625rem;   // 58px
+
+// ---- Motion -----------------------------------------------------------
+// The design system's four durations and its arriving curve.
+$dur-instant: 120ms;
+$dur-fast:    200ms;
+$dur-base:    360ms;
+$dur-slow:    640ms;
+$ease-out:    cubic-bezier(0.2, 0.8, 0.2, 1);
+$ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+
+// Legacy aliases.
+$dur-1: $dur-fast;
+$dur-2: $dur-base;
+
+// ---- Shadows ----------------------------------------------------------
+$shadow-light: 0 1px 2px rgba(0, 0, 0, 0.06), 0 12px 32px -8px rgba(0, 0, 0, 0.18);
+$shadow-dark:  0 1px 2px rgba(0, 0, 0, 0.40), 0 16px 40px -8px rgba(0, 0, 0, 0.70);
+
+// ---- The grey ramp ----------------------------------------------------
+// Tailwind CSS's `neutral` scale (MIT). Achromatic, so it never tints a
+// photograph beside it. Used to build both theme maps below.
+$gray: (
+  50:  oklch(98.5% 0 0),
+  100: oklch(97% 0 0),
+  200: oklch(92.2% 0 0),
+  300: oklch(87% 0 0),
+  400: oklch(70.8% 0 0),
+  500: oklch(55.6% 0 0),
+  600: oklch(43.9% 0 0),
+  700: oklch(37.1% 0 0),
+  800: oklch(26.9% 0 0),
+  900: oklch(20.5% 0 0),
+  950: oklch(14.5% 0 0),
+);
+
+@function gray($step) { @return map.get($gray, $step); }
+
+// ---- The one accent ---------------------------------------------------
+// Scratchpad has exactly one brand colour, the way the Im Design System does.
+// Every collection hue is derived from it by rotating the hue, so changing
+// this one value re-tints the whole site. Override it without touching SCSS
+// by setting `accent_color:` in _config.yml.
+$accent-default: #f22f46 !default;
+
+// ---- Theme colour maps ------------------------------------------------
+// These emit the LEGACY `--sp-color-*` names. The canonical names are the
+// design system's (`--sp-canvas`, `--sp-ink`, `--sp-body`, …); the pairs
+// are wired together in tokens/_tokens.scss so there is one set of values.
+$theme-light: (
+  accent:          #{gray(950)},   // the ink-filled primary surface
+  contrast:        #{gray(950)},
+  foreground:      #{gray(600)},
+  secondary:       #{gray(500)},
+  mute:            #{gray(400)},
+
+  background:      #ffffff,
+  background-100:  #{gray(100)},
+  background-200:  #{gray(200)},
+  background-300:  #{gray(300)},
+  surface:         #ffffff,
+  muted:           #{gray(100)},
+  overlay:         rgba(10, 10, 10, 0.6),
+
+  border:          color-mix(in oklab, #{gray(500)} 24%, transparent),
+
+  white:           #ffffff,
+  black:           #000000,
+
+  success:         #1a7f37,
+  warning:         #8a5a00,
+  danger:          #b42318,
+  info:            #175cd3,
+);
+
+$theme-dark: (
+  accent:          #ffffff,
+  contrast:        #ffffff,
+  foreground:      #{gray(400)},
+  secondary:       #{gray(500)},
+  mute:            #{gray(600)},
+
+  background:      #{gray(950)},
+  background-100:  #{gray(900)},
+  background-200:  #{gray(800)},
+  background-300:  #{gray(700)},
+  surface:         #{gray(900)},
+  muted:           #{gray(900)},
+  overlay:         rgba(0, 0, 0, 0.72),
+
+  border:          color-mix(in oklab, #{gray(400)} 26%, transparent),
+
+  white:           #ffffff,
+  black:           #000000,
+
+  success:         #4ac26b,
+  warning:         #e3b341,
+  danger:          #f97066,
+  info:            #6ea8fe,
+);
+
+@function tone($key, $mode: light) {
+  @if $mode == dark { @return map.get($theme-dark, $key); }
+  @return map.get($theme-light, $key);
+}

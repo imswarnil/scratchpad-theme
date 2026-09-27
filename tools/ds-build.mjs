@@ -17,7 +17,7 @@
  *   scratchpad.css       the stylesheet, with a banner
  *   scratchpad.min.css   comments and slack removed, nothing reordered
  *   tokens.json          every --sp-* value, light and dark, as data
- *   manifest.json        what was built, from which commit, and how big
+ *   manifest.json        version, size, rule and token counts
  */
 import fs from 'node:fs';
 import path from 'node:path';

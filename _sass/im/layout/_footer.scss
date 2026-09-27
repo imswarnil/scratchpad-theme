@@ -1,0 +1,271 @@
+// ======================================================================
+// layout/_footer.scss — the band at the foot of the site
+// ----------------------------------------------------------------------
+// One frame, any number of columns, all of them data (`footer.columns` in
+// _config.yml). The lead column — brand, blurb, where to find me — is
+// wider than the link columns beside it; the strip under them lines up
+// with the same measure however wide the window is.
+//
+// Three skins: `line` (a hairline above, on the page's own canvas — the
+// default), `fill` (a surface band) and `ink` (inverted, always the
+// opposite of the page it sits on).
+// ======================================================================
+
+.im-footer {
+  --im-footer-columns: 5;
+  --im-footer-lead: 1.5fr;
+  --im-footer-gap: clamp(1.75rem, 1rem + 2.4vw, 3.5rem);
+  --im-footer-pad: clamp(2.5rem, 1.6rem + 3vw, 4.5rem);
+  --im-footer-width: var(--im-width-wide);
+
+  display: flex;
+  flex-direction: column;
+  gap: var(--im-footer-gap);
+  margin-top: var(--im-section-gap);
+  padding: var(--im-footer-pad) var(--im-gutter) 1.25rem;
+  color: var(--im-body);
+  font-size: var(--im-text-sm);
+}
+
+// Every direct child is centred on the same measure, so the strip lines
+// up with the columns at every width.
+.im-footer > * {
+  width: 100%;
+  max-width: var(--im-footer-width);
+  margin-inline: auto;
+}
+
+.im-footer-line { border-top: 1px solid var(--im-line); }
+.im-footer-fill { background: var(--im-surface); }
+
+// Inverted. It restates the SEMANTIC TOKENS rather than setting colours,
+// so everything inside — a button, a chip, a form field — follows without
+// knowing it is in a dark band. Two blocks, because there is no way to
+// say "the other theme's values" in CSS without a reference cycle.
+.im-footer-ink {
+  color-scheme: dark;
+
+  --im-canvas:    var(--im-gray-950);
+  --im-surface:   var(--im-gray-900);
+  --im-surface-2: var(--im-gray-800);
+  --im-surface-3: var(--im-gray-700);
+  --im-line:  color-mix(in oklab, var(--im-gray-400) 26%, transparent);
+  --im-ink:   var(--im-white);
+  --im-body:  var(--im-gray-400);
+  --im-muted: var(--im-gray-500);
+  --im-faint: var(--im-gray-600);
+  --im-hover-bg: var(--im-surface-2);
+
+  background: var(--im-canvas);
+  color: var(--im-body);
+}
+:root[data-color-scheme="dark"] .im-footer-ink,
+:root[data-color-scheme="system"] .im-footer-ink {
+  color-scheme: light;
+
+  --im-canvas:    var(--im-white);
+  --im-surface:   var(--im-gray-100);
+  --im-surface-2: var(--im-gray-200);
+  --im-surface-3: var(--im-gray-300);
+  --im-line:  color-mix(in oklab, var(--im-gray-500) 24%, transparent);
+  --im-ink:   var(--im-gray-950);
+  --im-body:  var(--im-gray-600);
+  --im-muted: var(--im-gray-500);
+  --im-faint: var(--im-gray-400);
+}
+
+// ---- The columns ------------------------------------------------------
+.im-footer-cols {
+  display: grid;
+  gap: var(--im-footer-gap);
+  align-items: start;
+  grid-template-columns: repeat(var(--im-footer-columns), minmax(0, 1fr));
+
+  // The lead column is the first cell and takes more than its share; the
+  // rest of the row splits what is left.
+  &:has(> .im-footer-lead) {
+    grid-template-columns: var(--im-footer-lead) repeat(calc(var(--im-footer-columns) - 1), minmax(0, 1fr));
+  }
+
+  // Below lg the lead goes full width and the link columns pair up; on a
+  // phone everything stacks. A five-up footer on a tablet is five columns
+  // of one word each.
+  @include mq-down($bp-xl) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    &:has(> .im-footer-lead) { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    > .im-footer-lead { grid-column: 1 / -1; }
+  }
+  @include mq-down($bp-sm) {
+    grid-template-columns: minmax(0, 1fr);
+    &:has(> .im-footer-lead) { grid-template-columns: minmax(0, 1fr); }
+  }
+}
+
+.im-footer-col,
+.im-footer-lead {
+  display: flex;
+  flex-direction: column;
+  gap: var(--im-space-3);
+  min-width: 0;
+}
+.im-footer-lead { gap: var(--im-space-4); max-width: 32rem; }
+// The newsletter takes a row of its own under the columns rather than a
+// cell among them: at five-up it is either too narrow for the form or it
+// leaves a hole beside the last link column.
+.im-footer-col-news {
+  grid-column: 1 / -1;
+  padding-top: var(--im-space-5);
+  border-top: 1px solid var(--im-line);
+
+  .im-footer-form { max-width: 26rem; }
+}
+
+.im-footer-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--im-space-2);
+  font-size: var(--im-text-h4);
+  font-weight: var(--im-weight-semibold);
+  letter-spacing: var(--im-tracking-tight);
+  color: var(--im-ink);
+  text-decoration: none;
+
+  img { width: 1.75rem; height: 1.75rem; border-radius: var(--im-radius-full); object-fit: cover; }
+}
+
+.im-footer-text { margin: 0; color: var(--im-muted); line-height: var(--im-leading-base); text-wrap: pretty; }
+
+.im-footer-facts {
+  display: flex;
+  flex-direction: column;
+  gap: var(--im-space-1);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  color: var(--im-muted);
+
+  i { margin-right: var(--im-space-1); color: var(--im-faint); }
+  a { color: inherit; text-decoration: none; &:hover { color: var(--im-ink); } }
+}
+
+// A column's heading: mono, small, upper-case — a LABEL, which is what the
+// system sets in the mono face everywhere.
+.im-footer-title {
+  margin: 0;
+  color: var(--im-ink);
+  font-family: var(--im-font-mono);
+  font-size: 0.6875rem;
+  font-weight: var(--im-weight-medium);
+  letter-spacing: var(--im-tracking-wide);
+  text-transform: uppercase;
+}
+
+// ---- Link lists -------------------------------------------------------
+.im-footer-links {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+
+  a {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--im-space-2);
+    min-height: 1.875rem;
+    color: inherit;
+    text-decoration: none;
+    transition: color var(--im-duration-instant);
+
+    &:hover, &:focus-visible { color: var(--im-ink); }
+  }
+
+  // The count after a collection's name: how much is in there, quietly.
+  small {
+    margin-left: auto;
+    padding-left: var(--im-space-3);
+    color: var(--im-faint);
+    font-family: var(--im-font-mono);
+    font-size: var(--im-text-xs);
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+// ---- Newsletter -------------------------------------------------------
+.im-footer-form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--im-space-2);
+
+  input {
+    flex: 1 1 11rem;
+    min-width: 0;
+    width: auto;
+    min-height: 2.5rem;
+    padding: 0 var(--im-space-4);
+    border: 0;
+    border-radius: var(--im-radius-full);
+    box-shadow: inset 0 0 0 1px var(--im-line);
+    background: transparent;
+    color: var(--im-ink);
+    font-size: var(--im-text-sm);
+
+    &::placeholder { color: var(--im-faint); }
+    &:disabled { opacity: var(--im-opacity-disabled); }
+  }
+}
+.im-footer-note { margin: 0; color: var(--im-faint); font-size: var(--im-text-xs); }
+
+// ---- The strip --------------------------------------------------------
+.im-footer-strip {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--im-space-3) var(--im-space-5);
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--im-line);
+  color: var(--im-muted);
+  font-size: var(--im-text-sm);
+}
+.im-footer-strip-only { border-top: 0; padding-top: 0; }
+.im-footer-copy { margin: 0; }
+
+.im-footer-legal,
+.im-footer-inlinenav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--im-space-3) var(--im-space-4);
+
+  a { color: inherit; text-decoration: none; &:hover { color: var(--im-ink); } }
+}
+
+.im-footer-top-link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--im-space-2);
+  color: inherit;
+  text-decoration: none;
+  transition: color var(--im-duration-instant);
+
+  i { transition: translate var(--im-duration-instant) var(--im-ease-out); }
+  &:hover { color: var(--im-ink); i { translate: 0 -3px; } }
+}
+
+// The minimal footer is the strip on its own.
+.im-footer-minimal {
+  .im-footer-strip-only { justify-content: center; text-align: center; }
+  .im-footer-social { justify-content: center; }
+}
+
+.im-visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}

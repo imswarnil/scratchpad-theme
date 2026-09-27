@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160" width="160" height="160" role="img" aria-label="Portrait placeholder">
+  <!-- A placeholder portrait, so the theme ships with no photograph of a
+       real person in it. Replace `avatarurl` in _config.yml with your own
+       and nothing here is used. -->
+  <defs>
+    <linearGradient id="a" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#1c1c1f"/><stop offset="1" stop-color="#2e2e34"/>
+    </linearGradient>
+  </defs>
+  <rect width="160" height="160" rx="80" fill="url(#a)"/>
+  <circle cx="80" cy="64" r="24" fill="#f22f46" fill-opacity="0.9"/>
+  <path d="M28 146a52 52 0 0 1 104 0Z" fill="#f22f46" fill-opacity="0.55"/>
+</svg>

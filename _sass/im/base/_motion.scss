@@ -1,0 +1,241 @@
+// ======================================================================
+// im/_motion.scss — background patterns, scroll-reveal, page transitions
+// ----------------------------------------------------------------------
+// Motion conventions: reuse --im-dur-1/2 + --im-ease for all timing (see
+// _config.scss). Every animated effect here is either inert until
+// `prefers-reduced-motion: no-preference`, or explicitly killed by the
+// global reduced-motion guard at the bottom of this file.
+// ======================================================================
+
+// ---- Background patterns -------------------------------------------------
+// Subtle, theme-aware dot-grid — reads var(--im-ink) so it's
+// legible (and dim) in both light and dark without extra tokens.
+.im-bg-dots {
+  position: relative;
+  isolation: isolate;
+
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background-image: radial-gradient(var(--im-ink) 1px, transparent 1px);
+    background-size: 22px 22px;
+    opacity: 0.06;
+    mask-image: radial-gradient(ellipse 80% 60% at 70% 20%, #000 40%, transparent 100%);
+  }
+}
+
+.im-bg-grid {
+  position: relative;
+  isolation: isolate;
+
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background-image:
+      linear-gradient(var(--im-line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--im-line) 1px, transparent 1px);
+    background-size: 48px 48px;
+    opacity: 0.5;
+    mask-image: linear-gradient(to bottom, #000, transparent);
+  }
+}
+
+// Concentric rings, for the collections whose subject is a broadcast — a
+// series, a podcast. Same weight as the other two: at the limit of what
+// prints, and masked so it fades rather than ending on a line.
+.im-bg-rings {
+  position: relative;
+  isolation: isolate;
+
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background-image: repeating-radial-gradient(circle at 78% 18%, var(--im-ink) 0 1px, transparent 1px 34px);
+    opacity: 0.05;
+    mask-image: radial-gradient(ellipse 90% 80% at 78% 18%, #000 30%, transparent 100%);
+  }
+}
+
+// Hero gets a "magic" grid + a floating accent glow, plus a soft entrance.
+.im-hero {
+  position: relative;
+  // isolate keeps the negative-z-index layers below (grid, glow, video)
+  // from falling behind an ancestor's background — but it also traps the
+  // video's screen blend in here, where the backdrop would otherwise be
+  // transparent. Painting the page colour explicitly gives that blend a
+  // white base to lighten against; without it, screen has nothing to work
+  // with and dark frames just sit there as a grey smudge. Same colour the
+  // page already was, so nothing changes visually on its own.
+  isolation: isolate;
+  background: var(--im-canvas);
+
+  // Fine grid, radially masked so it fades into the page.
+  &::before {
+    content: "";
+    position: absolute;
+    inset: -30% -12% -12%;
+    z-index: -2;
+    background-image:
+      linear-gradient(to right,  var(--im-line) 1px, transparent 1px),
+      linear-gradient(to bottom, var(--im-line) 1px, transparent 1px);
+    background-size: 42px 42px;
+    opacity: 0.55;
+    -webkit-mask-image: radial-gradient(ellipse 62% 72% at 72% 28%, #000 8%, transparent 74%);
+            mask-image: radial-gradient(ellipse 62% 72% at 72% 28%, #000 8%, transparent 74%);
+  }
+
+  // Soft, slowly drifting accent glow behind the grid — the "magic".
+  &::after {
+    content: "";
+    position: absolute;
+    z-index: -3;
+    top: -18%;
+    right: -4%;
+    width: 40rem;
+    height: 40rem;
+    max-width: 85%;
+    border-radius: var(--im-radius-full);
+    background: radial-gradient(circle at center,
+      color-mix(in srgb, var(--im-accent) 42%, transparent),
+      color-mix(in srgb, var(--im-accent) 12%, transparent) 45%,
+      transparent 68%);
+    filter: blur(28px);
+    opacity: 0.4;
+    pointer-events: none;
+  }
+}
+
+// Ambient background video — muted/looped, centred in its band, no visible
+// frame/edge anywhere. Top-level on purpose: the /videos/ band and any
+// other `position: relative; isolation: isolate` container can use it, not
+// just the homepage hero. Decorative
+// only: aria-hidden, no pointer events, hidden below $bp-lg and for
+// reduced motion.
+//
+// The centre point matters: at 72%/28% (the old corner-biased spot) it
+// sat almost entirely *behind* the portrait — same z-index stack, so
+// the (opaque) photo painted straight over it and it was invisible.
+// 50%/45% sits in the open band above/around both columns instead, so
+// there's real, unobstructed space for it to actually show in.
+//
+//  1. `radial-gradient(circle closest-side ...)` sizes the fade circle
+//     to the NEAREST side of the box, not the farthest corner — so it's
+//     geometrically guaranteed to reach full transparency before it
+//     ever reaches any edge. A farthest-corner circle (the default
+//     sizing) can still be mid-fade when it hits a *near* edge, which
+//     is exactly what reads as a hard cut/line right at the box
+//     boundary — this can't do that, by construction.
+//  2. `mask-image` on the whole `.im-hero-bgvideo` box (iframe
+//     included) — masking clips an element's actual rendered output,
+//     iframe or not, so this reliably hides everything past the fade,
+//     independent of z-index/layering quirks a video iframe can have.
+//  3. `mix-blend-mode: screen` — can only ever lighten what's behind
+//     it, never darken, so a black pixel (letterboxing, an error
+//     frame, anything dark) contributes nothing; only the video's
+//     brighter/coloured pixels wash through faintly. This is what
+//     keeps it feeling light, not a dark/vintage box.
+.im-hero-bgvideo {
+  display: none;
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+  -webkit-mask-image: radial-gradient(circle closest-side at 50% 45%, #000 0%, transparent 100%);
+          mask-image: radial-gradient(circle closest-side at 50% 45%, #000 0%, transparent 100%);
+  // The blend has to live HERE, on the masked box, not on the iframe
+  // inside it: mask-image makes this element a stacking context, and
+  // mix-blend-mode only ever blends within one. On the iframe it would
+  // blend against its (empty, transparent) parent and do nothing at
+  // all — the video would just sit there at 50% alpha, reading as a
+  // grey smudge. On this element it blends against the page itself,
+  // which is what makes dark frames disappear instead of darkening.
+  mix-blend-mode: screen;
+
+  @include mq($bp-lg) {
+    @media (prefers-reduced-motion: no-preference) { display: block; }
+  }
+
+  iframe {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 180%;
+    height: 180%;
+    transform: translate(-50%, -50%);
+    opacity: 0.5;
+    // Heavy blur is what makes this work with *any* clip. Unblurred, a
+    // title card or a hard cut reads as recognisable content sitting
+    // behind the copy and competing with it; blurred, every frame is
+    // just drifting colour. It also means the effect doesn't have to be
+    // re-tuned whenever the video is swapped.
+    filter: blur(26px);
+    pointer-events: none;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .im-hero::after { animation: im-hero-float 16s var(--im-ease-out) infinite alternate; }
+}
+
+@keyframes im-hero-float {
+  from { transform: translate3d(0, 0, 0) scale(1); }
+  to   { transform: translate3d(-5%, 5%, 0) scale(1.12); }
+}
+
+// The hero's own entrance is a GSAP timeline (assets/scripts/hero.js), not
+// CSS keyframes — it needs to sequence a word-by-word mask reveal against
+// the photo and the rest of the copy, which is fiddly to keep in sync with
+// nth-child delays. Deliberately nothing here sets an opacity:0 start
+// state: if GSAP never loads, the hero just renders, un-animated.
+
+// ---- Scroll reveal ------------------------------------------------------
+// Paired with the IntersectionObserver in assets/scripts/custom.js, which
+// adds `.is-revealed` when an `.im-reveal` element enters the viewport.
+// If JS never runs (disabled/error), content stays visible — see the
+// `.no-js`-equivalent fallback: the base state is only ever applied when
+// `prefers-reduced-motion: no-preference` AND JS confirms support.
+.im-reveal.js-reveal {
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity var(--im-duration-base) var(--im-ease-out), transform var(--im-duration-base) var(--im-ease-out);
+
+  &.is-revealed { opacity: 1; transform: translateY(0); }
+}
+
+// ---- Native page transitions (progressive enhancement) --------------------
+// Supported in Chromium-based browsers today; a no-op elsewhere. No JS,
+// no dependency — the browser cross-fades the outgoing/incoming page.
+@view-transition {
+  navigation: auto;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation-duration: var(--im-duration-base);
+    animation-timing-function: var(--im-ease-out);
+  }
+}
+
+// ---- Global reduced-motion guard -----------------------------------------
+// Belt-and-braces on top of the per-effect `no-preference` gates above —
+// kills any transition/animation duration outright when the user opts out.
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
+  }
+}

@@ -1,0 +1,30 @@
+{%- comment -%}
+  "The rest of this series / course", shown on a child entry so a reader
+  can move around inside it without going back up to the parent.
+{%- endcomment -%}
+{%- if page.collection == "episodes" -%}
+  {%- assign parent = site.webseries | where: "slug", page.series | first -%}
+  {%- assign sibs = site.episodes | where: "series", page.series | sort: "episode" -%}
+  {%- assign label = "episodes" -%}
+{%- elsif page.collection == "lessons" -%}
+  {%- assign parent = site.courses | where: "slug", page.course | first -%}
+  {%- assign sibs = site.lessons | where: "course", page.course | sort: "lesson" -%}
+  {%- assign label = "lessons" -%}
+{%- endif -%}
+{%- if sibs.size > 1 -%}
+<section class="im-eplist" aria-labelledby="im-siblings-title">
+  <h2 class="im-eplist-title" id="im-siblings-title">
+    <i class="ph-bold ph-list-numbers" aria-hidden="true"></i>
+    {%- if parent %} More in {{ parent.title }}{% else %} All {{ label }}{% endif -%}
+    <span class="im-eplist-count">{{ sibs.size }}</span>
+  </h2>
+  <div class="im-eplist-rows">
+    {%- for s in sibs -%}
+      {%- unless s.url == page.url -%}
+        {%- if page.collection == "episodes" -%}{% include cards/episode.html item=s %}
+        {%- else -%}{% include cards/lesson.html item=s %}{%- endif -%}
+      {%- endunless -%}
+    {%- endfor -%}
+  </div>
+</section>
+{%- endif -%}

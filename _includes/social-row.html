@@ -1,0 +1,24 @@
+{%- comment -%}
+  The site's social links as an icon row, reusable anywhere.
+  Params: class (extra class on the <ul>), label (aria-label on the list).
+  The icon map lives here and nowhere else, so a new network is one line.
+{%- endcomment -%}
+{%- if site.social_links -%}
+<ul class="im-social-row {{ include.class }}"{% if include.label %} aria-label="{{ include.label }}"{% endif %}>
+  {%- for s in site.social_links -%}
+    {%- assign icon = 'link' -%}
+    {%- case s[0] -%}
+      {%- when 'Twitter'   -%}{% assign icon = 'x-logo'         %}
+      {%- when 'X'         -%}{% assign icon = 'x-logo'         %}
+      {%- when 'LinkedIn'  -%}{% assign icon = 'linkedin-logo'  %}
+      {%- when 'GitHub'    -%}{% assign icon = 'github-logo'    %}
+      {%- when 'RSS'       -%}{% assign icon = 'rss'            %}
+      {%- when 'YouTube'   -%}{% assign icon = 'youtube-logo'   %}
+      {%- when 'Instagram' -%}{% assign icon = 'instagram-logo' %}
+      {%- when 'Mastodon'  -%}{% assign icon = 'mastodon-logo'  %}
+      {%- when 'Email'     -%}{% assign icon = 'envelope'       %}
+    {%- endcase -%}
+    <li><a href="{{ s[1] }}" target="_blank" rel="me noopener" aria-label="{{ s[0] }}"><i class="ph-bold ph-{{ icon }}" aria-hidden="true"></i></a></li>
+  {%- endfor -%}
+</ul>
+{%- endif -%}

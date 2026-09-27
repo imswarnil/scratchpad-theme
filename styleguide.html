@@ -1,0 +1,156 @@
+---
+layout: default
+title: Style guide
+permalink: /styleguide/
+description: "Every card, component and colour in this theme, on one page."
+sidebar: false
+ad_rails: false
+sitemap: false
+---
+{%- comment -%}
+  Everything the theme draws, on one page, from the REAL content in the
+  repository — so this cannot drift from what a card actually looks like.
+  It is the page to open when you are deciding which collection a new kind
+  of thing belongs to, or whether a component already exists.
+{%- endcomment -%}
+<section class="im-collection im-page is-docs" style="--im-c-current: var(--im-c-docs, var(--im-accent));">
+
+  <header class="im-collhero im-reveal" style="--im-c-this: var(--im-c-docs, var(--im-accent));">
+    <span class="im-collhero-art im-pattern-grid" aria-hidden="true"></span>
+    <div class="im-collhero-copy">
+      <p class="im-caption" data-index="{{ site.collections.size }}">Reference</p>
+      <h1 class="im-collhero-title">Style guide</h1>
+      <p class="im-collhero-text">
+        Every card, component and colour, drawn from the real content in this
+        repository — so it cannot drift from what the site actually looks like.
+      </p>
+      <p class="im-collhero-meta">
+        <span>{{ site.collections.size }} collections</span>
+        <a href="{{ '/docs/' | relative_url }}">The manual</a>
+      </p>
+    </div>
+  </header>
+
+  {%- comment -%} ── Colour ── {%- endcomment -%}
+  <section class="im-sg im-reveal">
+    {% include utility/section-head.html id="colour" eyebrow="Tokens" title="One accent, one hue per collection" %}
+    <p class="im-sg-note">
+      Every collection's colour is the site accent with its hue rotated, so
+      changing <code>accent_color</code> moves all of them together.
+    </p>
+    <ul class="im-sg-swatches">
+      {%- for c in site.collections -%}
+      <li>
+        <span class="im-sg-swatch" style="background: var(--im-c-{{ c.label }}, var(--im-accent));"></span>
+        <span class="im-sg-swatch-name">{{ c.title | default: c.label }}</span>
+        <code>--im-c-{{ c.label }}</code>
+      </li>
+      {%- endfor -%}
+    </ul>
+  </section>
+
+  {%- comment -%} ── Every card ── {%- endcomment -%}
+  <section class="im-sg im-reveal">
+    {% include utility/section-head.html id="cards" eyebrow="Cards" title="One design per kind of thing" %}
+    <p class="im-sg-note">
+      A collection names its card with <code>card:</code> in <code>_config.yml</code>.
+      Each is a real entry from this site.
+    </p>
+    {%- for c in site.collections -%}
+      {%- assign sample = c.docs | first -%}
+      {%- if sample -%}
+      <div class="im-sg-row">
+        <p class="im-sg-label"><code>card: {{ c.card | default: "blog" }}</code> · {{ c.title }}</p>
+        <ul class="im-cards">
+          <li>{% include utility/card.html item=sample %}</li>
+        </ul>
+      </div>
+      {%- endif -%}
+    {%- endfor -%}
+  </section>
+
+  {%- comment -%} ── The four views ── {%- endcomment -%}
+  <section class="im-sg im-reveal">
+    {% include utility/section-head.html id="views" eyebrow="Views" title="Four dressings of one grid" %}
+    <p class="im-sg-note">
+      The cards never change markup; the feed decides their shape. Readers
+      switch with the control in a collection's hero, and the choice is
+      remembered across the site.
+    </p>
+    {%- assign posts = site.posts -%}
+    {%- assign views = "card,grid,list,simple" | split: "," -%}
+    {%- for v in views -%}
+    <div class="im-sg-row">
+      <p class="im-sg-label"><code>data-view="{{ v }}"</code></p>
+      <ul class="im-cards" data-view="{{ v }}">
+        {%- for p in posts limit: 3 -%}<li>{% include utility/card.html item=p %}</li>{%- endfor -%}
+      </ul>
+    </div>
+    {%- endfor -%}
+  </section>
+
+  {%- comment -%} ── Components ── {%- endcomment -%}
+  <section class="im-sg im-reveal">
+    {% include utility/section-head.html id="components" eyebrow="Components" title="The pieces pages are built from" %}
+
+    <div class="im-sg-row">
+      <p class="im-sg-label">Buttons</p>
+      <div class="im-sg-strip">
+        <a class="im-btn im-btn-primary" href="#components">Primary <i class="ph-bold ph-arrow-right"></i></a>
+        <a class="im-btn im-btn-ink" href="#components">Ink</a>
+        <a class="im-btn" href="#components">Default</a>
+        <a class="im-btn im-btn-outline" href="#components">Outline</a>
+        <a class="im-btn im-btn-ghost" href="#components">Ghost</a>
+        <a class="im-btn im-btn-sm" href="#components">Small</a>
+        <a class="im-btn im-btn-lg" href="#components">Large</a>
+      </div>
+    </div>
+
+    <div class="im-sg-row">
+      <p class="im-sg-label">Chips and badges</p>
+      <div class="im-sg-strip">
+        <a class="im-tag" href="#components">A topic <small>4</small></a>
+        <a class="im-tag" href="#components" aria-current="page">Selected</a>
+        <span class="im-badge">Badge</span>
+        <span class="im-badge im-badge-collection">Collection</span>
+        <span class="im-badge im-badge-success">Success</span>
+        <span class="im-badge im-badge-warning">Warning</span>
+        <span class="im-badge im-badge-danger">Danger</span>
+      </div>
+    </div>
+
+    <div class="im-sg-row">
+      <p class="im-sg-label">Callouts <code>components/callout.html</code></p>
+      {% include components/callout.html type="tip" title="Tip" text="The body takes **Markdown**." %}
+      {% include components/callout.html type="info" title="Info" text="Six types: note, info, tip, success, warning, danger." %}
+      {% include components/callout.html type="warning" title="Warning" text="Used for the thing that will bite." %}
+    </div>
+
+    <div class="im-sg-row">
+      <p class="im-sg-label">Folded code <code>components/code.html</code></p>
+      {% include components/code.html title="A block that starts folded" lang="bash" code="npm run setup
+npm run dev" %}
+    </div>
+
+    <div class="im-sg-row">
+      <p class="im-sg-label">Share, and the AI hand-off</p>
+      {% include single/share.html %}
+      {% include single/ask.html %}
+    </div>
+  </section>
+
+  {%- comment -%} ── Typography ── {%- endcomment -%}
+  <section class="im-sg im-reveal">
+    {% include utility/section-head.html id="type" eyebrow="Type" title="Geist, and a mono for labels" %}
+    <div class="im-sg-row im-prose">
+      <h1>Heading one</h1>
+      <h2>Heading two</h2>
+      <h3>Heading three</h3>
+      <h4>Heading four</h4>
+      <p>Body copy, at the reading measure. <a href="#type">A link</a>, <strong>bold</strong>,
+         <em>italic</em>, <code>inline code</code> and <kbd>⌘K</kbd>.</p>
+      <blockquote><p>A quotation, which the theme marks with a rule in the collection's colour.</p></blockquote>
+      <pre><code>a block of code — dark in both themes, deliberately</code></pre>
+    </div>
+  </section>
+</section>

@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" role="img" aria-label="Logo">
+  <!-- The dot. A recording light, a full stop, a point on a map — the one
+       mark this theme uses for itself. It is drawn from the accent via
+       currentColor wherever it is inlined, and baked to the accent here so
+       the file also works as a favicon, where no stylesheet applies. -->
+  <rect width="64" height="64" rx="16" fill="#0a0a0a"/>
+  <circle cx="32" cy="32" r="11" fill="#f22f46"/>
+  <circle cx="32" cy="32" r="19.5" fill="none" stroke="#f22f46" stroke-opacity="0.38" stroke-width="2"/>
+  <circle cx="32" cy="32" r="27" fill="none" stroke="#f22f46" stroke-opacity="0.16" stroke-width="2"/>
+</svg>

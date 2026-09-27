@@ -1,0 +1,37 @@
+{%- comment -%}
+  A project's lead: the repo-style header, then the screenshots. The
+  carousel takes `screenshots:` — a list of {src, alt, caption} — and falls
+  back to the single cover when there is only one picture to show.
+{%- endcomment -%}
+{%- if page.repo contains "github.com/" -%}
+  {%- assign rslug = page.repo | split: "github.com/" | last | remove: ".git" | split: "/" | slice: 0, 2 | join: "/" -%}
+{%- endif -%}
+<div class="im-repo-head" data-lang="{{ page.lang | downcase | slugify }}">
+  <div class="im-repo-head-row">
+    <i class="ph-bold {% if page.kind == 'film' %}ph-film-slate{% elsif page.kind == 'design' %}ph-pen-nib{% else %}ph-git-branch{% endif %}" aria-hidden="true"></i>
+    {%- if rslug %}<a class="im-rcard-slug" href="{{ page.repo }}" target="_blank" rel="noopener"><span class="im-rcard-owner">{{ rslug | split: "/" | first }}</span>/<strong>{{ rslug | split: "/" | last }}</strong></a>{% endif -%}
+    <span class="im-rcard-kind">{{ page.kind | default: "project" }}</span>
+    {%- if page.year %}<span class="im-repo-year">{{ page.year }}</span>{% endif -%}
+  </div>
+  {%- if page.summary %}<p class="im-repo-summary">{{ page.summary }}</p>{% endif -%}
+  <div class="im-rcard-meta">
+    {%- if page.lang %}<span class="im-rcard-lang"><i class="im-lang-dot" aria-hidden="true"></i>{{ page.lang }}</span>{% endif -%}
+    {%- if page.stars %}<span><i class="ph-bold ph-star" aria-hidden="true"></i> {{ page.stars }} stars</span>{% endif -%}
+    {%- if page.forks %}<span><i class="ph-bold ph-git-fork" aria-hidden="true"></i> {{ page.forks }} forks</span>{% endif -%}
+    {%- if page.role %}<span><i class="ph-bold ph-user-circle" aria-hidden="true"></i> {{ page.role }}</span>{% endif -%}
+  </div>
+  {%- if page.stack.size > 0 -%}
+  <div class="im-rcard-topics">{%- for t in page.stack -%}<span class="im-rcard-topic">{{ t }}</span>{%- endfor -%}</div>
+  {%- endif -%}
+  <div class="im-repo-actions">
+    {%- if page.demo %}<a class="im-btn im-btn-sm im-btn-ink" href="{{ page.demo }}" target="_blank" rel="noopener"><i class="ph-bold ph-arrow-square-out" aria-hidden="true"></i> Live site</a>{% endif -%}
+    {%- if page.repo %}<a class="im-btn im-btn-sm im-btn-outline" href="{{ page.repo }}" target="_blank" rel="noopener"><i class="ph-bold ph-github-logo" aria-hidden="true"></i> Source</a>{% endif -%}
+    <a class="im-btn im-btn-sm im-btn-ghost" href="{{ '/portfolio/' | relative_url }}"><i class="ph-bold ph-arrow-left" aria-hidden="true"></i> All work</a>
+  </div>
+</div>
+
+{%- if page.facts -%}
+<div class="im-factbar">{%- for f in page.facts %}<span class="im-fact">{% if f.icon %}<i class="ph-bold {{ f.icon }}" aria-hidden="true"></i>{% endif %}<span class="im-fact-label">{{ f.label }}</span><span class="im-fact-value">{{ f.value }}</span></span>{% endfor -%}</div>
+{%- endif -%}
+
+{% include media/carousel.html items=page.screenshots fallback=page.image label="Screenshots" %}

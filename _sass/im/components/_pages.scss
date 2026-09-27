@@ -1,0 +1,446 @@
+// ======================================================================
+// im/_pages.scss — homepage sections + the standalone pages built on the
+// 12-column grid (about, contact, now). Section heads, skill pills, the
+// CTA band, page headers, photo/story rows, the form, and the sticky
+// sidebars. Everything sits on the tokens; nothing here hides content
+// for animation — reveals are the existing .im-reveal observer.
+// ======================================================================
+
+// ---- Section rhythm ----------------------------------------------------
+.im-sec {
+  padding-block: var(--im-space-7);
+  border-top: 1px solid var(--im-line);
+  @include mq($bp-lg) { padding-block: var(--im-space-8); }
+}
+.im-sec-body { margin-top: var(--im-space-5); }
+
+.im-sec-head {
+  align-items: end;
+  row-gap: var(--im-space-2);
+}
+// A section's kicker is a LABEL, so it is set in the mono face, and it
+// wears the colour of the collection the section is about — one hue per
+// collection, in the kicker, the chips, the cover art and the cards.
+.im-sec-eyebrow {
+  display: inline-block;
+  margin-bottom: var(--im-space-2);
+  font-family: var(--im-font-mono);
+  font-size: var(--im-text-xs);
+  font-weight: var(--im-weight-medium);
+  letter-spacing: var(--im-tracking-wide);
+  text-transform: uppercase;
+  color: color-mix(in oklab, var(--im-c-this, var(--im-c-current)) 72%, var(--im-muted));
+}
+.im-sec-title {
+  margin: 0;
+  font-size: var(--im-text-h1);
+  line-height: var(--im-leading-h1);
+  letter-spacing: var(--im-tracking-tight);
+}
+// "All work →" is a call to action, so its arrow leans, like every other
+// one in the theme.
+.im-sec-head-link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--im-space-2);
+  font-size: var(--im-text-sm);
+  font-weight: var(--im-weight-semibold);
+  color: var(--im-ink);
+  text-decoration: none;
+  @include mq($bp-md) { justify-content: flex-end; padding-bottom: var(--im-space-1); }
+  i { font-size: 0.9em; transition: translate var(--im-duration-instant) var(--im-ease-out); }
+  &:hover { color: var(--im-accent); }
+  &:hover i { translate: 3px 0; }
+}
+
+// ---- Skill pills (utility/skills.html) ---------------------------------
+.im-skills { display: flex; flex-direction: column; gap: var(--im-space-4); }
+.im-skills-row {
+  display: grid;
+  gap: var(--im-space-2);
+  @include mq($bp-md) { grid-template-columns: 8rem minmax(0, 1fr); align-items: start; }
+}
+.im-skills-level {
+  padding-top: var(--im-space-2);
+  font-size: var(--im-text-xs);
+  font-weight: var(--im-weight-semibold);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--im-faint);
+}
+.im-skills-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--im-space-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.im-skill {
+  position: relative;
+  overflow: hidden;
+  padding: var(--im-space-2) var(--im-space-3) calc(var(--im-space-2) + 3px);
+  border-radius: var(--im-radius-full);
+  box-shadow: inset 0 0 0 1px var(--im-line);
+  font-size: var(--im-text-sm);
+  font-weight: var(--im-weight-medium);
+  color: var(--im-ink);
+  @include im-hover-fill;
+}
+// A hairline along the pill's bottom edge, proportional to the skill's
+// `percent` — a quiet level indicator, not a chart.
+.im-skill-bar {
+  position: absolute;
+  left: var(--im-space-3);
+  right: var(--im-space-3);
+  bottom: 0;
+  height: 2px;
+  border-radius: var(--im-radius-full);
+  background: linear-gradient(to right, var(--im-ink) var(--im-skill, 70%), var(--im-line) var(--im-skill, 70%));
+}
+.im-skills-note .im-flink { display: inline-flex; align-items: center; gap: var(--im-space-1); font-size: var(--im-text-sm); font-weight: var(--im-weight-medium); }
+
+// ---- CTA band ------------------------------------------------------------
+.im-cta-band {
+  align-items: center;
+  padding: var(--im-space-6);
+  border: 1px solid var(--im-line);
+  border-radius: var(--im-radius-2xl);
+  background:
+    radial-gradient(120% 140% at 100% 0%, color-mix(in srgb, var(--im-accent) 10%, transparent), transparent 60%),
+    var(--im-surface);
+  @include mq($bp-lg) { padding: var(--im-space-8); }
+}
+.im-cta-band-title {
+  margin: 0 0 var(--im-space-3);
+  font-size: clamp(var(--im-text-2xl), 3.4vw, var(--im-text-4xl));
+  letter-spacing: -0.025em;
+  line-height: 1.1;
+  text-wrap: balance;
+}
+.im-cta-band-text { margin: 0; max-width: 56ch; font-size: var(--im-text-lg); color: var(--im-muted); }
+.im-cta-band-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--im-space-3);
+  @include mq($bp-lg) { flex-direction: column; align-items: stretch; .im-btn { justify-content: center; } }
+}
+.im-cta-band-email { align-self: center; font-size: var(--im-text-sm); color: var(--im-muted); }
+
+// ---- Standalone pages (about / contact / now) -----------------------------
+.im-pg-head {
+  align-items: end;
+  padding-block: var(--im-space-6) var(--im-space-7);
+  @include mq($bp-lg) { padding-block: var(--im-space-7) var(--im-space-8); }
+}
+.im-pg-title {
+  margin: 0 0 var(--im-space-4);
+  font-size: clamp(var(--im-text-4xl), 5.2vw, var(--im-text-5xl));
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+  text-wrap: balance;
+}
+.im-pg-lede {
+  margin: 0;
+  max-width: 60ch;
+  font-size: var(--im-text-lg);
+  line-height: var(--im-leading-base);
+  color: var(--im-muted);
+}
+.im-pg-head-aside { @include mq($bp-lg) { padding-bottom: var(--im-space-2); } }
+
+.im-pg-facts {
+  display: flex;
+  flex-direction: column;
+  gap: var(--im-space-3);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: var(--im-text-sm);
+  color: var(--im-muted);
+  li { display: flex; align-items: flex-start; gap: var(--im-space-2); }
+  i { flex: 0 0 auto; margin-top: 0.2em; color: var(--im-faint); }
+  &.im-card { gap: var(--im-space-3); }
+}
+
+.im-pg-row { padding-block: var(--im-space-4) var(--im-space-7); align-items: start; }
+
+.im-pg-photo {
+  margin: 0;
+  img {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    border-radius: var(--im-radius-2xl);
+    box-shadow: var(--im-shadow-lg);
+  }
+  figcaption {
+    margin-top: var(--im-space-3);
+    font-family: "Caveat", ui-rounded, cursive;
+    font-size: 1.3rem;
+    color: var(--im-muted);
+    transform: rotate(-1deg);
+    transform-origin: left;
+  }
+  @include mq($bp-lg) { position: sticky; top: calc(var(--im-navbar-height) + var(--im-space-5)); }
+}
+.im-pg-story {
+  h2 { margin-top: 0; font-size: var(--im-text-2xl); letter-spacing: -0.02em; }
+  h2 + p, p + h2 { margin-top: var(--im-space-4); }
+  h2:not(:first-child) { margin-top: var(--im-space-6); }
+  ul { padding-left: 1.1rem; }
+  li + li { margin-top: var(--im-space-2); }
+}
+
+// "How I work" steps
+.im-pg-step { position: relative; gap: var(--im-space-3); }
+.im-pg-step-num {
+  position: absolute;
+  top: var(--im-space-4);
+  right: var(--im-space-5);
+  font-size: var(--im-text-3xl);
+  font-weight: var(--im-weight-bold);
+  letter-spacing: -0.04em;
+  color: transparent;
+  -webkit-text-stroke: 1px var(--im-line);
+}
+
+// Social tiles
+.im-pg-social {
+  display: flex;
+  flex-direction: column;
+  gap: var(--im-space-1);
+  --im-hover-bg: var(--im-surface-2);
+
+  padding: 1.25rem;
+  border-radius: var(--im-radius-xl);
+  background: var(--im-surface);
+  color: var(--im-ink);
+  text-decoration: none;
+  @include im-hover-card($shadow: false);
+  i { font-size: 1.4rem; margin-bottom: var(--im-space-2); color: var(--im-muted); }
+  &:hover i { color: var(--im-accent); }
+}
+.im-pg-social-name { font-weight: var(--im-weight-semibold); }
+.im-pg-social-url { font-size: var(--im-text-xs); color: var(--im-muted); overflow-wrap: anywhere; }
+
+// Sticky sidebar stack (contact, now)
+.im-pg-aside {
+  display: flex;
+  flex-direction: column;
+  gap: var(--im-space-4);
+  @include mq($bp-lg) { position: sticky; top: calc(var(--im-navbar-height) + var(--im-space-5)); }
+  .im-card { gap: var(--im-space-3); }
+  .im-btn { align-self: flex-start; }
+}
+.im-pg-aside-big { font-size: var(--im-text-lg); font-weight: var(--im-weight-semibold); overflow-wrap: anywhere; }
+.im-pg-aside-social .im-footer-social { margin-top: var(--im-space-2); }
+
+// ---- Contact form ----------------------------------------------------------
+.im-form { gap: var(--im-space-5); }
+.im-form-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--im-space-3);
+  .im-card-title { margin: 0; }
+}
+.im-form-grid {
+  display: grid;
+  gap: var(--im-space-4);
+  @include mq($bp-md) { grid-template-columns: 1fr 1fr; }
+}
+.im-field { display: flex; flex-direction: column; gap: var(--im-space-2); }
+.im-field-full { @include mq($bp-md) { grid-column: 1 / -1; } }
+.im-field-label { font-size: var(--im-text-sm); font-weight: var(--im-weight-medium); color: var(--im-ink); }
+.im-input {
+  width: 100%;
+  padding: var(--im-space-3) var(--im-space-4);
+  border: 1px solid var(--im-line);
+  border-radius: var(--im-radius-lg);
+  background: var(--im-canvas);
+  color: var(--im-ink);
+  font: inherit;
+  font-size: var(--im-text-sm);
+  transition: border-color var(--im-duration-fast) var(--im-ease-out), box-shadow var(--im-duration-fast) var(--im-ease-out);
+  &::placeholder { color: var(--im-faint); }
+  &:focus-visible {
+    outline: none;
+    border-color: var(--im-ink);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--im-ink) 12%, transparent);
+  }
+}
+textarea.im-input { resize: vertical; min-height: 8rem; }
+select.im-input { cursor: pointer; }
+.im-form-foot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--im-space-4);
+}
+.im-form-note { font-size: var(--im-text-xs); color: var(--im-faint); }
+
+// ---- Now page --------------------------------------------------------------
+.im-now { display: flex; flex-direction: column; gap: var(--im-space-3); }
+.im-now-sec {
+  padding: 1.25rem;
+  border-radius: var(--im-radius-xl);
+  background: var(--im-surface);
+  scroll-margin-top: calc(var(--im-navbar-height) + var(--im-space-4));
+  > p { margin: 0; color: var(--im-muted); }
+}
+.im-now-sec--muted { background: transparent; box-shadow: inset 0 0 0 1px var(--im-line); }
+.im-now-sec-head {
+  display: flex;
+  align-items: center;
+  gap: var(--im-space-3);
+  margin-bottom: var(--im-space-4);
+  h2 { margin: 0; font-size: var(--im-text-xl); letter-spacing: -0.01em; }
+  time { margin-left: auto; font-size: var(--im-text-xs); color: var(--im-faint); }
+  .im-card-icon { margin: 0; }
+}
+.im-now-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--im-space-3);
+  li {
+    position: relative;
+    padding-left: var(--im-space-5);
+    color: var(--im-body);
+    line-height: var(--im-leading-base);
+    &::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0.7em;
+      width: 0.5rem;
+      height: 0.5rem;
+      border-radius: var(--im-radius-full);
+      background: var(--im-ink);
+    }
+  }
+  strong { color: var(--im-ink); }
+}
+.im-now-nav {
+  gap: var(--im-space-2);
+  .im-sec-eyebrow { margin-bottom: var(--im-space-1); }
+  .im-flink { align-self: flex-start; font-size: var(--im-text-sm); }
+}
+
+// ======================================================================
+// /about/ — the story, in chapters
+// ----------------------------------------------------------------------
+// A rail of years on the left that marks where you are, the chapters
+// stacked on the right. The rail is sticky because the point of it is
+// orientation: it has to be there when you are three chapters down.
+// ======================================================================
+.im-story {
+  display: grid;
+  gap: var(--im-space-7);
+  margin-block: var(--im-section-gap);
+
+  @include mq($bp-lg) {
+    grid-template-columns: minmax(0, 4fr) minmax(0, 8fr);
+    gap: clamp(2rem, 5vw, 4rem);
+    align-items: start;
+  }
+}
+
+.im-story-rail {
+  @include mq($bp-lg) {
+    position: sticky;
+    top: calc(var(--im-navbar-height) + var(--im-space-5));
+  }
+}
+.im-story-rail-title {
+  margin: 0 0 var(--im-space-4);
+  font-family: var(--im-font-mono);
+  font-size: var(--im-text-xs);
+  font-weight: var(--im-weight-medium);
+  letter-spacing: var(--im-tracking-wide);
+  text-transform: uppercase;
+  color: var(--im-faint);
+}
+
+.im-story-rail-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+
+  a {
+    display: grid;
+    grid-template-columns: 3.5rem minmax(0, 1fr);
+    gap: var(--im-space-3);
+    align-items: baseline;
+    padding: var(--im-space-2) var(--im-space-3);
+    border-left: 2px solid transparent;
+    border-radius: 0 var(--im-radius-sm) var(--im-radius-sm) 0;
+    color: var(--im-muted);
+    text-decoration: none;
+    transition: background-color var(--im-duration-instant), color var(--im-duration-instant);
+
+    &:hover { background: var(--im-hover-bg); color: var(--im-ink); }
+
+    // The chapter you are reading wears the theme's one CURRENT state —
+    // a fill and a bolder label, marked on the rule at its left.
+    &.is-current {
+      background: var(--im-current-bg);
+      border-left-color: var(--im-ink);
+      color: var(--im-current-fg);
+      font-weight: var(--im-current-weight);
+    }
+  }
+}
+.im-story-year {
+  font-family: var(--im-font-mono);
+  font-size: var(--im-text-xs);
+  color: var(--im-faint);
+  font-variant-numeric: tabular-nums;
+}
+.im-story-label { min-width: 0; font-size: var(--im-text-sm); }
+
+.im-story-body { display: flex; flex-direction: column; gap: var(--im-section-gap); min-width: 0; }
+
+.im-story-photo {
+  margin: 0;
+
+  img {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    border-radius: var(--im-radius-2xl);
+    background: var(--im-surface);
+  }
+  figcaption {
+    margin-top: var(--im-space-3);
+    color: var(--im-muted);
+    font-size: var(--im-text-sm);
+    text-align: center;
+  }
+}
+
+.im-story-ch {
+  scroll-margin-top: calc(var(--im-navbar-height) + var(--im-space-6));
+
+  .im-prose { max-width: 62ch; }
+}
+.im-story-ch-year {
+  margin: 0 0 var(--im-space-1);
+  font-family: var(--im-font-mono);
+  font-size: var(--im-text-xs);
+  letter-spacing: var(--im-tracking-wide);
+  color: var(--im-c-current, var(--im-accent));
+}
+.im-story-ch-title {
+  margin: 0 0 var(--im-space-3);
+  font-size: var(--im-text-h2);
+  line-height: var(--im-leading-h2);
+  letter-spacing: var(--im-tracking-tight);
+}

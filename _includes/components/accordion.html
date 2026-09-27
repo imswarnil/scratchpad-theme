@@ -1,0 +1,20 @@
+{%- comment -%}
+  Accordion / FAQ (native <details>, no JS).
+  Pass a list of items (each: q/title, a/body) and optionally open_first:
+    {% include components/accordion.html items=page.faq %}
+  Front-matter shape:
+    faq:
+      - q: "Is it free?"
+        a: "Yes, MIT licensed."
+{%- endcomment -%}
+<div class="accordion">
+  {%- for item in include.items -%}
+  <details class="accordion__item"{% if forloop.first and include.open_first %} open{% endif %}>
+    <summary class="accordion__summary">
+      <span>{{ item.q | default: item.title }}</span>
+      <i class="ph-bold ph-caret-down accordion__icon" aria-hidden="true"></i>
+    </summary>
+    <div class="accordion__body">{{ item.a | default: item.body | markdownify }}</div>
+  </details>
+  {%- endfor -%}
+</div>

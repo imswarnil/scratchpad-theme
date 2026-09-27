@@ -1,0 +1,36 @@
+{%- comment -%}
+  A scroll-snapping strip of pictures, with a caption and a dot per slide.
+
+  It is a scroll container, not a slideshow: the browser does the paging,
+  so it works with a finger, a trackpad, a scrollbar and the arrow keys
+  before a single line of JavaScript runs. The buttons and the dots are
+  progressive enhancement (assets/scripts/carousel.js).
+
+  Params: items (list of {src, alt, caption}), fallback (one image path),
+          label (accessible name).
+{%- endcomment -%}
+{%- assign shots = include.items -%}
+{%- if shots.size > 0 -%}
+<figure class="im-carousel" data-carousel aria-roledescription="carousel" aria-label="{{ include.label | default: 'Images' }}">
+  <div class="im-carousel-track" data-carousel-track tabindex="0">
+    {%- for s in shots -%}
+    <div class="im-carousel-slide" data-carousel-slide role="group" aria-roledescription="slide" aria-label="{{ forloop.index }} of {{ shots.size }}">
+      <img src="{{ s.src | relative_url }}" alt="{{ s.alt | default: s.caption | default: include.label }}" loading="{% if forloop.first %}eager{% else %}lazy{% endif %}">
+      {%- if s.caption %}<figcaption class="im-carousel-caption">{{ s.caption }}</figcaption>{% endif -%}
+    </div>
+    {%- endfor -%}
+  </div>
+
+  {%- if shots.size > 1 -%}
+  <div class="im-carousel-controls im-no-print">
+    <button class="im-carousel-btn" type="button" data-carousel-prev aria-label="Previous image"><i class="ph-bold ph-arrow-left" aria-hidden="true"></i></button>
+    <div class="im-carousel-dots" data-carousel-dots>
+      {%- for s in shots -%}<button class="im-carousel-dot" type="button" data-carousel-dot="{{ forloop.index0 }}" aria-label="Go to image {{ forloop.index }}"></button>{%- endfor -%}
+    </div>
+    <button class="im-carousel-btn" type="button" data-carousel-next aria-label="Next image"><i class="ph-bold ph-arrow-right" aria-hidden="true"></i></button>
+  </div>
+  {%- endif -%}
+</figure>
+{%- elsif include.fallback and include.fallback != site.placeholder_image -%}
+<figure class="im-post-cover"><img src="{{ include.fallback | relative_url }}" alt="{{ page.title }}"></figure>
+{%- endif -%}

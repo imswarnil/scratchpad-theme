@@ -1,0 +1,23 @@
+{%- comment -%} A course: cover, level, how many lessons, how long. {%- endcomment -%}
+{%- assign it = include.item -%}
+{%- assign cover = it.cover | default: it.image -%}
+{%- if cover == site.placeholder_image %}{% assign cover = nil %}{% endif -%}
+{%- assign lessons = site.lessons | where: "course", it.slug -%}
+<article class="im-coursecard" style="--im-c-this: var(--im-c-{{ it.collection }}, var(--im-accent));">
+  <a class="im-coursecard-media" href="{{ it.url | relative_url }}" tabindex="-1" aria-hidden="true">
+    {%- if cover %}<img src="{{ cover | relative_url }}" alt="" loading="lazy" width="1200" height="750">
+    {%- else %}{% include utility/thumb.html item=it size="sm" %}{% endif -%}
+  </a>
+  <div class="im-coursecard-body">
+    {%- if it.level %}<span class="im-coursecard-level">{{ it.level }}</span>{% endif -%}
+    <h3 class="im-coursecard-title"><a href="{{ it.url | relative_url }}">{{ it.title }}</a></h3>
+    {%- assign snip = it.description | default: it.excerpt -%}
+    {%- if snip and snip != "" %}<p class="im-coursecard-text">{{ snip | strip_html | truncate: 130 }}</p>{% endif -%}
+    <p class="im-coursecard-meta">
+      {%- if lessons.size > 0 %}<span><i class="ph-bold ph-list-checks" aria-hidden="true"></i> {{ lessons.size }} lessons</span>{% endif -%}
+      {%- if it.hours %}<span><i class="ph-bold ph-clock" aria-hidden="true"></i> {{ it.hours }}</span>{% endif -%}
+      {%- if it.price %}<span><i class="ph-bold ph-tag" aria-hidden="true"></i> {{ it.price }}</span>{% endif -%}
+    </p>
+    <a class="im-card-cta" href="{{ it.url | relative_url }}">Start course <i class="ph-bold ph-arrow-right" aria-hidden="true"></i></a>
+  </div>
+</article>

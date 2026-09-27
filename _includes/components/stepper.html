@@ -1,0 +1,21 @@
+{%- comment -%}
+  Numbered step flow.
+  Pass a list of steps (each: title, body, done?) via a variable:
+    {% include components/stepper.html steps=page.steps %}
+    {% include components/stepper.html steps=page.steps variant="horizontal" %}
+  Front-matter shape:
+    steps:
+      - title: "Discover"
+        body: "Clarify the problem and KPIs."
+        done: true
+{%- endcomment -%}
+{%- assign variant = include.variant -%}
+<ol class="stepper{% if variant == 'horizontal' %} stepper--horizontal{% endif %}">
+  {%- for s in include.steps -%}
+  <li class="step{% if s.done %} step--done{% endif %}">
+    <h3 class="step__title">{{ s.title }}</h3>
+    {%- assign sbody = s.body | default: s.text -%}
+    {%- if sbody -%}<div class="step__body">{{ sbody | markdownify }}</div>{%- endif -%}
+  </li>
+  {%- endfor -%}
+</ol>

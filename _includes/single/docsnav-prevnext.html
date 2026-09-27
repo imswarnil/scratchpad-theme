@@ -1,0 +1,16 @@
+{%- comment -%} Previous / next through the manual, in reading order. {%- endcomment -%}
+{%- assign pages = site.docs | sort: "order" -%}
+{%- assign prev = nil -%}{%- assign next = nil -%}
+{%- for d in pages -%}
+  {%- if d.url == page.url -%}
+    {%- assign i = forloop.index0 -%}
+    {%- if i > 0 %}{% assign prev = pages[i | minus: 1] %}{% endif -%}
+    {%- unless forloop.last %}{% assign next = pages[i | plus: 1] %}{% endunless -%}
+  {%- endif -%}
+{%- endfor -%}
+{%- if prev or next -%}
+<nav class="im-postnav" aria-label="Documentation">
+  {%- if prev %}<a href="{{ prev.url | relative_url }}"><span class="im-postnav-label">Previous</span><span class="im-postnav-title">{{ prev.title }}</span></a>{% endif -%}
+  {%- if next %}<a class="im-postnav-next" href="{{ next.url | relative_url }}"><span class="im-postnav-label">Next</span><span class="im-postnav-title">{{ next.title }}</span></a>{% endif -%}
+</nav>
+{%- endif -%}

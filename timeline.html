@@ -1,0 +1,108 @@
+---
+layout: default
+title: Timeline
+permalink: /timeline/
+description: "Everything worth marking, across every collection, most recent first."
+ad_rails: false
+---
+{%- comment -%}
+  Cross-collection timeline: any collection entry with `timeline: true` in
+  its front matter shows up here, most-recent-first. Optional `timeline_note`
+  overrides the excerpt/description shown under the title. Milestone media:
+  `video_id` → YouTube embed; else `image`/`cover` (when not the site
+  placeholder); else generated SVG art from the doc's own front matter.
+{%- endcomment -%}
+{%- assign timeline_items = "" | split: "" -%}
+{%- for c in site.collections -%}
+  {%- assign timeline_items = timeline_items | concat: c.docs -%}
+{%- endfor -%}
+{%- assign timeline_items = timeline_items | where_exp: "d", "d.timeline == true" | sort: "date" | reverse -%}
+{%- assign years = timeline_items | group_by_exp: "d", "d.date | date: '%Y'" -%}
+
+<section class="im-home im-page im-tl">
+  <header class="im-tl-head im-reveal">
+    <span class="im-collection-icon"><i class="ph-bold ph-clock-counter-clockwise" aria-hidden="true"></i></span>
+    <div>
+      <h1 class="im-collection-title">Timeline</h1>
+      <p class="im-collection-desc">Everything worth marking, across every collection — most recent first.</p>
+    </div>
+    {%- if timeline_items.size > 0 -%}
+    <div class="im-collection-stats"><span><strong>{{ timeline_items.size }}</strong> milestones</span><span><strong>{{ years.size }}</strong> years</span></div>
+    {%- endif -%}
+  </header>
+
+  {%- if timeline_items.size > 0 -%}
+  <div class="im-grid-12 im-tl-layout">
+
+    {%- comment -%} ══ Rail of milestone cards ══ {%- endcomment -%}
+    <ol class="im-span-12 im-span-lg-8 im-tl-rail">
+      {%- for yr in years -%}
+      <li class="im-tl-year" id="year-{{ yr.name }}"><span>{{ yr.name }}</span></li>
+      {%- for it in yr.items -%}
+      {%- assign coll = site.collections | where: "label", it.collection | first -%}
+      {%- assign cover = it.image | default: it.cover -%}
+      {%- if cover == site.placeholder_image %}{% assign cover = nil %}{% endif -%}
+      {%- assign snip = it.timeline_note | default: it.excerpt | default: it.description -%}
+      <li class="im-tl-item im-reveal">
+        <span class="im-tl-dot" aria-hidden="true"></span>
+        <article class="im-tl-card">
+          {%- if it.date %}<time class="im-tl-date" datetime="{{ it.date | date_to_xmlschema }}">{{ it.date | date: "%b %-d, %Y" }}</time>{% endif -%}
+          <div class="im-tl-media">
+            {%- if it.video_id -%}
+            <iframe src="https://www.youtube-nocookie.com/embed/{{ it.video_id }}" title="{{ it.title | escape }}" loading="lazy" allow="accelerometer; encrypted-media; picture-in-picture" allowfullscreen></iframe>
+            {%- elsif cover and cover != "" -%}
+            <a href="{{ it.url | relative_url }}" tabindex="-1" aria-hidden="true"><img src="{{ cover | relative_url }}" alt="" loading="lazy" width="1200" height="675"></a>
+            {%- else -%}
+            <a href="{{ it.url | relative_url }}" tabindex="-1" aria-hidden="true">{% include utility/thumb.html item=it %}</a>
+            {%- endif -%}
+          </div>
+          <div class="im-tl-body">
+            <span class="im-tl-kicker"><i class="ph-bold ph-{{ coll.icon | default: 'folder' }}" aria-hidden="true"></i> {{ it.kind | default: coll.singular | default: it.collection }}</span>
+            <h3 class="im-tl-title"><a href="{{ it.url | relative_url }}">{{ it.title }}</a></h3>
+            {%- if snip %}<p class="im-tl-text">{{ snip | strip_html | truncate: 180 }}</p>{% endif -%}
+            <div class="im-tl-foot">
+              {%- if it.tags.size > 0 -%}<div class="im-tl-tags">{%- for t in it.tags limit: 4 -%}<span>#{{ t }}</span>{%- endfor -%}</div>{%- endif -%}
+              <a class="im-flink im-tl-more" href="{{ it.url | relative_url }}">Open →</a>
+            </div>
+          </div>
+        </article>
+      </li>
+      {%- endfor -%}
+      {%- endfor -%}
+    </ol>
+
+    {%- comment -%} ══ Sticky sidebar ══ {%- endcomment -%}
+    <aside class="im-span-12 im-span-lg-4 im-tl-aside">
+      <div class="im-tl-aside-sticky">
+        <nav class="im-card im-tl-widget" aria-label="Jump to year">
+          <h2 class="im-tl-widget-title"><i class="ph-bold ph-calendar-blank" aria-hidden="true"></i> Jump to</h2>
+          <ul class="im-tl-years">
+            {%- for yr in years -%}
+            <li><a href="#year-{{ yr.name }}">{{ yr.name }}<span class="im-sitetree-count">{{ yr.items.size }}</span></a></li>
+            {%- endfor -%}
+          </ul>
+        </nav>
+
+        <section class="im-card im-tl-widget">
+          <h2 class="im-tl-widget-title"><i class="ph-bold ph-squares-four" aria-hidden="true"></i> By collection</h2>
+          <ul class="im-tl-colls">
+            {%- for c in site.collections -%}
+              {%- assign n = timeline_items | where: "collection", c.label | size -%}
+              {%- if n > 0 -%}
+              <li><a href="{{ c.landing | default: c.url | relative_url }}"><i class="ph-bold ph-{{ c.icon | default: 'folder' }}" aria-hidden="true"></i> {{ c.title }}</a><span class="im-sitetree-count">{{ n }}</span></li>
+              {%- endif -%}
+            {%- endfor -%}
+          </ul>
+        </section>
+
+        <section class="im-card im-tl-widget im-tl-note">
+          <h2 class="im-tl-widget-title"><i class="ph-bold ph-plus-circle" aria-hidden="true"></i> Add a milestone</h2>
+          <p>Any post, project, video, snippet or prompt can appear here. Put <code>timeline: true</code> in its front matter; an optional <code>timeline_note</code> replaces the excerpt shown on the card.</p>
+        </section>
+      </div>
+    </aside>
+  </div>
+  {%- else -%}
+  <p class="im-text-muted">Nothing marked for the timeline yet — add <code>timeline: true</code> to a post's front matter to show it here.</p>
+  {%- endif -%}
+</section>

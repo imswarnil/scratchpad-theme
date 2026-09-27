@@ -1,0 +1,13 @@
+{%- comment -%}
+  Floating bottom leaderboard (728x90). Desktop only (hidden <768px via
+  CSS), dismissible — the close button hides it for the rest of the
+  browser session (sessionStorage, see assets/scripts/custom.js).
+{%- endcomment -%}
+{%- if site.adsense.enabled -%}
+<div class="im-sticky-ad" data-im-sticky-ad hidden>
+  <button type="button" class="im-sticky-ad-close" data-im-sticky-ad-close aria-label="Close ad">
+    <i class="ph-bold ph-x" aria-hidden="true"></i>
+  </button>
+  {% include ad.html type="horizontal" class="im-ad--sticky" %}
+</div>
+{%- endif -%}

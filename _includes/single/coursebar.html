@@ -1,0 +1,46 @@
+{%- comment -%}
+  The bar a lesson wears instead of a breadcrumb: which course you are in,
+  how far through, and the next lesson — the three things someone working
+  through a course reaches for. Sticky, one navbar tall, the same island
+  shape the site bar has.
+{%- endcomment -%}
+{%- assign parent = site.courses | where: "slug", page.course | first -%}
+{%- assign all = site.lessons | where: "course", page.course | sort: "lesson" -%}
+{%- if all.size > 0 -%}
+{%- assign prev = nil -%}{%- assign next = nil -%}
+{%- for l in all -%}
+  {%- if l.url == page.url -%}
+    {%- assign i = forloop.index0 -%}
+    {%- if i > 0 %}{% assign prev = all[i | minus: 1] %}{% endif -%}
+    {%- unless forloop.last %}{% assign next = all[i | plus: 1] %}{% endunless -%}
+  {%- endif -%}
+{%- endfor -%}
+{%- assign done = page.lesson | times: 100 | divided_by: all.size -%}
+<div class="im-coursebar im-coursebar-solo im-no-print">
+  {%- comment -%}
+    This bar IS the page's navigation — the site header is not rendered on
+    a lesson (`chrome: false`). So the first thing in it is the way out.
+  {%- endcomment -%}
+  <a class="im-coursebar-back" href="{{ parent.url | default: '/courses/' | relative_url }}">
+    <i class="ph-bold ph-arrow-left" aria-hidden="true"></i>
+    <span class="im-coursebar-back-label">Back to course</span>
+  </a>
+
+  <a class="im-coursebar-course" href="{{ parent.url | default: '/courses/' | relative_url }}">
+    <i class="ph-bold ph-graduation-cap" aria-hidden="true"></i>
+    <span>{{ parent.title | default: "Course" }}</span>
+  </a>
+
+  <span class="im-coursebar-progress">
+    <span class="im-coursebar-bar" aria-hidden="true"><span style="width: {{ done }}%"></span></span>
+    <span class="im-coursebar-count">{{ page.lesson }} / {{ all.size }}</span>
+  </span>
+
+  <span class="im-coursebar-move">
+    {%- if prev -%}<a class="im-coursebar-btn" href="{{ prev.url | relative_url }}" aria-label="Previous lesson: {{ prev.title | escape }}"><i class="ph-bold ph-arrow-left" aria-hidden="true"></i></a>
+    {%- else -%}<span class="im-coursebar-btn is-disabled" aria-hidden="true"><i class="ph-bold ph-arrow-left"></i></span>{%- endif -%}
+    {%- if next -%}<a class="im-coursebar-btn im-coursebar-next" href="{{ next.url | relative_url }}"><span>Next</span> <i class="ph-bold ph-arrow-right" aria-hidden="true"></i></a>
+    {%- else -%}<a class="im-coursebar-btn im-coursebar-next" href="{{ parent.url | relative_url }}"><span>Finish</span> <i class="ph-bold ph-check" aria-hidden="true"></i></a>{%- endif -%}
+  </span>
+</div>
+{%- endif -%}

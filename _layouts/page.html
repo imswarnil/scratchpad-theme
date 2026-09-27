@@ -1,0 +1,91 @@
+---
+layout: default
+---
+{%- if page.list_collection -%}
+  {%- assign coll = site.collections | where: "label", page.list_collection | first -%}
+  {%- assign docs = coll.docs | sort: "date" | reverse -%}
+  {%- assign latest = docs | first -%}
+  <section class="im-collection im-page is-{{ page.list_collection }}" style="--im-c-current: var(--im-c-{{ page.list_collection }}, var(--im-accent));">
+    {%- comment -%}
+      A landing page opens on the collection hero unless the collection
+      says otherwise (`hero: false`), in which case it gets the compact
+      one-row head instead. Both are data — see collection/hero.html.
+    {%- endcomment -%}
+    {%- if coll.hero == false -%}
+      {%- include utility/collection-head.html
+          title=page.title
+          desc=coll.description
+          icon=coll.icon
+          count=docs.size
+          count_label=coll.title
+          latest=latest.date -%}
+    {%- else -%}
+      {%- assign show_views = coll.hero.views -%}
+      {%- comment -%}
+        Portfolio filters rather than links: its chips are buttons that
+        narrow the feed in place. Everywhere else they are links to the
+        tag's own page.
+      {%- endcomment -%}
+      {%- assign do_filter = false -%}{% if page.list_collection == "portfolio" %}{% assign do_filter = true %}{% endif %}
+      {%- assign show_tags = true -%}{% if do_filter %}{% assign show_tags = false %}{% endif %}
+      {%- include collection/hero.html coll=coll docs=docs title=page.title views=show_views tags=show_tags filters=do_filter -%}
+    {%- endif -%}
+    {%- if page.content != "" -%}<div class="im-prose im-margin-bottom-5">{{ content }}</div>{%- endif -%}
+
+    {%- if page.list_collection == "portfolio" -%}
+      {%- comment -%}
+        The filter moved into the hero's foot bar — see collection/hero.html.
+        What is left here is the feed itself, at the full width the work
+        deserves, with `data-im-filter-grid` for the script to act on and
+        the per-card `data-kind` / `data-tags` it reads.
+      {%- endcomment -%}
+      <ul class="im-cards" id="feed" data-view="{{ coll.view | default: 'card' }}" data-im-filter-grid>
+        {%- for d in docs -%}
+        <li data-kind="{{ d.kind | default: 'project' }}" data-tags="{%- for t in d.tags -%}{{ t | slugify }} {% endfor -%}{%- for t in d.stack -%}{{ t | slugify }} {% endfor -%}">
+          {% include utility/card.html item=d %}
+        </li>
+        {%- endfor -%}
+      </ul>
+      <p class="im-feed-empty" data-im-filter-empty hidden>Nothing matches those filters. <button class="im-btn im-btn-sm" type="button" data-im-filter-clear>Clear them</button></p>
+    {%- else -%}
+      {% include utility/collection-list.html collection=page.list_collection %}
+    {%- endif -%}
+  </section>
+  <script src="{{ '/assets/scripts/filter.js' | relative_url }}?v={{ site.time | date: '%s' }}" defer></script>
+{%- else -%}
+  {%- comment -%}
+    A plain page. With `sidebar: true` it gets a contents rail, which is
+    what turns a long one — the docs — from a wall into something you can
+    navigate. `widgets:` in front matter picks what goes in the rail.
+  {%- endcomment -%}
+  {%- assign has_sidebar = false -%}
+  {%- if page.sidebar %}{% assign has_sidebar = true %}{% endif -%}
+  {%- assign single = site.layout.single -%}
+
+  <div class="im-shell{% if has_sidebar %} has-sidebar{% else %} is-reading{% endif %} im-page">
+    <div class="im-shell-main">
+      <article class="im-article">
+        <nav class="im-breadcrumb" aria-label="Breadcrumb">
+          <a href="{{ '/' | relative_url }}">Home</a><span aria-hidden="true">/</span><span>{{ page.title }}</span>
+        </nav>
+        <h1 class="im-post-title">{{ page.title }}</h1>
+
+        {%- if has_sidebar -%}
+        <details class="im-toc-mobile" id="im-toc-mobile" hidden>
+          <summary><i class="ph-bold ph-list-bullets" aria-hidden="true"></i> On this page</summary>
+          <nav class="im-toc" aria-label="Table of contents"><ul id="im-toc-mobile-list"></ul></nav>
+        </details>
+        {%- endif -%}
+
+        <div class="im-prose">
+          {{ content }}
+        </div>
+      </article>
+    </div>
+
+    {%- if has_sidebar -%}
+    <aside class="im-sidebar" aria-label="Sidebar">{% include sidebar.html %}</aside>
+    {%- endif -%}
+  </div>
+  {%- if has_sidebar %}{% include toc-script.html %}{% endif -%}
+{%- endif -%}

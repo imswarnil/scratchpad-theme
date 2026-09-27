@@ -1,0 +1,26 @@
+{%- comment -%}
+  Call-to-action banner.
+    {% include components/cta.html title="Let's build something" text="Have an idea?"
+       button_text="Get in touch" button_url="/contact/"
+       secondary_text="View work" secondary_url="/portfolio/" %}
+  Optional: split=true for a left-aligned two-column layout.
+{%- endcomment -%}
+<section class="cta{% if include.split %} cta--split{% endif %}">
+  <div>
+    <h2 class="cta__title">{{ include.title }}</h2>
+    {%- if include.text -%}<p class="cta__text">{{ include.text }}</p>{%- endif -%}
+  </div>
+  <div class="cta__actions">
+    {%- if include.button_text -%}
+    <a class="btn is-lg" href="{{ include.button_url | default: '#' | relative_url }}">
+      {%- if include.button_icon -%}<i class="ph-bold {{ include.button_icon }}"></i>{%- endif -%}
+      <span>{{ include.button_text }}</span>
+    </a>
+    {%- endif -%}
+    {%- if include.secondary_text -%}
+    <a class="btn btn--outline is-lg" href="{{ include.secondary_url | default: '#' | relative_url }}">
+      <span>{{ include.secondary_text }}</span>
+    </a>
+    {%- endif -%}
+  </div>
+</section>

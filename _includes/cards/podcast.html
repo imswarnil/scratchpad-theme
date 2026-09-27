@@ -1,0 +1,21 @@
+{%- comment -%}
+  A podcast episode: the number, the title, the runtime, and a player the
+  reader can start without leaving the list. `audio` is a file or URL.
+{%- endcomment -%}
+{%- assign it = include.item -%}
+<article class="im-podcard" style="--im-c-this: var(--im-c-{{ it.collection }}, var(--im-accent));">
+  <div class="im-podcard-head">
+    <span class="im-podcard-n">{%- if it.episode %}#{{ it.episode }}{% else %}<i class="ph-bold ph-microphone" aria-hidden="true"></i>{% endif -%}</span>
+    <div class="im-podcard-id">
+      <h3 class="im-podcard-title"><a href="{{ it.url | relative_url }}">{{ it.title }}</a></h3>
+      <p class="im-podcard-meta">
+        {%- if it.date %}<time datetime="{{ it.date | date_to_xmlschema }}">{{ it.date | date: "%b %-d, %Y" }}</time>{% endif -%}
+        {%- if it.duration %}<span class="im-dot">·</span><span>{{ it.duration }}</span>{% endif -%}
+        {%- if it.guest %}<span class="im-dot">·</span><span>with {{ it.guest }}</span>{% endif -%}
+      </p>
+    </div>
+  </div>
+  {%- assign snip = it.description | default: it.excerpt -%}
+  {%- if snip and snip != "" %}<p class="im-podcard-text">{{ snip | strip_html | truncate: 160 }}</p>{% endif -%}
+  {%- if it.audio -%}<audio class="im-podcard-audio" controls preload="none" src="{{ it.audio | relative_url }}"></audio>{%- endif -%}
+</article>

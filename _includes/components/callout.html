@@ -1,0 +1,24 @@
+{%- comment -%}
+  Callout / admonition.
+  Usage:
+    {% include components/callout.html type="tip" title="Heads up" text="Body **markdown** here." %}
+  Types: info | tip | success | warning | danger | note
+  Optional: icon="ph-lightbulb" (Phosphor name) to override the default.
+{%- endcomment -%}
+{%- assign ctype = include.type | default: "note" -%}
+{%- case ctype -%}
+  {%- when "info"    -%}{%- assign cicon = "ph-info" -%}
+  {%- when "tip"     -%}{%- assign cicon = "ph-lightbulb" -%}
+  {%- when "success" -%}{%- assign cicon = "ph-check-circle" -%}
+  {%- when "warning" -%}{%- assign cicon = "ph-warning" -%}
+  {%- when "danger"  -%}{%- assign cicon = "ph-warning-octagon" -%}
+  {%- else           -%}{%- assign cicon = "ph-note-pencil" -%}
+{%- endcase -%}
+{%- assign cicon = include.icon | default: cicon -%}
+<div class="callout callout--{{ ctype }}" role="note">
+  <span class="callout__icon" aria-hidden="true"><i class="ph-bold {{ cicon }}"></i></span>
+  <div>
+    {%- if include.title -%}<p class="callout__title">{{ include.title }}</p>{%- endif -%}
+    <div class="callout__body">{{ include.text | markdownify }}</div>
+  </div>
+</div>

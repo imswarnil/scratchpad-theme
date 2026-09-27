@@ -1,0 +1,61 @@
+---
+layout: default
+title: Podcast
+permalink: /podcast/
+description: "Conversations about engineering, film and making things."
+collection_view: true
+ad_rails: false
+---
+{%- comment -%}
+  The podcast landing, grouped by SERIES. A podcast is usually more than
+  one show, and a flat list of episodes from two of them is a list nobody
+  can subscribe to. Each series gets its heading, its own feed, and its
+  episodes in order — newest first, because that is how a listener checks
+  for a new one.
+
+  Episodes with no `series:` fall into a final ungrouped block, so an
+  entry is never invisible for want of a key.
+{%- endcomment -%}
+{%- assign coll = site.collections | where: "label", "podcast" | first -%}
+{%- assign all = site.podcast | sort: "date" | reverse -%}
+<section class="im-collection im-page is-podcast" style="--im-c-current: var(--im-c-podcast, var(--im-accent));">
+  {% include collection/hero.html coll=coll docs=all title=page.title views=true tags=true %}
+
+  {%- for s in coll.series -%}
+    {%- assign eps = all | where: "series", s.slug -%}
+    {%- if eps.size > 0 -%}
+    <section class="im-series" aria-labelledby="s-{{ s.slug }}">
+      <header class="im-series-head">
+        <span class="im-series-mark" aria-hidden="true"><i class="ph-bold ph-{{ s.icon | default: 'microphone' }}"></i></span>
+        <div class="im-series-id">
+          <h2 class="im-series-title" id="s-{{ s.slug }}">{{ s.title }}</h2>
+          {%- if s.description %}<p class="im-series-text">{{ s.description }}</p>{% endif -%}
+        </div>
+        <p class="im-series-actions">
+          <span class="im-series-count">{{ eps.size }} {% if eps.size == 1 %}episode{% else %}episodes{% endif %}</span>
+          <a class="im-btn im-btn-sm" href="{{ '/podcast/' | append: s.slug | append: '/feed.xml' | relative_url }}">
+            <i class="ph-bold ph-rss" aria-hidden="true"></i> Feed
+          </a>
+        </p>
+      </header>
+      <ul class="im-cards">
+        {%- for e in eps -%}<li>{% include cards/podcast.html item=e %}</li>{%- endfor -%}
+      </ul>
+    </section>
+    {%- endif -%}
+  {%- endfor -%}
+
+  {%- assign loose = all | where_exp: "d", "d.series == nil" -%}
+  {%- if loose.size > 0 -%}
+  <section class="im-series" aria-labelledby="s-other">
+    <header class="im-series-head">
+      <span class="im-series-mark" aria-hidden="true"><i class="ph-bold ph-microphone"></i></span>
+      <div class="im-series-id"><h2 class="im-series-title" id="s-other">Other episodes</h2></div>
+      <p class="im-series-actions"><span class="im-series-count">{{ loose.size }}</span></p>
+    </header>
+    <ul class="im-cards">
+      {%- for e in loose -%}<li>{% include cards/podcast.html item=e %}</li>{%- endfor -%}
+    </ul>
+  </section>
+  {%- endif -%}
+</section>

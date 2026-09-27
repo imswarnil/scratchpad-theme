@@ -1,0 +1,122 @@
+---
+layout: default
+title: Docs
+permalink: /docs/
+description: "How to use this theme — set it up, fill it, shape it, ship it."
+ad_rails: false
+---
+{%- comment -%}
+  The manual's front page. It is not a list of pages — the rail on every
+  docs page already is one. It is the path from "I cloned this" to "it is
+  live", in the order someone actually walks it, with the reference
+  grouped underneath for when they come back looking for one thing.
+{%- endcomment -%}
+{%- assign coll = site.collections | where: "label", "docs" | first -%}
+{%- assign pages = site.docs | sort: "order" -%}
+<section class="im-collection im-page is-docs" style="--im-c-current: var(--im-c-docs, var(--im-accent));">
+
+  <header class="im-collhero im-reveal" style="--im-c-this: var(--im-c-docs, var(--im-accent));">
+    <span class="im-collhero-art im-pattern-rules" aria-hidden="true"></span>
+    <svg class="im-collhero-mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+      {% include utility/mark.html collection="docs" stroke="0.55" %}
+    </svg>
+    <div class="im-collhero-copy">
+      <p class="im-caption" data-index="{{ pages.size }}">Documentation</p>
+      <h1 class="im-collhero-title">Make it yours</h1>
+      <p class="im-collhero-text">
+        Thirteen collections, a resume, a tag index and four ways to look at
+        every listing — and almost all of it is configured rather than coded.
+        Start at the top; it takes about ten minutes.
+      </p>
+      <p class="im-collhero-meta">
+        <span>{{ pages.size }} pages</span>
+        <a href="{{ '/styleguide/' | relative_url }}">Style guide</a>
+        <a href="https://github.com/imswarnil/Personal-Website-Jekyll-Theme">Source</a>
+      </p>
+    </div>
+  </header>
+
+  {%- comment -%} ── The path, in order ── {%- endcomment -%}
+  <section class="im-sec im-reveal">
+    {% include utility/section-head.html id="start" eyebrow="Ten minutes" title="From clone to live" %}
+    <ol class="im-steps">
+      <li class="im-step">
+        <span class="im-step-n">1</span>
+        <div class="im-step-body">
+          <h3 class="im-step-title">Get it on your machine</h3>
+          <p>One command. It clones the theme, drops its history so the first commit is yours, clears the demo content and opens the setup form.</p>
+          <pre><code>npx scratchpad-theme my-site</code></pre>
+          <p class="im-step-note">Ruby 3.4 and Node 18+. The macOS system Ruby cannot build this — use <code>bin/serve</code> rather than calling Jekyll directly.</p>
+        </div>
+      </li>
+      <li class="im-step">
+        <span class="im-step-n">2</span>
+        <div class="im-step-body">
+          <h3 class="im-step-title">Answer the form</h3>
+          <p>Your name, the accent colour, which collections you want, the header, the footer, your links. It serves one page on <code>127.0.0.1</code>, uploads nothing, and backs up everything it replaces before it writes.</p>
+          <pre><code>npm run setup</code></pre>
+          <p class="im-step-note">Safe to run again whenever you like — it opens pre-filled from your current config.</p>
+        </div>
+      </li>
+      <li class="im-step">
+        <span class="im-step-n">3</span>
+        <div class="im-step-body">
+          <h3 class="im-step-title">See it</h3>
+          <pre><code>npm run dev      # http://localhost:4000</code></pre>
+          <p><code>npm run doctor</code> will tell you about anything half-configured before it bites — a missing cover, an endpoint you have not set.</p>
+        </div>
+      </li>
+      <li class="im-step">
+        <span class="im-step-n">4</span>
+        <div class="im-step-body">
+          <h3 class="im-step-title">Write something</h3>
+          <p>A post is a Markdown file in <code>_posts/</code>, named <code>YYYY-MM-DD-slug.md</code>. <code>npm run new</code> scaffolds one in any collection with the right front matter.</p>
+          <p><a class="im-card-cta" href="{{ '/docs/writing/' | relative_url }}">Writing a post <i class="ph-bold ph-arrow-right" aria-hidden="true"></i></a></p>
+        </div>
+      </li>
+      <li class="im-step">
+        <span class="im-step-n">5</span>
+        <div class="im-step-body">
+          <h3 class="im-step-title">Put it online</h3>
+          <p>Create a repository named <strong><code>username.github.io</code></strong>, push to <code>main</code>, then <strong>Settings → Pages → Source: GitHub Actions</strong>.</p>
+          <p class="im-step-note">The workflow passes GitHub's own base path to Jekyll, so the same setup is correct for a user page and a project page. You never set <code>baseurl</code> by hand.</p>
+          <p><a class="im-card-cta" href="{{ '/docs/deploying/' | relative_url }}">Deploying <i class="ph-bold ph-arrow-right" aria-hidden="true"></i></a></p>
+        </div>
+      </li>
+    </ol>
+  </section>
+
+  {%- comment -%} ── The reference, grouped ── {%- endcomment -%}
+  {%- assign groups = pages | group_by: "section" -%}
+  {%- for g in groups -%}
+  <section class="im-sec im-reveal">
+    {% include utility/section-head.html id=g.name eyebrow="Reference" title=g.name %}
+    <ul class="im-cards">
+      {%- for d in g.items -%}<li>{% include cards/doc.html item=d %}</li>{%- endfor -%}
+    </ul>
+  </section>
+  {%- endfor -%}
+
+  {%- comment -%} ── Where else to look ── {%- endcomment -%}
+  <section class="im-sec im-reveal">
+    {% include utility/section-head.html id="more" eyebrow="Also" title="Two more places" %}
+    <ul class="im-cards">
+      <li>
+        <article class="im-card im-card-link">
+          <span class="im-card-icon"><i class="ph-bold ph-palette" aria-hidden="true"></i></span>
+          <h3 class="im-card-title">The style guide</h3>
+          <p class="im-card-text">Every card, component and colour on one page, drawn from the real content in the repository — so it cannot drift from what the site actually looks like.</p>
+          <div class="im-card-footer"><a class="im-card-cta" href="{{ '/styleguide/' | relative_url }}">Open <i class="ph-bold ph-arrow-right" aria-hidden="true"></i></a></div>
+        </article>
+      </li>
+      <li>
+        <article class="im-card im-card-link">
+          <span class="im-card-icon"><i class="ph-bold ph-sparkle" aria-hidden="true"></i></span>
+          <h3 class="im-card-title">The skills, for an assistant</h3>
+          <p class="im-card-text"><code>.claude/skills/</code> holds the same ground written for an AI: how to stand the site up, and what a cover should be for each collection. If you use one, point it there.</p>
+          <div class="im-card-footer"><a class="im-card-cta" href="https://github.com/imswarnil/Personal-Website-Jekyll-Theme/tree/main/.claude/skills">On GitHub <i class="ph-bold ph-arrow-up-right" aria-hidden="true"></i></a></div>
+        </article>
+      </li>
+    </ul>
+  </section>
+</section>

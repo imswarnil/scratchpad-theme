@@ -1,0 +1,12 @@
+{%- comment -%}
+  Feature / link card.
+    {% include components/card.html icon="ph-rocket-launch" title="Fast" text="Ships in ms." %}
+    {% include components/card.html title="Project" text="…" href="/projects/foo/" cta="View" bento=true %}
+{%- endcomment -%}
+{%- assign tag = "div" -%}{%- if include.href -%}{%- assign tag = "a" -%}{%- endif -%}
+<{{ tag }} class="card{% if include.href %} card--link{% endif %}{% if include.bento %} card--bento{% endif %}{% if include.class %} {{ include.class }}{% endif %}"{% if include.href %} href="{{ include.href | relative_url }}"{% endif %}>
+  {%- if include.icon -%}<span class="card__icon" aria-hidden="true"><i class="ph-bold {{ include.icon }}"></i></span>{%- endif -%}
+  {%- if include.title -%}<h3 class="card__title">{{ include.title }}</h3>{%- endif -%}
+  {%- if include.text -%}<p class="card__text">{{ include.text }}</p>{%- endif -%}
+  {%- if include.cta -%}<span class="card__footer"><span class="readmore">{{ include.cta }} <i class="ph-bold ph-arrow-right"></i></span></span>{%- endif -%}
+</{{ tag }}>

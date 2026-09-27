@@ -1,0 +1,49 @@
+{%- comment -%}
+  Video-player-styled card. Reads: title, video_id (YouTube), duration,
+  channel, date, excerpt/description, image|cover, tags.
+{%- endcomment -%}
+{%- assign it = include.item -%}
+{%- assign cover = it.cover | default: it.image -%}
+{%- if cover == site.placeholder_image %}{% assign cover = nil %}{% endif -%}
+{%- assign snip = it.excerpt | default: it.description -%}
+<article class="im-vcard" style="--im-c-this: var(--im-c-{{ it.collection }}, var(--im-accent));">
+  <a class="im-vcard-screen" href="{{ it.url | relative_url }}" aria-label="Watch: {{ it.title | escape }}">
+    {%- comment -%}
+      The entry's own picture first, then YouTube's, then the drawn one.
+      A remote thumbnail is a request to someone else that fails offline,
+      in a preview build, and behind a strict network — so it is the
+      fallback, not the default.
+    {%- endcomment -%}
+    {%- if cover and cover != "" -%}<img src="{{ cover | relative_url }}" alt="" loading="lazy" width="1200" height="675">
+    {%- elsif it.video_id -%}<img src="https://i.ytimg.com/vi/{{ it.video_id }}/hqdefault.jpg" alt="" loading="lazy" width="480" height="360">
+    {%- else -%}{%- include utility/thumb.html item=it size="sm" -%}{%- endif -%}
+    <span class="im-vcard-play" aria-hidden="true"><i class="ph-fill ph-play"></i></span>
+    {%- if it.duration %}<span class="im-vcard-duration">{{ it.duration }}</span>{% endif -%}
+    {%- comment -%}
+      A progress bar that means progress: `progress: 0.4` in front matter
+      is how far through a viewer got. With no value there is nothing to
+      report, so the bar is not drawn — a scrubber that animates on hover
+      and reports nothing is a decoration pretending to be data.
+    {%- endcomment -%}
+    {%- if it.progress -%}
+    <span class="im-vcard-bar" role="progressbar" aria-label="Watched"
+          aria-valuenow="{{ it.progress | times: 100 | round }}" aria-valuemin="0" aria-valuemax="100">
+      <span style="width: {{ it.progress | times: 100 | round }}%"></span>
+    </span>
+    {%- endif -%}
+  </a>
+  <div class="im-vcard-body">
+    <h3 class="im-vcard-title"><a href="{{ it.url | relative_url }}">{{ it.title }}</a></h3>
+    <div class="im-vcard-meta">
+      <img src="{{ site.avatarurl | relative_url }}" alt="" width="24" height="24" loading="lazy">
+      <span>{{ it.channel | default: site.author | default: site.title }}</span>
+      {%- if it.views %}<span class="im-dot">·</span><span>{{ it.views }} views</span>{% endif -%}
+      {%- if it.date %}<span class="im-dot">·</span><time datetime="{{ it.date | date_to_xmlschema }}">{{ it.date | date: "%b %Y" }}</time>{% endif -%}
+    </div>
+    {%- if snip %}<p class="im-vcard-excerpt">{{ snip | strip_html | truncate: 110 }}</p>{% endif -%}
+    <div class="im-vcard-foot">
+      {%- if it.tags.size > 0 -%}<div class="im-vcard-tags">{%- for t in it.tags limit: 3 -%}<span>#{{ t }}</span>{%- endfor -%}</div>{%- endif -%}
+      <a class="im-card-cta im-vcard-cta" href="{{ it.url | relative_url }}">Watch <i class="ph-bold ph-arrow-right" aria-hidden="true"></i></a>
+    </div>
+  </div>
+</article>

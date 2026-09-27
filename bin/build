@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+set -e
+# Prefer chruby's ruby-3.4.1 if present (macOS system Ruby 2.6 can't build this);
+# otherwise trust the shell's Ruby (rbenv/asdf/etc., pinned by .ruby-version).
+[ -d "$HOME/.rubies/ruby-3.4.1/bin" ] && export PATH="$HOME/.rubies/ruby-3.4.1/bin:$PATH"
+cd "$(dirname "$0")/.."
+rm -f Gemfile.lock
+bundle check >/dev/null 2>&1 || bundle install
+exec env JEKYLL_ENV=production bundle exec jekyll build "$@"

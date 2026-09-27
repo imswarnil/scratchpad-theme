@@ -1,0 +1,59 @@
+---
+layout: default
+---
+{%- comment -%}
+  One tag. The page is written by _plugins/tag_pages.rb, which hands it
+  `tag`, `tag_slug`, `tag_count` and `entries` — every entry carrying the
+  tag, from every collection, newest first.
+{%- endcomment -%}
+<section class="im-collection im-page is-tags" style="--im-c-current: var(--im-c-tags, var(--im-accent));">
+
+  <header class="im-collhero im-reveal" style="--im-c-this: var(--im-c-tags, var(--im-accent));">
+    <span class="im-collhero-art im-pattern-lines" aria-hidden="true"></span>
+    <div class="im-collhero-copy">
+      <p class="im-caption" data-index="{{ page.tag_count }}">Tag</p>
+      <h1 class="im-collhero-title"><span class="im-collhero-hash" aria-hidden="true">#</span>{{ page.tag }}</h1>
+      <p class="im-collhero-text">
+        Everything tagged <strong>{{ page.tag }}</strong> — across every collection on the site.
+      </p>
+      <p class="im-collhero-meta">
+        <span>{{ page.tag_count }} {% if page.tag_count == 1 %}entry{% else %}entries{% endif %}</span>
+        {%- assign kinds = page.entries | map: "collection" | uniq -%}
+        <span>{{ kinds.size }} {% if kinds.size == 1 %}collection{% else %}collections{% endif %}</span>
+        <a href="{{ '/tags/' | relative_url }}">All tags</a>
+      </p>
+    </div>
+
+    <div class="im-collhero-bar">
+      <div class="im-collbar-filters">
+        {%- for label in kinds -%}
+          {%- assign c = site.collections | where: "label", label | first -%}
+          {%- assign n = page.entries | where: "collection", label | size -%}
+          <a class="im-tag" href="#c-{{ label }}" style="--im-c-this: var(--im-c-{{ label }}, var(--im-accent));">
+            <i class="ph-bold ph-{{ c.icon | default: 'folder' }}" aria-hidden="true"></i>
+            {{ c.title | default: label }} <small>{{ n }}</small>
+          </a>
+        {%- endfor -%}
+      </div>
+      <div class="im-btn-group im-viewswitch" role="group" aria-label="How to show them" data-im-view="#feed">
+        <button class="im-btn im-btn-sm" type="button" value="grid" aria-pressed="true"><i class="ph-bold ph-squares-four" aria-hidden="true"></i><span>Grid</span></button>
+        <button class="im-btn im-btn-sm" type="button" value="list" aria-pressed="false"><i class="ph-bold ph-rows" aria-hidden="true"></i><span>List</span></button>
+        <button class="im-btn im-btn-sm" type="button" value="simple" aria-pressed="false"><i class="ph-bold ph-list-dashes" aria-hidden="true"></i><span>Simple</span></button>
+      </div>
+    </div>
+  </header>
+
+  {%- comment -%}
+    Grouped by collection, because "everything tagged travel" is a film,
+    a trip and a post, and a reader is usually after one of those kinds.
+    Each group is its own feed so the view switch dresses them together.
+  {%- endcomment -%}
+  <ul class="im-cards" id="feed" data-view="grid">
+    {%- for it in page.entries -%}<li>{% include utility/card.html item=it %}</li>{%- endfor -%}
+  </ul>
+
+  {%- for label in kinds -%}
+    {%- assign c = site.collections | where: "label", label | first -%}
+    <h2 class="im-visually-hidden" id="c-{{ label }}">{{ c.title | default: label }}</h2>
+  {%- endfor -%}
+</section>

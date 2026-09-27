@@ -1,0 +1,25 @@
+{%- comment -%}
+  The manual's contents, as a rail beside every page of it. Grouped by
+  `section:` in each page's front matter and sorted by `order:` — so a new
+  page joins the nav by existing, not by being listed somewhere as well.
+{%- endcomment -%}
+{%- assign pages = site.docs | sort: "order" -%}
+{%- assign groups = pages | group_by: "section" -%}
+<nav class="im-docsnav" aria-label="Documentation">
+  <a class="im-docsnav-home" href="{{ '/docs/' | relative_url }}">
+    <i class="ph-bold ph-book-open" aria-hidden="true"></i>
+    <span>Documentation</span>
+  </a>
+  {%- for g in groups -%}
+  <div class="im-docsnav-group">
+    {%- if g.name and g.name != "" %}<p class="im-docsnav-title">{{ g.name }}</p>{% endif -%}
+    <ul class="im-docsnav-list">
+      {%- for d in g.items -%}
+      <li>
+        <a href="{{ d.url | relative_url }}"{% if d.url == page.url %} aria-current="page"{% endif %}>{{ d.title }}</a>
+      </li>
+      {%- endfor -%}
+    </ul>
+  </div>
+  {%- endfor -%}
+</nav>

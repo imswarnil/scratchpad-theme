@@ -1,0 +1,7 @@
+{%- assign _coll = site.collections | where: "label", include.collection | first -%}
+{%- assign _docs = _coll.docs | sort: "date" | reverse -%}
+<ul class="im-cards" id="feed" data-view="{{ _coll.view | default: 'card' }}">
+  {%- for it in _docs -%}
+  <li>{% include utility/card.html item=it %}</li>
+  {%- endfor -%}
+</ul>

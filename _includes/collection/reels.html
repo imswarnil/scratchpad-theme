@@ -1,0 +1,46 @@
+{%- comment -%}
+  The reels band. A reel is shot 9:16 and there is no honest way to show
+  one in a 16:9 card, so the portrait entries in a video collection get
+  their own block: a strip of two columns of them on the left, and on the
+  right the one the band is about — its title, what it is, where to watch.
+
+  An entry joins it with `orientation: portrait` (or `reel: true`).
+  Params: items (the portrait entries), title.
+{%- endcomment -%}
+{%- assign reels = include.items -%}
+{%- if reels.size > 0 -%}
+{%- assign lead = reels | first -%}
+<section class="im-reelband" aria-labelledby="im-reelband-title">
+  <div class="im-reelband-strip">
+    {%- for r in reels limit: 6 -%}
+    <a class="im-reel" href="{{ r.url | relative_url }}">
+      <span class="im-reel-art">
+        {%- assign cover = r.cover | default: r.image -%}
+        {%- if r.video_id -%}<img src="https://i.ytimg.com/vi/{{ r.video_id }}/hqdefault.jpg" alt="" loading="lazy" width="360" height="640">
+        {%- elsif cover and cover != site.placeholder_image -%}<img src="{{ cover | relative_url }}" alt="" loading="lazy" width="360" height="640">
+        {%- else -%}{% include utility/thumb.html item=r size="sm" %}{%- endif -%}
+        <span class="im-reel-scrim" aria-hidden="true"></span>
+        <span class="im-reel-play" aria-hidden="true"><i class="ph-fill ph-play"></i></span>
+        {%- if r.duration %}<span class="im-reel-time">{{ r.duration }}</span>{% endif -%}
+      </span>
+      <span class="im-reel-title">{{ r.title }}</span>
+    </a>
+    {%- endfor -%}
+  </div>
+
+  <div class="im-reelband-copy">
+    <p class="im-chero-kicker"><i class="ph-bold ph-device-mobile-camera" aria-hidden="true"></i> Reels</p>
+    <h2 class="im-reelband-title" id="im-reelband-title">{{ include.title | default: "Shot vertical" }}</h2>
+    <p class="im-reelband-desc">
+      {{ include.desc | default: "Short, vertical, made for a phone held upright — the format most of these were watched in, so it is the shape they are shown in here." }}
+    </p>
+    <dl class="im-chero-stats">
+      <div><dt>Reels</dt><dd>{{ reels.size }}</dd></div>
+      {%- if lead.date -%}<div><dt>Latest</dt><dd>{{ lead.date | date: "%b %Y" }}</dd></div>{%- endif -%}
+    </dl>
+    <p class="im-reelband-actions">
+      <a class="im-btn im-btn-primary" href="{{ lead.url | relative_url }}"><i class="ph-fill ph-play" aria-hidden="true"></i> Watch the latest</a>
+    </p>
+  </div>
+</section>
+{%- endif -%}

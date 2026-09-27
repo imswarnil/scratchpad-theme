@@ -1,0 +1,1120 @@
+# ======================================================================
+# Scratchpad — a modular Jekyll theme on the Im Design System
+# ----------------------------------------------------------------------
+# THIS FILE IS THE CONTROL PANEL. Almost everything you can change about
+# the site without writing code lives here: who you are, what the menus
+# say, which collections exist, what the header and footer show.
+#
+#   Never edited this before?  Run `npm run setup` and answer the form in
+#   your browser — it writes the same keys for you, then tells you how to
+#   put the site on GitHub Pages.
+#
+#   Full reference:  /docs/configuration/   (docs/configuration.md)
+#
+# ⚠️  Jekyll reads this file ONCE, at boot. After any change here, stop the
+#     dev server and start it again — a live-reload will not pick it up.
+#
+# Sections
+#   1. Identity          who the site is
+#   2. Look              accent, fonts, header, footer, reading layout
+#   3. Navigation        the menus
+#   4. Collections       the kinds of content this site publishes
+#   5. Resume            the /resume/ page's content
+#   6. Plugins & build   Jekyll's own settings — rarely touched
+# ======================================================================
+
+# ── 1. Identity ────────────────────────────────────────────────────────
+# `title` and `description` are what search engines and social cards show.
+# Keep the description under ~155 characters and write it for a human.
+title: "Swarnil Singhai"
+job_title: "Salesforce Developer"        # one line under the brand name
+description: "Software engineer and filmmaker. Salesforce CRM Analytics by day, cinematic travel films by night — essays, code and work in progress."
+url: "https://scratchpad.imswarnil.com"         # no trailing slash
+baseurl: ""                              # "/repo-name" if you deploy to a project page
+
+author: "Swarnil Singhai"                # the default byline on every post
+email: "contact@imswarnil.com"
+location: "Bengaluru, India"
+repo: "https://github.com/imswarnil/Personal-Website-Jekyll-Theme"
+
+lang: en-GB                              # <html lang>, and jekyll-seo-tag
+timezone: Asia/Kolkata
+encoding: utf-8
+
+logo: "/assets/img/brand/logo.svg"       # the mark in the header (a dot; see assets/img/brand/)
+avatarurl: "/assets/img/brand/avatar.svg" # the face beside your byline — a placeholder; point it at yours
+
+work:
+  company: "Imswarnil Studio"
+  role: "Software Engineer & Filmmaker"
+  url: "https://imswarnil.com"
+
+# Where you are on the internet. The KEY is the label and picks the icon
+# (Twitter, X, LinkedIn, GitHub, YouTube, Instagram, Mastodon, Bluesky,
+# Dribbble, Behance, email, link, RSS); the value is the URL. Delete a row
+# to drop it from the header, the footer and the JSON-LD `sameAs` list.
+social_links:
+  GitHub: https://github.com/imswarnil
+  LinkedIn: https://www.linkedin.com/in/imswarnil
+  Twitter: https://twitter.com/imswarnil
+  YouTube: https://youtube.com/@ImSwarnil
+  link: https://imswarnil.com
+  RSS: /feed.xml
+
+sharing_links:                           # the buttons under a post
+  Twitter: "#0d94e7"
+  facebook: "#3B5998"
+  Email: true
+
+# ── 2. Look ────────────────────────────────────────────────────────────
+# ONE brand colour. Every tinted thing on the site derives from it: links,
+# the focus ring, the active menu item, the reading-progress bar, every
+# generated cover, and one rotated hue per collection. Change this line
+# and the whole site moves. Any CSS colour works.
+accent_color: "#f22f46"
+
+# Optional overrides for the two other things a brand usually wants to
+# set. Comment them out to keep the design system's own values.
+# theme_radius: "0.75rem"                # roundness of cards and fields
+# theme_width:  "78rem"                  # the site's maximum width
+
+# Web fonts. The design system specifies Geist; Caveat is only used for
+# the handwritten accents on the about page. Remove a URL to drop it.
+# The typefaces are SERVED FROM THIS REPOSITORY (assets/fonts/, declared in
+# _sass/im/base/_fonts.scss). A font from a CDN is a third party on every
+# page load — a DNS lookup, a connection, a request that can be slow,
+# blocked or logged. Leave these lists empty unless you are adding a face
+# you cannot vendor.
+fonts:
+  preconnect_urls: []
+  font_urls: []
+
+# The header. Drives _includes/header.html — mix and match freely.
+header:
+  layout: island            # island | full   (island = floating rounded pill)
+  sticky: true              # stay at the top on scroll
+  blur: true                # frosted-glass backdrop
+  brand: both               # both | logo | title
+  show_icons: true          # icons inside the nav links
+  dropdowns: true           # render item.children as a dropdown (nesting allowed)
+  megamenu: true            # items with `megamenu: true` + `groups:` open a panel
+  progress: true            # reading-progress bar along the navbar's edge
+  search: true              # search button — opens the command palette, or press /
+  dark_toggle: true         # light / dark / system switch
+  # Action order in the bar, left to right: search · theme · GitHub stars
+  github:
+    enabled: true
+    repo: imswarnil/Personal-Website-Jekyll-Theme   # owner/repo — live star count
+    show_stars: true
+  sponsor:
+    enabled: false
+    url: https://github.com/sponsors/imswarnil
+    label: Sponsor
+  cta:
+    enabled: false
+    label: Hire me
+    url: /contact/
+
+# The footer. Drives _includes/footer.html.
+footer:
+  layout: columns           # columns | minimal
+  skin: line                # line (hairline above) | fill (surface) | ink (inverted)
+  tagline: "Engineering meets storytelling — built fast, cinematic, robust."
+  show_details: true        # brand, location, email, social
+  show_legal: true          # navigation_legal links
+  show_social: true
+
+  # The columns, in order. A column lists either `collections:` (labels, which
+  # bring their own title, icon and landing URL) or `links:` (anything). One
+  # column may be `newsletter: true` instead. Name them for what a reader is
+  # looking for, not for how the site is organised — "Watch" finds a video
+  # faster than "Collections" does.
+  columns:
+    - title: Read
+      collections: [posts, newsletter, snippets, prompts]
+    - title: Watch
+      collections: [videos, webseries, podcast]
+    - title: Make
+      collections: [portfolio, courses, travel, uses]
+    - title: More
+      links:
+        - { title: Docs, url: /docs/ }
+        - { title: About, url: /about/ }
+        - { title: Resume, url: /resume/ }
+        - { title: Now, url: /now/ }
+        - { title: Timeline, url: /timeline/ }
+        - { title: Tags, url: /tags/ }
+        - { title: Guestbook, url: /guestbook/ }
+        - { title: Support, url: /support/ }
+        - { title: Contact, url: /contact/ }
+
+  newsletter:
+    enabled: true
+    title: "The newsletter"
+    text: "New posts, films and snippets — when there's something worth sending."
+    action: ""              # your form endpoint (Buttondown, Mailchimp, …)
+    placeholder: "you@email.com"
+
+# The reading layout: article column, right sidebar, optional ad rails.
+# Any page can opt out with `sidebar: false` / `ad_rails: false` in its
+# own front matter.
+layout:
+  sidebar: true             # the right sidebar on posts
+  ad_rails: true            # sticky vertical ad rails on very wide screens
+  toc: true                 # build a table of contents from the h2/h3s
+
+  # ── What a single entry is made of ──────────────────────────────────
+  # An entry page is COMPOSED, not templated: `parts` are stacked in the
+  # order given, `widgets` fill the sidebar, and `lead` is the block
+  # between the title and the body.
+  #
+  #   parts   → _includes/single/<name>.html
+  #   widgets → _includes/widgets/<name>.html
+  #   lead    → _includes/leads/<name>.html   ("none" for no lead)
+  #
+  # Every collection below may override the whole block, and any single
+  # entry may override it again in its own front matter. To invent a part,
+  # drop a file in the right folder and name it here — no template edits.
+  #
+  # Parts that ship:  breadcrumbs head toc-mobile lead prose tags share
+  #                   ask comments author nav
+  # Widgets that ship: toc details collection about cta share subscribe ad
+  single:
+    lead: cover
+    parts: [head, toc-mobile, lead, prose, tags, share, ask, author, nav]
+    widgets: [toc, ad, collection, about, cta]
+    sidebar: true
+
+# A demo YouTube id: shows a "Watch" CTA and plays muted behind the hero.
+# Set to "" to hide it; per-page front matter `hero_video:` overrides it.
+hero_video: "aqz-KE-bpKQ"
+
+# Monetisation. `enabled: false` renders a labelled dashed placeholder in
+# every ad slot instead of a real unit, so you can see the layout without
+# an AdSense account.
+adsense:
+  enabled: false
+  client: "ca-pub-1291242080282540"
+  placements:
+    square: "7663977887"
+    horizontal: "8939839370"
+    autorelaxed: "6808134701"
+    vertical: "3487917390"
+    fluid: "9130894804"
+    in_article: "6501428979"
+
+# Progressive web app. `service_worker: false` turns the offline cache off.
+service_worker: true
+short_name: "Scratchpad"
+manifest:
+  theme_color: "#0a0a0a"
+  background_color: "#ffffff"
+
+# google_analytics: "G-XXXXXXXXXX"
+# google_analytics_anonymize_ip: true
+# disqus: "your-shortname"                # comments under posts
+# date_format: "%-d %B %Y"
+
+# ── 3. Navigation ──────────────────────────────────────────────────────
+# Each item takes: title, url, icon (a Phosphor icon name), sub (a line of
+# subtitle on mobile). Three menu shapes are demonstrated below:
+#   • a plain link                     (Home, Blog, …)
+#   • a grouped megamenu               (Library: megamenu + groups + featured)
+#   • a nested dropdown                (About: children, one of which has children)
+# Icon names: https://phosphoricons.com
+navigation_header:
+  - title: Home
+    url: /
+    icon: house
+  - title: Blog
+    url: /blog/
+    icon: pen-nib
+  - title: Portfolio
+    url: /portfolio/
+    icon: briefcase
+  # ── Watch: the two video collections under one label ──
+  - title: Watch
+    url: /videos/
+    icon: play-circle
+    children:
+      - title: Videos
+        url: /videos/
+        icon: video
+      - title: Web series
+        url: /webseries/
+        icon: monitor-play
+  # ── Library: a plain dropdown, not a megamenu ──
+  - title: Library
+    url: /snippets/
+    icon: stack
+    children:
+      - title: Snippets
+        url: /snippets/
+        icon: code
+      - title: Prompts
+        url: /prompts/
+        icon: sparkle
+      - title: Podcast
+        url: /podcast/
+        icon: microphone
+      - title: Courses
+        url: /courses/
+        icon: graduation-cap
+      - title: Tags
+        url: /tags/
+        icon: hash
+      - title: Docs
+        url: /docs/
+        icon: book-open
+      - title: Archive
+        url: /archive/
+        icon: archive
+  # ── a two-level nested dropdown ──
+  - title: About
+    url: /about/
+    icon: user
+    children:
+      - title: About me
+        url: /about/
+        icon: user
+      - title: Resume
+        url: /resume/
+        icon: identification-card
+      - title: More
+        icon: dots-three-outline
+        children:
+          - title: Now
+            url: /now/
+            icon: clock
+          - title: Timeline
+            url: /timeline/
+            icon: clock-counter-clockwise
+          - title: Contact
+            url: /contact/
+            icon: chat-circle
+          - title: Guestbook
+            url: /guestbook/
+            icon: notebook
+          - title: Support
+            url: /support/
+            icon: heart
+
+# Kept short on purpose — the footer caps this list at footer.nav_limit so
+# the "Site" column can't grow tall. The collection cloud already links
+# every collection with its own icon.
+navigation_footer:
+  - title: About
+    url: /about/
+  - title: Resume
+    url: /resume/
+  - title: Blog
+    url: /blog/
+  - title: Now
+    url: /now/
+  - title: Timeline
+    url: /timeline/
+  - title: Tags
+    url: /tags/
+  - title: Guestbook
+    url: /guestbook/
+  - title: Support
+    url: /support/
+  - title: Contact
+    url: /contact/
+  - title: Sitemap
+    url: /sitemap/
+
+# Legal links — their own quiet row at the foot of the footer.
+navigation_legal:
+  - title: Privacy Policy
+    url: /privacy/
+  - title: Terms of Use
+    url: /terms/
+
+# ── 4. Collections ─────────────────────────────────────────────────────
+# A COLLECTION is a kind of content. Each one gets a folder (_posts,
+# _portfolio, …), a card design, a landing page, a JSON-LD type and a
+# colour, and it appears in search, the archive, the sitemap and the
+# footer cloud automatically.
+#
+# To ADD one:   add a block here → make the _folder → add a landing page
+#               → (optional) add _includes/cards/<label>.html
+# To REMOVE one: delete the block, the folder, and its landing page.
+# Full walkthrough: /docs/collections/
+#
+# The custom keys Scratchpad reads, beyond Jekyll's own:
+#   singular      what one entry is called ("Post", "Project")
+#   description   one line, shown on the landing page and in <meta>
+#   landing       the listing page's URL (permalink is the per-entry rule)
+#   icon          a Phosphor icon name
+#   schema        the schema.org @type for JSON-LD
+#   style         how the landing page lays out: numbered | gallery |
+#                 featured | compact | cards
+#   image         the fallback cover, used when an entry has none
+#   color         pin this collection's hue (default: derived from the accent)
+collections:
+  posts:
+    output: true
+    title: Blog
+    singular: Post
+    description: "Essays, how-tos and field notes on engineering & craft."
+    permalink: /blog/:title/
+    landing: /blog/
+    icon: pen-nib
+    schema: BlogPosting
+    style: numbered
+    card: blog
+    hero:
+      pattern: dots
+      views: true
+    image: "/assets/img/covers/blog.svg"
+    single:
+      shell: reading
+      lead: cover
+      parts: [breadcrumbs, head, toc-mobile, lead, prose, tags, share, ask, comments, author, nav]
+      widgets: [toc, ad, collection, about, cta]
+  portfolio:
+    output: true
+    title: Portfolio
+    singular: Project
+    description: "Things I've designed, built, shot and shipped — code, film and product."
+    permalink: /portfolio/:name/
+    landing: /portfolio/
+    icon: briefcase
+    schema: CreativeWork
+    style: gallery
+    card: portfolio
+    hero:
+      pattern: grid
+      views: true
+    image: "/assets/img/covers/portfolio.svg"
+    single:
+      shell: split
+      lead: portfolio
+      parts: [breadcrumbs, head, lead, prose, tags, share, ask, comments, author, nav]
+      widgets: [details, toc, collection, about, cta]
+    # Each entry sets `kind:` (project | film | design); the landing page
+    # filters on it alongside tags and stack.
+  videos:
+    output: true
+    title: Videos
+    singular: Video
+    description: "Films, edits and video essays."
+    permalink: /videos/:name/
+    landing: /videos/
+    icon: video
+    schema: VideoObject
+    style: featured
+    card: video
+    hero:
+      pattern: none
+      video: "aqz-KE-bpKQ"
+      views: true
+      full: true              # edge to edge: the film wants every pixel
+    image: "/assets/img/covers/videos.svg"
+    single:
+      shell: wide
+      lead: video
+      parts: [breadcrumbs, head, lead, prose, tags, share, ask, comments, author, nav]
+      widgets: [toc, collection, about, subscribe]
+  snippets:
+    output: true
+    title: Snippets
+    singular: Snippet
+    description: "Short, copy-pasteable code snippets and TILs."
+    permalink: /snippets/:name/
+    landing: /snippets/
+    icon: code
+    schema: TechArticle
+    style: compact
+    card: snippet
+    hero:
+      pattern: grid
+    image: "/assets/img/covers/snippets.svg"
+    single:
+      shell: reading
+      lead: snippet
+      parts: [breadcrumbs, head, lead, prose, tags, share, ask, author, nav]
+      widgets: [toc, collection, about]
+  prompts:
+    output: true
+    title: Prompts
+    singular: Prompt
+    description: "Battle-tested AI prompts you can copy and run."
+    permalink: /prompts/:name/
+    landing: /prompts/
+    icon: sparkle
+    schema: CreativeWork
+    style: cards
+    card: prompt
+    hero:
+      pattern: dots
+    image: "/assets/img/covers/prompts.svg"
+    single:
+      shell: reading
+      lead: prompt
+      parts: [breadcrumbs, head, lead, prose, tags, share, ask, comments, author, nav]
+      widgets: [toc, collection, about, cta]
+
+  # ── Watch ───────────────────────────────────────────────────────────
+  webseries:
+    output: true
+    title: Web series
+    singular: Series
+    description: "Multi-part series — each one a season of episodes."
+    permalink: /webseries/:name/
+    landing: /webseries/
+    icon: monitor-play
+    schema: TVSeries
+    style: poster
+    card: webseries
+    hero:
+      pattern: rings
+    image: "/assets/img/covers/webseries.svg"
+    single:
+      shell: wide
+      lead: series
+      parts: [breadcrumbs, head, lead, prose, episodes, share, ask, comments, author]
+      widgets: [toc, collection, about, subscribe]
+  episodes:
+    output: true
+    title: Episodes
+    singular: Episode
+    description: "Single episodes of a series."
+    permalink: /webseries/:name/
+    landing: /webseries/
+    icon: film-strip
+    schema: TVEpisode
+    style: compact
+    card: episode
+    sitemap_group: webseries
+    image: "/assets/img/covers/webseries.svg"
+    single:
+      shell: wide
+      lead: video
+      parts: [breadcrumbs, head, lead, prose, siblings, share, ask, comments, nav]
+      widgets: [toc, collection, about]
+
+  # ── Learn ───────────────────────────────────────────────────────────
+  courses:
+    output: true
+    title: Courses
+    singular: Course
+    description: "Structured courses — modules, lessons and exercises."
+    permalink: /courses/:name/
+    landing: /courses/
+    icon: graduation-cap
+    schema: Course
+    style: cards
+    card: course
+    hero:
+      pattern: dots
+    image: "/assets/img/covers/courses.svg"
+    single:
+      shell: wide
+      lead: course
+      # No `head`: the course hero already carries the title, the facts and
+      # the call to action. Two titles on one page is one title too many.
+      parts: [breadcrumbs, lead, prose, lessons, share, ask, author]
+      widgets: [toc, collection, about, cta]
+  lessons:
+    output: true
+    title: Lessons
+    singular: Lesson
+    description: "A single lesson inside a course."
+    permalink: /courses/:name/
+    landing: /courses/
+    icon: article
+    schema: LearningResource
+    style: compact
+    card: lesson
+    sitemap_group: courses
+    image: "/assets/img/covers/courses.svg"
+    single:
+      shell: course
+      lead: none
+      parts: [coursebar, head, toc-mobile, prose, share, ask, nav]
+      widgets: [toc, collection]
+
+  # ── Listen ──────────────────────────────────────────────────────────
+  podcast:
+    output: true
+    title: Podcast
+    singular: Episode
+    description: "Conversations about engineering, film and making things."
+    permalink: /podcast/:name/
+    landing: /podcast/
+    icon: microphone
+    schema: PodcastEpisode
+    style: compact
+    card: podcast
+    # A podcast is usually more than one show. An episode names its series
+    # with `series:`; the landing page groups by it, and each series gets
+    # its own RSS feed at /podcast/<series>/feed.xml so a player can
+    # subscribe to one without getting the others.
+    series:
+      - slug: the-long-cut
+        title: The Long Cut
+        description: "Conversations about making things — engineering, film, and the overlap."
+        icon: microphone-stage
+      - slug: field-notes
+        title: Field Notes
+        description: "Short solo episodes, recorded wherever the trip happened to be."
+        icon: map-trifold
+    hero:
+      pattern: rings
+    image: "/assets/img/covers/podcast.svg"
+    single:
+      shell: aside
+      lead: audio
+      parts: [breadcrumbs, head, lead, prose, tags, share, ask, comments, author, nav]
+      widgets: [toc, collection, about, subscribe]
+
+  # ── Read ────────────────────────────────────────────────────────────
+  newsletter:
+    output: true
+    title: Newsletter
+    singular: Issue
+    description: "Every issue, in full, on the web."
+    permalink: /newsletter/:name/
+    landing: /newsletter/
+    icon: envelope-simple
+    schema: Article
+    style: numbered
+    card: issue
+    hero:
+      pattern: dots
+    image: "/assets/img/covers/newsletter.svg"
+    single:
+      shell: reading
+      lead: none
+      parts: [breadcrumbs, head, prose, tags, share, ask, author, nav]
+      widgets: [toc, subscribe, collection, about]
+
+  # ── Live ────────────────────────────────────────────────────────────
+  travel:
+    output: true
+    title: Travel
+    singular: Trip
+    description: "Places, routes and what they cost — with the films that came out of them."
+    permalink: /travel/:name/
+    landing: /travel/
+    icon: map-trifold
+    schema: TouristTrip
+    style: gallery
+    card: trip
+    hero:
+      pattern: grid
+    image: "/assets/img/covers/travel.svg"
+    single:
+      shell: split
+      lead: cover
+      parts: [breadcrumbs, head-split, prose, tags, share, ask, comments, author, nav]
+      widgets: [details, toc, collection, about]
+  uses:
+    output: true
+    title: Uses
+    singular: Thing
+    description: "The hardware, software and gear behind the work."
+    permalink: /uses/:name/
+    landing: /uses/
+    icon: wrench
+    schema: Product
+    style: cards
+    card: product
+    hero:
+      pattern: dots
+      views: true
+    image: "/assets/img/covers/uses.svg"
+    single:
+      shell: split
+      lead: cover
+      parts: [breadcrumbs, head, lead, prose, tags, share, ask, author]
+      widgets: [details, toc, collection, about]
+  # ── The theme's own manual ──────────────────────────────────────────
+  # A collection, so the docs are pages with a nav rather than one very
+  # long page. `section:` groups them in the rail and `order:` sorts them.
+  docs:
+    output: true
+    title: Docs
+    singular: Page
+    description: "How to use this theme — set it up, fill it, style it, ship it."
+    permalink: /docs/:name/
+    landing: /docs/
+    icon: book-open
+    schema: TechArticle
+    style: compact
+    card: doc
+    hero: false
+    image: "/assets/img/covers/docs.svg"
+    single:
+      shell: course
+      lead: none
+      parts: [head, toc-mobile, prose, docsnav-prevnext]
+      widgets: [toc]
+      sidebar: false
+
+
+# ── Contact ────────────────────────────────────────────────────────────
+# The contact form posts HERE, not to the newsletter endpoint — they are
+# different things going to different places, and wiring one to the other
+# is how a signup list quietly fills with project enquiries.
+contact:
+  action: ""                  # Formspree, Basin, Netlify, your own handler
+  topics:
+    - A project or contract
+    - A film or brand story
+    - Something on the blog
+    - Just saying hi
+  reply_within: "2 working days"
+  availability: "Open to analytics builds, web work and short films"
+
+# ── About ──────────────────────────────────────────────────────────────
+# The story, in chapters. The left rail on /about/ lists them by year and
+# marks the one you are reading; the right column stacks them. Add, remove
+# or reorder here — the page is generated from this list.
+about:
+  chapters:
+    - id: mahroni
+      year: "1996"
+      title: "A small town in Uttar Pradesh"
+      body: >
+        Mahroni. One road worth the name, a school with more ambition than
+        equipment, and a public library I worked through mostly out of
+        boredom. Nothing about it suggested software, which is probably why
+        I noticed software at all when it arrived.
+    - id: school
+      year: "2009"
+      title: "Schooling, and the first computer"
+      body: >
+        A shared machine in a room of twenty, forty minutes a week. I spent
+        most of that time finding out what a spreadsheet would do if you
+        pushed it, which turns out to be the same instinct I now get paid
+        for.
+    - id: college
+      year: "2013"
+      title: "Engineering, and no campus offer"
+      body: >
+        Four years of engineering and no job at the end of them — the thing
+        the brochures do not mention. What came next is one of the most-read
+        pieces on this site, because it turns out a lot of people are
+        standing where I was standing.
+      link: /blog/no-campus-job-lessons/
+      link_label: "Read what I did next"
+    - id: salesforce
+      year: "2017"
+      title: "Apex on an org nobody wanted"
+      body: >
+        My first real work was the system everyone avoided. I found I liked
+        the untouchable ones best — they are where the actual problems live.
+        That became a decade around CRM Analytics, CPQ, and the unglamorous
+        plumbing between a quote and a paid invoice.
+    - id: camera
+      year: "2020"
+      title: "A camera, and what editing taught me"
+      body: >
+        Editing taught me more about engineering than any book did: cut what
+        does not serve the story, get the pacing right, make the first three
+        seconds count. Every dashboard and pull request I ship now runs
+        through that filter.
+    - id: now
+      year: "Now"
+      title: "Both, on purpose"
+      body: >
+        Shipping analytics at work, making travel and brand films under
+        Imswarnil Studio, and writing about the craft of both here.
+      link: /now/
+      link_label: "What I am doing now"
+
+# ── Support ────────────────────────────────────────────────────────────
+# What /support/ offers. Every entry is optional; the page renders what is
+# here and nothing else, so an empty list means an honest empty page.
+support:
+  intro: "Everything here is free to read and MIT-licensed where it is code. If it saved you an afternoon, here are the ways that help most — the first two are free."
+  ways:
+    - title: Share it
+      text: "Send a post to one person who needs it. That does more than any of the rest."
+      icon: share-network
+      cta: Copy a link
+      url: /blog/
+    - title: Subscribe
+      text: "The newsletter goes out when there is something worth sending, and never otherwise."
+      icon: envelope-simple
+      cta: Read an issue
+      url: /newsletter/
+    - title: Sponsor on GitHub
+      text: "Recurring, cancel any time. It pays for the domains and the coffee that the films are edited on."
+      icon: github-logo
+      cta: Sponsor
+      url: https://github.com/sponsors/imswarnil
+    - title: Buy me a coffee
+      text: "One-off, no account needed."
+      icon: coffee
+      cta: Buy a coffee
+      url: https://buymeacoffee.com/imswarnil
+    - title: Hire me
+      text: "Analytics engineering, Salesforce CRM Analytics, or a film. The most direct kind of support there is."
+      icon: briefcase
+      cta: Get in touch
+      url: /contact/
+
+# ── Guestbook ──────────────────────────────────────────────────────────
+# A static site has no server, so the guestbook is the comments provider
+# you already configured (see `comments:`), pointed at one page.
+guestbook:
+  intro: "Say hello, leave a note, tell me what you are building. No account needed if you are signing by email."
+
+  # ── The theme's own manual ──────────────────────────────────────────
+  # A collection, so the docs are pages with a nav rather than one very
+  # long page. `section:` groups them in the rail and `order:` sorts them.
+  docs:
+    output: true
+    title: Docs
+    singular: Page
+    description: "How to use this theme — set it up, fill it, style it, ship it."
+    permalink: /docs/:name/
+    landing: /docs/
+    icon: book-open
+    schema: TechArticle
+    style: compact
+    card: doc
+    hero: false
+    image: "/assets/img/covers/docs.svg"
+    single:
+      shell: course
+      lead: none
+      parts: [head, toc-mobile, prose, docsnav-prevnext]
+      widgets: [toc]
+      sidebar: false
+
+# The last-resort cover, when an entry has none and its collection has none.
+# Scratchpad draws a cover from the entry's own front matter before falling
+# back this far — see _includes/utility/thumb.html.
+placeholder_image: "/assets/img/placeholder.svg"
+
+defaults:
+  - scope:
+      path: ""
+    values:
+      image: "/assets/img/placeholder.svg"
+      layout: post                        # every collection entry → post
+  - scope:
+      path: ""
+      type: "pages"
+    values:
+      layout: page                        # standalone pages → page
+  # A lesson is inside a course, not inside a site menu: it drops the site
+  # header and carries its own bar instead — which course, how far through,
+  # and the way back. See _includes/single/coursebar.html.
+  - scope:
+      path: ""
+      type: "lessons"
+    values:
+      chrome: false
+
+# Resume content (global)
+resume:
+  name: Raja Swarnil Singhai
+  tagline: Software Engineer • Filmmaker • Creator
+  avatar: /assets/img/brand/portrait.svg
+
+  # One-paragraph professional summary — the first thing an ATS and a
+  # recruiter both read. Keep it keyword-dense and specific.
+  summary: >
+    Software engineer with 4+ years building Salesforce CRM Analytics and CPQ
+    solutions for revenue teams — SAQL dashboards, Conga CPQ automation, Apex
+    and LWC — most recently at Twilio, where analytics work cut quote-to-agreement
+    time by ~28%. Alongside engineering, an independent filmmaker and creator
+    with 20+ published films and a 17K-subscriber YouTube channel. Comfortable
+    owning a problem end-to-end: discovery, prototype, build, rollout, enablement.
+
+  open_to: Senior / Lead Salesforce Analytics roles · Solutions engineering · Remote or Bengaluru hybrid
+  currently: Building CRM Analytics Academy and relaunching the Imswarnil channel
+
+  contact:
+    location: Bengaluru, India
+    email: hello@imswarnil.com
+    site: imswarnil.com
+    linkedin: /in/imswarnil
+    github: imswarnil
+    youtube: "@ImSwarnil"
+
+  # Company icon mapping (optional helper)
+  company_icons:
+    Twilio:
+      icon: ph-buildings
+      logo: /assets/logos/twilio.png
+    Imswarnil:
+      icon: ph-film-slate
+      logo: /assets/logos/imswarnil.png
+
+  # Grouped, keyword-rich skills — what an ATS matches against.
+  core_skills:
+    - group: Languages
+      items: [Apex, SAQL, SOQL, JavaScript, TypeScript, Python, SQL, HTML, CSS]
+    - group: Frameworks
+      items: [Lightning Web Components, Next.js, React, Node.js, Jekyll, Supabase]
+    - group: Data & Analytics
+      items: [Salesforce CRM Analytics (Tableau CRM), Dataflows & Recipes, Einstein Discovery, Data modelling, KPI design]
+    - group: Tools
+      items: [Salesforce CPQ, Conga CPQ, Git & GitHub, VS Code, Jira, Figma, Postman]
+    - group: Film & Media
+      items: [DaVinci Resolve, Premiere Pro, After Effects, Colour grading, Scriptwriting, YouTube growth]
+
+  experience:
+    - role: Software Engineer
+      org: Twilio
+      icon: ph-buildings
+      when: Jun 2021 – Present
+      where: Bengaluru, India
+      body: >
+        Owner of Salesforce CRM Analytics and CPQ tooling for Sales, Finance and RevOps.
+      points:
+        - Designed and shipped 50+ SAQL dashboards (AE quote pipeline, discount analysis, CPQ cycle time) used weekly by 300+ sellers and finance analysts
+        - Automated Conga CPQ quote generation and approval routing, reducing median quote-to-agreement time by ~28%
+        - Prototyped CPQ Embedded AI (Apex + LWC) to pre-fill quote lines from historical deals; adopted into the 2025 roadmap
+        - Partnered with RevOps and Finance on enablement — authored 12 playbooks and 30+ short training clips
+      tags: [SAQL, Conga CPQ, Apex, LWC, UX]
+
+    - role: Filmmaker & Creator
+      org: Imswarnil
+      icon: ph-film-slate
+      when: Mar 2018 – Present
+      where: Remote · YouTube
+      body: >
+        Independent travel films and brand stories with clean cinematic pacing and a dry sense of humour.
+      points:
+        - Published 20+ films; grew the channel to 17K subscribers before a 2025 relaunch targeting 1M
+        - Built a reusable thumbnail / poster / lower-third system that cut edit turnaround by ~40%
+        - Producing "Scripts & Trips", a documentary series on the craft of travel filmmaking
+      tags: [Story, Editing, Motion]
+
+  education:
+    - degree: B.Tech, Computer Science & Engineering
+      school: Lakshmi Narain College of Technology
+      icon: ph-graduation-cap
+      when: Aug 2016 – May 2020
+      where: Bhopal, India
+      body: >
+        Led the film society; built student analytics tools; two inter-college festival wins.
+      tags: [Salesforce, DSA, Cinematics]
+
+  certifications:
+    - title: Salesforce Certified CRM Analytics and Einstein Discovery Consultant
+      org: Salesforce
+      when: Feb 2024
+    - title: Salesforce Certified Platform Developer I
+      org: Salesforce
+      when: Sep 2022
+    - title: Salesforce Certified Administrator
+      org: Salesforce
+      when: Jan 2022
+    - title: Conga CPQ Administrator Essentials
+      org: Conga
+      when: Nov 2022
+
+  languages:
+    - name: English
+      level: Professional working proficiency
+    - name: Hindi
+      level: Native
+
+  steps:
+    - title: Discover & Align
+      text: Clarify problem, KPIs, and definition of done.
+      bullets:
+        - Stakeholder interviews
+        - Scope & risks mapped
+    - title: Design & Prototype
+      text: Low-noise UI and analytics mocks.
+      bullets:
+        - Wireframes • SAQL sketch
+        - Accessibility checks
+    - title: Build & Validate
+      text: Iterative shipping with measurement.
+      bullets:
+        - Dashboards + CPQ automations
+        - Telemetry & success metrics
+    - title: Rollout & Scale
+      text: Documentation & enablement.
+      bullets:
+        - Playbooks • Training clips
+        - Post-launch review
+
+  skills:
+    - name: Salesforce CRM Analytics
+      level: Advanced
+      percent: 92
+    - name: Conga CPQ / Quote Flows
+      level: Advanced
+      percent: 88
+    - name: Apex / LWC
+      level: Intermediate
+      percent: 70
+    - name: Next.js / Supabase
+      level: Intermediate
+      percent: 68
+    - name: Filmmaking & Editing
+      level: Advanced
+      percent: 90
+    - name: Brand & Visual Systems
+      level: Advanced
+      percent: 84
+
+  stats:
+    - icon: ph-chart-line-up
+      k: Analytics dashboards shipped
+      v: 50+
+    - icon: ph-timer
+      k: Faster quote-to-agreement
+      v: ~28%
+    - icon: ph-youtube-logo
+      k: YouTube subscribers
+      v: 17K
+
+  links:
+    - icon: ph-globe
+      label: imswarnil.com
+      href: https://imswarnil.com
+    - icon: ph-linkedin-logo
+      label: LinkedIn
+      href: https://linkedin.com/in/imswarnil
+    - icon: ph-github-logo
+      label: GitHub
+      href: https://github.com/imswarnil
+    - icon: ph-youtube-logo
+      label: YouTube
+      href: https://youtube.com/@ImSwarnil
+
+  awards:
+    - icon: ph-trophy
+      title: Trailhead Ranger
+      meta: Admin • Developer • CRM Analytics
+    - icon: ph-medal
+      title: "\"Wise Owl\" (internal award, Twilio)"
+      meta: CPQ / Quote Analytics excellence, 2023
+
+  projects:
+    - title: CRM Analytics Academy
+      cover: /assets/img/placeholder.svg
+      meta: Site • Curriculum
+      desc: Membership-ready learning site for Salesforce CRM Analytics — compact tables, runnable SAQL snippets, docs theme.
+      tags: [Web, Analytics]
+      demo: https://crm-analytics-academy.com
+      repo: https://github.com/imswarnil/crma-academy
+      time: May 2025
+
+    - title: Docs Theme (Island UI)
+      cover: /assets/img/placeholder.svg
+      meta: Jekyll • Islands
+      desc: Sticky island header, fixed mobile bar, bento panel with keyboard escape.
+      tags: [Web, Jekyll]
+      repo: https://github.com/imswarnil/imswarnil.github.io
+      time: Aug 2025
+
+    - title: Quote-to-Agreement UX
+      cover: /assets/img/placeholder.svg
+      meta: Flow • UX
+      desc: Guided CPQ steps with compact controls and accessible validation.
+      tags: [App, UX]
+      time: Jul 2025
+
+  lines:
+    - Shipped analytics that reduced quote time by ~28%.
+    - Built thumbnail/poster system with consistent gridline fades.
+    - Mentors newcomers via Namaste Salesforce Academy.
+
+# ── 6. Plugins & build ─────────────────────────────────────────────────
+# Jekyll's own settings. You rarely need to touch anything below here.
+permalink: pretty
+excerpt_separator: <!-- more -->
+
+# Per-tag pages at /tags/<slug>/, written by _plugins/tag_pages.rb across
+# every collection. `false` turns them off; the tag links then fall back to
+# the anchors on /tags/, which work either way.
+tag_pages: true
+
+plugins:
+  - jekyll-sitemap
+  - jekyll-mentions
+  - jekyll-paginate-v2
+  - jekyll-seo-tag
+  - jekyll-redirect-from
+  - jekyll-feed
+  - jekyll-commonmark
+  - jekyll-include-cache
+  - jemoji
+
+# jekyll-paginate-v2 — paginates the blog listing at /blog/page/:num/
+pagination:
+  enabled: true
+  collection: posts
+  per_page: 2               # small on purpose, so the demo has pages to show
+  permalink: "/page/:num/"
+  sort_field: "date"
+  sort_reverse: true
+  # The window of numbers either side of the current page. jekyll-paginate-v2
+  # builds `paginator.page_trail` from this, and _includes/pagination.html
+  # renders it — every page is a real file, so the numbers work on GitHub
+  # Pages with no JavaScript and no server.
+  trail:
+    before: 2
+    after: 2
+
+jekyll-mentions: https://twitter.com
+
+twitter:
+  username: imswarnil
+
+social:                              # jekyll-seo-tag's structured data
+  name: Swarnil Singhai
+  links:
+    - https://twitter.com/imswarnil
+    - https://www.linkedin.com/in/imswarnil
+    - https://github.com/imswarnil
+    - https://youtube.com/@ImSwarnil
+
+favicons:                            # size: path
+  16:   "/assets/logos/logo@16px.png"
+  32:   "/assets/logos/logo@32px.png"
+  96:   "/assets/logos/logo@96px.png"
+  120:  "/assets/logos/logo@120px.png"
+  144:  "/assets/logos/logo@144px.png"
+  180:  "/assets/logos/logo@180px.png"
+  512:  "/assets/logos/logo@512px.png"
+  1024: "/assets/logos/logo@1024px.png"
+
+# NOTE on caching: the theme's own CSS and JS carry `?v=<build time>` in
+# the templates that load them. A deploy that changes a script therefore
+# changes its URL, instead of leaving a returning reader on the old file
+# until their cache expires. Nothing to configure — Liquid does not run in
+# this file, so the stamp lives where it is used.
+
+css_inline: false                    # true = inline all CSS into <head>
+
+sass:
+  quiet_deps: true
+
+# Not published. NOTE: CNAME must NOT be listed — Jekyll copies it into
+# _site so the GitHub Pages deploy keeps the custom domain.
+exclude:
+  - README.md
+  - ROADMAP.md
+  - CLAUDE.md
+  - DESIGN.md
+  - CONTRIBUTING.md
+  - CODE_OF_CONDUCT.md
+  - LICENSE
+  - screenshot.png
+  - Gemfile
+  - Gemfile.lock
+  - package.json
+  - package-lock.json
+  - node_modules
+  - .jekyll-cache
+  - bin
+  - tools
+  - vendor
+  - docs/decisions
+  - docs/nextjs-rebuild-prompt.md
+  - "*.gemspec"

@@ -1,0 +1,11 @@
+{%- comment -%} A podcast episode's lead is the player. {%- endcomment -%}
+{%- if page.audio -%}
+<div class="im-audio">
+  <audio controls preload="none" src="{{ page.audio | relative_url }}"></audio>
+  {%- if page.platforms -%}
+  <p class="im-audio-links">
+    {%- for p in page.platforms -%}<a class="im-btn im-btn-sm" href="{{ p.url }}" target="_blank" rel="noopener">{{ p.name }}</a>{%- endfor -%}
+  </p>
+  {%- endif -%}
+</div>
+{%- endif -%}

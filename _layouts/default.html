@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="{{ site.lang | default: 'en-US' }}">
+{% include head.html %}
+{%- comment -%}
+  Every collection has one colour, derived from the site accent (see
+  tokens/_tokens.scss). Publishing the CURRENT collection's colour on
+  <body> means a card, a chip, a rule or a cover inside a collection page
+  reads `var(--im-c-current)` and is automatically the right hue — no
+  per-collection CSS anywhere, and a new collection inherits the accent
+  until someone gives it a `color:` in _config.yml.
+{%- endcomment -%}
+{%- assign coll_label = page.collection | default: page.list_collection -%}
+<body
+  class="layout-{{ page.layout }}{% if page.collection %} is-{{ page.collection }}{% endif %}"
+  {% if coll_label %}data-collection="{{ coll_label }}" style="--im-c-current: var(--im-c-{{ coll_label }}, var(--im-accent));"{% endif %}>
+  {%- comment -%}
+    A page can stand on its own: `chrome: false` in its front matter drops
+    the site header and footer, and the page supplies whatever framing it
+    needs. /resume/ uses it — a CV is a document, not a page of a site.
+  {%- endcomment -%}
+  {%- assign chrome = true -%}{% if page.chrome == false %}{% assign chrome = false %}{% endif %}
+  {% if chrome %}{% include header.html %}{% endif %}
+
+  {%- assign rails_on = false -%}
+  {%- if site.layout.ad_rails and site.adsense.enabled and page.ad_rails != false %}{% assign rails_on = true %}{% endif -%}
+  <div class="im-rails{% if rails_on %} has-rails{% endif %}">
+    {%- if rails_on -%}<aside class="im-rail im-rail-left" aria-hidden="true">{% include ad.html type="vertical" %}</aside>{%- endif -%}
+    <main class="main" id="top">
+      {{ content }}
+    </main>
+    {%- if rails_on -%}<aside class="im-rail im-rail-right" aria-hidden="true">{% include ad.html type="vertical" %}</aside>{%- endif -%}
+  </div>
+
+  {% if chrome %}{% include footer.html %}{% endif %}
+  {% include ad-sticky.html %}
+
+  {% if site.service_worker != false %}{% include site-sw.html %}{% endif %}
+  {% include site-before-end.html %}
+
+  {% if chrome %}<script src="{{ '/assets/scripts/navbar.js' | relative_url }}?v={{ site.time | date: '%s' }}" defer></script>{% endif %}
+  {%- if page.layout == 'resume' -%}<script src="{{ '/assets/scripts/resume.js' | relative_url }}?v={{ site.time | date: '%s' }}" defer></script>{%- endif -%}
+  {%- if page.list_collection or page.collection_view -%}<script src="{{ '/assets/scripts/view.js' | relative_url }}?v={{ site.time | date: '%s' }}" defer></script>{%- endif -%}
+  {%- comment -%}
+    The hero's choreography, only on pages that have a hero. It used to
+    pull GSAP from a CDN — 70kB and a third party on the one page every
+    first-time visitor sees, to move six elements. It is the Web
+    Animations API now, and nothing outside this repository is fetched.
+  {%- endcomment -%}
+  {%- if page.hero_image -%}<script src="{{ '/assets/scripts/hero-media.js' | relative_url }}?v={{ site.time | date: '%s' }}" defer></script>{%- endif -%}
+  {%- if page.hero_title -%}<script src="{{ '/assets/scripts/hero.js' | relative_url }}?v={{ site.time | date: '%s' }}" defer></script>{%- endif -%}
+  <script src="{{ '/assets/scripts/custom.js' | relative_url }}?v={{ site.time | date: '%s' }}"></script>
+</body>
+</html>

@@ -1,0 +1,36 @@
+// ======================================================================
+// base/_fonts.scss — the typefaces, served from this repository
+// ----------------------------------------------------------------------
+// Self-hosted on purpose. A font from a CDN is a third party on every
+// page load: a DNS lookup, a connection, a request that can be slow,
+// blocked or logged, and a render that waits on someone else's uptime.
+// Six files, 280kB, versioned with the theme.
+//
+// Geist and Geist Mono are SIL Open Font License 1.1 (Vercel). The
+// licence travels with them in assets/fonts/OFL.txt.
+//
+// `font-display: swap` means text paints immediately in the fallback and
+// reflows when the face lands — a flash of unstyled text beats a flash of
+// nothing, and the fallback stack is metric-close enough that the reflow
+// is small.
+// ======================================================================
+
+@each $weight, $file in (400: "geist-400", 500: "geist-500", 600: "geist-600", 700: "geist-700") {
+  @font-face {
+    font-family: "Geist";
+    font-style: normal;
+    font-weight: $weight;
+    font-display: swap;
+    src: url("/assets/fonts/#{$file}.woff2") format("woff2");
+  }
+}
+
+@each $weight, $file in (400: "geistmono-400", 500: "geistmono-500") {
+  @font-face {
+    font-family: "Geist Mono";
+    font-style: normal;
+    font-weight: $weight;
+    font-display: swap;
+    src: url("/assets/fonts/#{$file}.woff2") format("woff2");
+  }
+}

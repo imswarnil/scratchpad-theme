@@ -1,0 +1,24 @@
+{%- comment -%}
+  Themed AdSense unit with an "Advertisement" label.
+  Params: type (horizontal|square|vertical|in_article|fluid), class (optional)
+  Reads site.adsense.{enabled,client,placements}. Renders a labelled
+  placeholder when ads are disabled so the layout slot stays visible.
+{%- endcomment -%}
+{%- assign type = include.type | default: "horizontal" -%}
+{%- assign ad = site.adsense -%}
+{%- assign slot = ad.placements[type] -%}
+<aside class="im-ad im-ad--{{ type }} {{ include.class }}" role="complementary" aria-label="Advertisement">
+  <span class="im-ad-label">Advertisement</span>
+  {%- if ad.enabled and ad.client and slot -%}
+    {%- if type == "in_article" -%}
+      <ins class="adsbygoogle" style="display:block;text-align:center" data-ad-layout="in-article" data-ad-format="fluid" data-ad-client="{{ ad.client }}" data-ad-slot="{{ slot }}"></ins>
+    {%- elsif type == "fluid" -%}
+      <ins class="adsbygoogle" style="display:block" data-ad-format="fluid" data-ad-client="{{ ad.client }}" data-ad-slot="{{ slot }}"></ins>
+    {%- else -%}
+      <ins class="adsbygoogle" style="display:block" data-ad-client="{{ ad.client }}" data-ad-slot="{{ slot }}" data-ad-format="auto" data-full-width-responsive="true"></ins>
+    {%- endif -%}
+    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+  {%- else -%}
+    <div class="im-ad-placeholder">Ad space</div>
+  {%- endif -%}
+</aside>

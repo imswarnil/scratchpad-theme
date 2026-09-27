@@ -1,0 +1,119 @@
+// ======================================================================
+// im/_search.scss — command-palette overlay + full search page
+// ======================================================================
+
+.im-search[hidden] { display: none; }
+.im-search {
+  position: fixed;
+  inset: 0;
+  z-index: var(--im-z-modal);
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 10vh var(--im-gutter) var(--im-gutter);
+}
+.im-search-overlay {
+  position: absolute;
+  inset: 0;
+  background: color-mix(in srgb, var(--im-black) 55%, transparent);
+  backdrop-filter: blur(4px);
+}
+.im-search-panel {
+  position: relative;
+  width: 100%;
+  max-width: 40rem;
+  border-radius: var(--im-radius-xl);
+  background: var(--im-canvas);
+  box-shadow: inset 0 0 0 1px var(--im-line), var(--im-shadow-float);
+  overflow: hidden;
+  animation: im-search-in var(--im-duration-base) var(--im-ease-out);
+}
+@keyframes im-search-in { from { opacity: 0; transform: translateY(-10px) scale(0.98); } to { opacity: 1; transform: none; } }
+
+.im-search-field {
+  display: flex;
+  align-items: center;
+  gap: var(--im-space-3);
+  padding: var(--im-space-4) var(--im-space-5);
+  border-bottom: 1px solid var(--im-line);
+
+  > i { font-size: 1.25rem; color: var(--im-muted); }
+  input {
+    flex: 1; border: 0; padding: 0; background: transparent;
+    font-size: var(--im-text-lg); color: var(--im-ink);
+    &:focus-visible { outline: none; }
+  }
+}
+.im-search-esc {
+  font-size: var(--im-text-xs);
+  padding: 0.15rem 0.4rem;
+  border: 1px solid var(--im-line);
+  border-radius: var(--im-radius-sm);
+  color: var(--im-muted);
+}
+
+.im-search-results {
+  list-style: none; margin: 0; padding: var(--im-space-2);
+  max-height: 50vh; overflow-y: auto;
+}
+.im-search-item {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 0 var(--im-space-3);
+  padding: var(--im-space-3) var(--im-space-4);
+  border-radius: var(--im-radius-md);
+  cursor: pointer;
+  transition: background-color var(--im-duration-instant);
+
+  // The arrow keys and the pointer mean the same thing here, so they get
+  // the same fill — the row the keyboard is on wears the CURRENT step.
+  &:hover { background: var(--im-hover-bg); }
+  &.is-active { background: var(--im-current-bg); }
+  &-title { font-weight: var(--im-weight-semibold); color: var(--im-ink); }
+  &-excerpt { grid-column: 1 / -1; margin-top: 2px; font-size: var(--im-text-sm); color: var(--im-muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+}
+.im-search-chip {
+  align-self: center;
+  padding: 0.1rem 0.5rem;
+  border-radius: var(--im-radius-full);
+  background: var(--im-surface-2);
+  font-size: var(--im-text-xs);
+  font-weight: var(--im-weight-medium);
+  color: var(--im-muted);
+  text-transform: capitalize;
+}
+.im-search-empty { padding: var(--im-space-6); text-align: center; color: var(--im-muted); }
+
+.im-search-foot {
+  display: flex;
+  gap: var(--im-space-4);
+  padding: var(--im-space-3) var(--im-space-5);
+  border-top: 1px solid var(--im-line);
+  font-size: var(--im-text-xs);
+  color: var(--im-muted);
+  span:last-child { margin-left: auto; }
+  kbd { padding: 0.1rem 0.35rem; border: 1px solid var(--im-line); border-radius: var(--im-radius-sm); }
+  a { color: var(--im-muted); text-decoration: none; &:hover { color: var(--im-ink); } }
+}
+
+// ---- Full search page (search.md) ------------------------------------
+.im-searchpage { max-width: calc(var(--im-container-narrow) + var(--im-gutter) * 2); margin-inline: auto; padding-inline: var(--im-gutter); }
+.im-searchpage-field {
+  display: flex; align-items: center; gap: var(--im-space-3);
+  padding: var(--im-space-4) var(--im-space-5);
+  border: 1px solid var(--im-line);
+  border-radius: var(--im-radius-full);
+  background: var(--im-canvas);
+  margin-bottom: var(--im-space-5);
+  > i { font-size: 1.25rem; color: var(--im-muted); }
+  input { flex: 1; border: 0; background: transparent; font-size: var(--im-text-lg); &:focus-visible { outline: none; } }
+}
+.im-searchpage-results { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: var(--im-space-3); }
+.im-searchpage-result {
+  padding: var(--im-space-4) var(--im-space-5);
+  border-radius: var(--im-radius-xl);
+  box-shadow: inset 0 0 0 1px var(--im-line);
+  @include im-hover-fill;
+  h3 { margin: 0 0 var(--im-space-1); font-size: var(--im-text-lg); a { text-decoration: none; } }
+  p { margin: 0; font-size: var(--im-text-sm); color: var(--im-muted); }
+}

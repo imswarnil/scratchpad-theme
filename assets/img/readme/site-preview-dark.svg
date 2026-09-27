@@ -1,0 +1,87 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="900" viewBox="0 0 1400 900" role="img" aria-label="imswarnil.com homepage preview, dark mode">
+  <defs>
+    <clipPath id="dc-round"><rect x="0" y="0" width="1400" height="900" rx="18"/></clipPath>
+  </defs>
+  <g clip-path="url(#dc-round)">
+    <rect width="1400" height="900" fill="#0f0f0f"/>
+
+    <!-- browser chrome -->
+    <rect width="1400" height="56" fill="#161616"/>
+    <circle cx="30" cy="28" r="7" fill="#3f3f3f"/>
+    <circle cx="54" cy="28" r="7" fill="#3f3f3f"/>
+    <circle cx="78" cy="28" r="7" fill="#3f3f3f"/>
+    <rect x="560" y="14" width="280" height="28" rx="14" fill="#0f0f0f" stroke="#3f3f3f"/>
+    <text x="700" y="33" font-family="Geist, system-ui, sans-serif" font-size="14" fill="#a3a3a3" text-anchor="middle">scratchpad.imswarnil.com</text>
+
+    <!-- navbar -->
+    <rect x="0" y="56" width="1400" height="64" fill="#0f0f0f"/>
+    <line x1="0" y1="120" x2="1400" y2="120" stroke="#282828" stroke-width="1"/>
+    <circle cx="60" cy="88" r="14" fill="#ffffff"/>
+    <text x="86" y="94" font-family="Geist, system-ui, sans-serif" font-size="20" font-weight="700" fill="#ffffff">Swarnil Singhai</text>
+    <g font-family="Geist, system-ui, sans-serif" font-size="15" fill="#c7c7c7">
+      <text x="620" y="93">Home</text>
+      <text x="690" y="93">Explore</text>
+      <text x="790" y="93">Blog</text>
+      <text x="850" y="93">Projects</text>
+      <text x="950" y="93">Portfolio</text>
+      <text x="1050" y="93">Videos</text>
+      <text x="1130" y="93">Library</text>
+      <text x="1220" y="93">About</text>
+    </g>
+    <circle cx="1340" cy="88" r="16" fill="none" stroke="#3f3f3f"/>
+
+    <!-- dotted hero background pattern -->
+    <g fill="#ffffff" opacity="0.08">
+      <circle cx="1120" cy="220" r="3"/><circle cx="1144" cy="220" r="3"/><circle cx="1168" cy="220" r="3"/><circle cx="1192" cy="220" r="3"/>
+      <circle cx="1120" cy="244" r="3"/><circle cx="1144" cy="244" r="3"/><circle cx="1168" cy="244" r="3"/><circle cx="1192" cy="244" r="3"/>
+      <circle cx="1120" cy="268" r="3"/><circle cx="1144" cy="268" r="3"/><circle cx="1168" cy="268" r="3"/><circle cx="1192" cy="268" r="3"/>
+      <circle cx="1120" cy="292" r="3"/><circle cx="1144" cy="292" r="3"/><circle cx="1168" cy="292" r="3"/><circle cx="1192" cy="292" r="3"/>
+    </g>
+
+    <!-- hero content -->
+    <rect x="90" y="180" width="180" height="30" rx="15" fill="none" stroke="#3f3f3f"/>
+    <text x="105" y="200" font-family="Geist, system-ui, sans-serif" font-size="13" font-weight="600" fill="#a3a3a3" letter-spacing="1">SOFTWARE ENGINEER</text>
+
+    <text x="88" y="270" font-family="Geist, system-ui, sans-serif" font-size="52" font-weight="700" fill="#ffffff" letter-spacing="-1">Engineering meets</text>
+    <text x="88" y="330" font-family="Geist, system-ui, sans-serif" font-size="52" font-weight="700" fill="#ffffff" letter-spacing="-1">storytelling.</text>
+
+    <text x="90" y="378" font-family="Geist, system-ui, sans-serif" font-size="18" fill="#a3a3a3">I build fast, cinematic and robust experiences — and write</text>
+    <text x="90" y="404" font-family="Geist, system-ui, sans-serif" font-size="18" fill="#a3a3a3">about the craft along the way.</text>
+
+    <g font-family="Geist, system-ui, sans-serif" font-size="13" fill="#a3a3a3">
+      <text x="90" y="440">💼 Software Engineer · Imswarnil Studio</text>
+      <text x="410" y="440">📍 Bengaluru, India</text>
+    </g>
+
+    <rect x="90" y="464" width="170" height="46" rx="23" fill="#ffffff"/>
+    <text x="175" y="493" font-family="Geist, system-ui, sans-serif" font-size="15" font-weight="600" fill="#0f0f0f" text-anchor="middle">See projects</text>
+    <rect x="272" y="464" width="140" height="46" rx="23" fill="none" stroke="#ffffff"/>
+    <text x="342" y="493" font-family="Geist, system-ui, sans-serif" font-size="15" font-weight="600" fill="#ffffff" text-anchor="middle">About me</text>
+    <circle cx="450" cy="487" r="23" fill="none" stroke="#3f3f3f"/>
+
+    <!-- hero portrait -->
+    <rect x="960" y="170" width="360" height="450" rx="24" fill="#212121"/>
+    <circle cx="1140" cy="330" r="90" fill="#3f3f3f"/>
+    <rect x="1030" y="450" width="220" height="16" rx="8" fill="#3f3f3f"/>
+    <rect x="1060" y="480" width="160" height="16" rx="8" fill="#3f3f3f"/>
+
+    <!-- collection cards row -->
+    <g>
+      <rect x="90" y="620" width="380" height="200" rx="18" fill="#161616" stroke="#282828"/>
+      <rect x="112" y="642" width="336" height="120" rx="10" fill="#282828"/>
+      <rect x="112" y="776" width="220" height="14" rx="7" fill="#3f3f3f"/>
+      <rect x="112" y="798" width="150" height="10" rx="5" fill="#282828"/>
+
+      <rect x="490" y="620" width="380" height="200" rx="18" fill="#161616" stroke="#282828"/>
+      <rect x="512" y="642" width="336" height="120" rx="10" fill="#282828"/>
+      <rect x="512" y="776" width="220" height="14" rx="7" fill="#3f3f3f"/>
+      <rect x="512" y="798" width="150" height="10" rx="5" fill="#282828"/>
+
+      <rect x="890" y="620" width="380" height="200" rx="18" fill="#161616" stroke="#282828"/>
+      <rect x="912" y="642" width="336" height="120" rx="10" fill="#282828"/>
+      <rect x="912" y="776" width="220" height="14" rx="7" fill="#3f3f3f"/>
+      <rect x="912" y="798" width="150" height="10" rx="5" fill="#282828"/>
+    </g>
+  </g>
+  <rect x="0.5" y="0.5" width="1399" height="899" rx="18" fill="none" stroke="#282828"/>
+</svg>

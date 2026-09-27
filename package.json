@@ -1,0 +1,58 @@
+{
+  "name": "scratchpad-theme",
+  "version": "1.0.0",
+  "private": false,
+  "description": "Scratchpad — a dev portfolio theme. One design, authored once, shipped as a starter for every stack: Jekyll, plain HTML, Astro, Hugo, Next, Nuxt, Gatsby, WordPress and Ghost. No runtime dependencies.",
+  "keywords": [
+    "dev-portfolio",
+    "portfolio-theme",
+    "developer-portfolio",
+    "jekyll",
+    "jekyll-theme",
+    "personal-website",
+    "blog",
+    "design-system",
+    "github-pages",
+    "astro",
+    "hugo",
+    "nextjs",
+    "wordpress-theme",
+    "ghost-theme"
+  ],
+  "homepage": "https://scratchpad.imswarnil.com",
+  "license": "MIT",
+  "type": "module",
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "setup": "node tools/setup/server.mjs",
+    "dev": "bin/serve",
+    "start": "bin/serve",
+    "build": "bin/build",
+    "thumbs": "node tools/thumbs.mjs",
+    "new": "node tools/new.mjs",
+    "doctor": "node tools/doctor.mjs",
+    "check": "node tools/doctor.mjs && bin/build",
+    "test": "node tools/test.mjs",
+    "create": "node tools/create/index.mjs",
+    "icons": "node tools/icons/build.mjs"
+  },
+  "dependencies": {},
+  "devDependencies": {},
+  "bin": {
+    "scratchpad-theme": "tools/create/index.mjs"
+  },
+  "files": [
+    "tools/",
+    "README.md",
+    "LICENSE"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/imswarnil/scratchpad-theme.git"
+  },
+  "bugs": {
+    "url": "https://github.com/imswarnil/scratchpad-theme/issues"
+  }
+}

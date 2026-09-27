@@ -1,0 +1,12 @@
+{%- assign it = include.item -%}
+<article class="im-lessonrow">
+  <a class="im-lessonrow-link" href="{{ it.url | relative_url }}">
+    <span class="im-lessonrow-n">{{ it.lesson | default: forloop.index }}</span>
+    <span class="im-lessonrow-body">
+      <span class="im-lessonrow-title">{{ it.title }}</span>
+      {%- assign snip = it.description | default: it.excerpt -%}
+      {%- if snip and snip != "" %}<span class="im-lessonrow-text">{{ snip | strip_html | truncate: 100 }}</span>{% endif -%}
+    </span>
+    {%- if it.minutes %}<span class="im-lessonrow-time">{{ it.minutes }} min</span>{% endif -%}
+  </a>
+</article>

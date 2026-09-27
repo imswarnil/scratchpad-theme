@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 420" width="960" height="420" role="img" aria-label="How an entry page is composed from config">
+  <style>
+    .t { font-family: Geist, ui-sans-serif, system-ui, sans-serif; fill: #e5e5e5; }
+    .m { font-family: "Geist Mono", ui-monospace, monospace; }
+    .lbl { font-size: 12px; fill: #8a8a92; letter-spacing: 1.4px; text-transform: uppercase; }
+    .h { font-size: 17px; font-weight: 600; fill: #fff; }
+    .s { font-size: 13px; fill: #b4b4bb; }
+    .box { fill: #1b1b20; stroke: #3a3a42; }
+    .pill { fill: #26262d; }
+  </style>
+  <rect width="960" height="420" rx="16" fill="#0e0e11"/>
+
+  <!-- config -->
+  <text class="t lbl" x="40" y="44">_config.yml</text>
+  <rect class="box" x="40" y="58" width="330" height="300" rx="12"/>
+  <text class="t m s" x="60" y="92">collections:</text>
+  <text class="t m s" x="76" y="114">portfolio:</text>
+  <text class="t m s" x="92" y="136">single:</text>
+  <text class="t m s" x="108" y="158" fill="#ff8a5c">shell: split</text>
+  <text class="t m s" x="108" y="180" fill="#5eead4">lead: portfolio</text>
+  <text class="t m s" x="108" y="202" fill="#93c5fd">parts: [head, lead,</text>
+  <text class="t m s" x="108" y="222" fill="#93c5fd">  prose, share, author]</text>
+  <text class="t m s" x="108" y="248" fill="#fcd34d">widgets: [details, toc]</text>
+  <text class="t s" x="60" y="300">Every name is a file.</text>
+  <text class="t s" x="60" y="322">Drop one in, name it here.</text>
+
+  <!-- arrow -->
+  <path d="M388 208h46" stroke="#5a5a64" stroke-width="2" marker-end="url(#a)"/>
+  <defs><marker id="a" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0l10 5-10 5z" fill="#5a5a64"/></marker></defs>
+
+  <!-- page -->
+  <text class="t lbl" x="452" y="44">the page</text>
+  <rect class="box" x="452" y="58" width="468" height="300" rx="12"/>
+
+  <rect class="pill" x="472" y="78" width="300" height="26" rx="6"/>
+  <text class="t s" x="484" y="96" fill="#93c5fd">head — kicker, title, byline</text>
+
+  <rect class="pill" x="472" y="112" width="300" height="70" rx="6"/>
+  <text class="t s" x="484" y="140" fill="#5eead4">lead — the repo header + screenshots</text>
+  <text class="t s" x="484" y="162" fill="#5eead4">(leads/portfolio.html)</text>
+
+  <rect class="pill" x="472" y="190" width="300" height="60" rx="6"/>
+  <text class="t s" x="484" y="216" fill="#93c5fd">prose — the body</text>
+  <text class="t s" x="484" y="238" fill="#93c5fd">share · author</text>
+
+  <rect class="pill" x="788" y="78" width="112" height="172" rx="6"/>
+  <text class="t s" x="800" y="100" fill="#fcd34d">details</text>
+  <text class="t s" x="800" y="122" fill="#fcd34d">toc</text>
+  <text class="t s" x="800" y="150" fill="#8a8a92">the sidebar,</text>
+  <text class="t s" x="800" y="168" fill="#8a8a92">sticky</text>
+
+  <text class="t s" x="472" y="286" fill="#ff8a5c">shell: split — 70 / 30</text>
+  <text class="t s" x="472" y="312">No layout was edited to make this page.</text>
+</svg>

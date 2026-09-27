@@ -1,0 +1,34 @@
+{%- comment -%}
+  A shelf: one row of cards that scrolls sideways, the way a streaming
+  service shows a category. It is a scroll container with snap points, so
+  a finger, a trackpad and the arrow keys all work before any script does;
+  assets/scripts/carousel.js adds the two buttons.
+
+  Params: items, title, kicker, link, link_text, card (which card partial)
+{%- endcomment -%}
+{%- assign items = include.items -%}
+{%- if items.size > 0 -%}
+<section class="im-shelf" aria-labelledby="shelf-{{ include.id }}">
+  <header class="im-shelf-head">
+    <div>
+      {%- if include.kicker %}<p class="im-caption">{{ include.kicker }}</p>{% endif -%}
+      <h2 class="im-shelf-title" id="shelf-{{ include.id }}">{{ include.title }}</h2>
+    </div>
+    {%- if include.link -%}
+    <a class="im-card-cta" href="{{ include.link | relative_url }}">{{ include.link_text | default: "See all" }} <i class="ph-bold ph-arrow-right" aria-hidden="true"></i></a>
+    {%- endif -%}
+  </header>
+
+  <div class="im-shelf-wrap" data-carousel>
+    <div class="im-shelf-track{% if include.portrait %} is-portrait{% endif %}" data-carousel-track tabindex="0">
+      {%- for it in items -%}
+      <div class="im-shelf-item" data-carousel-slide>
+        {% include utility/card.html item=it %}
+      </div>
+      {%- endfor -%}
+    </div>
+    <button class="im-shelf-btn im-shelf-prev" type="button" data-carousel-prev aria-label="Scroll left"><i class="ph-bold ph-arrow-left" aria-hidden="true"></i></button>
+    <button class="im-shelf-btn im-shelf-next" type="button" data-carousel-next aria-label="Scroll right"><i class="ph-bold ph-arrow-right" aria-hidden="true"></i></button>
+  </div>
+</section>
+{%- endif -%}

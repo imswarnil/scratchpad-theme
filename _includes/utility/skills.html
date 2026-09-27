@@ -1,0 +1,21 @@
+{%- comment -%}
+  Skill pills from site.resume.skills, grouped by `level` (Advanced,
+  Intermediate, …) — one labelled row per level, in that order.
+{%- endcomment -%}
+{%- assign levels = site.resume.skills | map: "level" | uniq -%}
+<div class="im-skills">
+  {%- for lvl in levels -%}
+  {%- assign group = site.resume.skills | where: "level", lvl -%}
+  <div class="im-skills-row">
+    <span class="im-skills-level">{{ lvl }}</span>
+    <ul class="im-skills-list">
+      {%- for s in group -%}
+      <li class="im-skill" style="--im-skill: {{ s.percent | default: 70 }}%">
+        <span class="im-skill-name">{{ s.name }}</span>
+        {%- if s.percent %}<span class="im-skill-bar" aria-hidden="true"></span>{% endif -%}
+      </li>
+      {%- endfor -%}
+    </ul>
+  </div>
+  {%- endfor -%}
+</div>

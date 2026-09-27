@@ -1,0 +1,24 @@
+# Jekyll build output & caches
+_site/
+.sass-cache/
+.jekyll-cache/
+.jekyll-metadata
+
+# Bundler — installed gems should never be committed
+.bundle/
+vendor/
+
+# Dependency lockfile (resolved fresh by CI)
+Gemfile.lock
+**/Gemfile.lock
+
+# OS / editor cruft
+.DS_Store
+*.log
+node_modules/
+
+# The built gem, not a source file.
+scratchpad-theme-*.gem
+
+# What the setup wizard moves aside; never a source file.
+.scratchpad-backup/

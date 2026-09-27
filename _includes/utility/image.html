@@ -1,0 +1,12 @@
+{%- comment -%}
+  Resolve an image URL with a fallback chain:
+  include.image (front-matter value) → collection cover → site placeholder.
+  Params: image (optional), collection (label, optional). Outputs a URL.
+{%- endcomment -%}
+{%- assign _img = include.image -%}
+{%- if _img == nil or _img == "" -%}
+  {%- assign _coll = site.collections | where: "label", include.collection | first -%}
+  {%- assign _img = _coll.image -%}
+{%- endif -%}
+{%- if _img == nil or _img == "" -%}{%- assign _img = site.placeholder_image -%}{%- endif -%}
+{{- _img | relative_url -}}

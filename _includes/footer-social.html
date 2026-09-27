@@ -1,0 +1,16 @@
+{%- comment -%} Shared social icon row for the footer {%- endcomment -%}
+{%- if site.footer.show_social != false and site.social_links -%}
+<ul class="im-footer-social">
+  {%- for s in site.social_links -%}
+    {%- assign icon = 'link' -%}
+    {%- case s[0] -%}
+      {%- when 'Twitter'  -%}{% assign icon = 'twitter-logo'  %}
+      {%- when 'LinkedIn' -%}{% assign icon = 'linkedin-logo' %}
+      {%- when 'GitHub'   -%}{% assign icon = 'github-logo'   %}
+      {%- when 'RSS'      -%}{% assign icon = 'rss'           %}
+      {%- when 'YouTube'  -%}{% assign icon = 'youtube-logo'  %}
+    {%- endcase -%}
+    <li><a href="{{ s[1] }}" target="_blank" rel="me noopener" aria-label="{{ s[0] }}"><i class="ph-bold ph-{{ icon }}" aria-hidden="true"></i></a></li>
+  {%- endfor -%}
+</ul>
+{%- endif -%}

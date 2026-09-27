@@ -1,0 +1,14 @@
+{%- comment -%}
+  Which card a collection's entries wear. A collection names its own in
+  _config.yml (`card: webseries` → _includes/cards/webseries.html); the
+  blog card is what anything unnamed falls back to, so a brand-new
+  collection renders sensibly before it has a design of its own.
+{%- endcomment -%}
+{%- assign c = site.collections | where: "label", include.item.collection | first -%}
+{%- assign card_name = include.card | default: c.card -%}
+{%- if card_name -%}
+  {%- assign card_file = "cards/" | append: card_name | append: ".html" -%}
+  {% include {{ card_file }} item=include.item %}
+{%- else -%}
+  {% include cards/blog.html item=include.item %}
+{%- endif -%}

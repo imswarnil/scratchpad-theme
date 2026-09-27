@@ -1,0 +1,457 @@
+// ======================================================================
+// im/_resume.scss — /resume/ page (site.resume.* data, _layouts/resume.html)
+// Sticky resume bar under the navbar, ATS-ordered sections on the 12-col
+// grid with a sticky sidebar, and a print stylesheet for "Save as PDF".
+// ======================================================================
+
+// ---- Sticky resume bar -----------------------------------------------
+// Sits just under the site navbar (top = its height) and stays put on
+// scroll. Same island treatment as the navbar so the two read as a pair.
+// ======================================================================
+// The hero, and the bar it becomes
+// ----------------------------------------------------------------------
+// /resume/ renders no site header (`chrome: false`). It opens with a
+// full-height hero whose picture is a SQUARE as tall as the hero — one
+// measurement sets both — and once that hero has scrolled away the bar
+// below takes over, exactly one navbar tall and shaped like the site's
+// island bar, so the page still feels like part of the site.
+// ======================================================================
+
+// Tall enough to be an opening, short enough that the first job is on the
+// same screen: a CV that makes a recruiter scroll before they see a single
+// role has spent its best moment on a photograph.
+.im-rhero {
+  display: grid;
+  align-content: center;
+  padding-block: clamp(2rem, 5vh, 3.5rem);
+}
+
+.im-rhero-grid {
+  display: grid;
+  gap: var(--im-space-6);
+  align-items: center;
+
+  @include mq($bp-lg) {
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: clamp(2rem, 5vw, 4rem);
+  }
+}
+
+// The picture is square, and as tall as the hero allows. `min()` keeps it
+// from outgrowing either the viewport's height or the column's width.
+.im-rhero-figure {
+  margin: 0;
+  width: min(100%, 26rem);
+  justify-self: center;
+
+  @include mq($bp-lg) {
+    width: min(30vw, 22rem);
+  }
+}
+
+.im-rhero-photo {
+  width: 100%;
+  aspect-ratio: 1;
+  object-fit: cover;
+  border-radius: var(--im-radius-2xl);
+  background: var(--im-surface);
+}
+
+.im-rhero-copy { display: flex; flex-direction: column; gap: var(--im-space-3); min-width: 0; }
+
+.im-rhero-kicker {
+  margin: 0;
+  font-family: var(--im-font-mono);
+  font-size: var(--im-text-xs);
+  font-weight: var(--im-weight-medium);
+  letter-spacing: var(--im-tracking-wide);
+  text-transform: uppercase;
+  color: var(--im-muted);
+}
+
+.im-rhero-name {
+  margin: 0;
+  font-size: var(--im-text-display);
+  line-height: var(--im-leading-display);
+  letter-spacing: var(--im-tracking-tighter);
+}
+
+.im-rhero-tagline { margin: 0; font-size: var(--im-text-lg); color: var(--im-body); }
+
+.im-rhero-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--im-space-2) var(--im-space-5);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: var(--im-text-sm);
+  color: var(--im-muted);
+
+  i { margin-right: var(--im-space-1); color: var(--im-faint); }
+  a { color: inherit; text-decoration: none; &:hover { color: var(--im-ink); } }
+}
+
+.im-rhero-open {
+  display: flex;
+  align-items: center;
+  gap: var(--im-space-2);
+  margin: 0;
+  font-size: var(--im-text-sm);
+  color: var(--im-body);
+}
+.im-rhero-open-dot {
+  width: 0.5rem;
+  height: 0.5rem;
+  flex: 0 0 auto;
+  border-radius: var(--im-radius-full);
+  background: var(--im-success);
+  box-shadow: 0 0 0 3px color-mix(in oklab, var(--im-success) 25%, transparent);
+}
+
+.im-rhero-actions { display: flex; flex-wrap: wrap; gap: var(--im-space-3); margin-top: var(--im-space-2); }
+
+// ---- The bar the hero becomes -----------------------------------------
+.im-rbar {
+  position: sticky;
+  top: var(--im-space-2);
+  z-index: var(--im-z-bar);
+  margin-bottom: var(--im-space-6);
+  // Hidden until the hero has left. It keeps its box so the sticky
+  // position is already resolved when it arrives.
+  opacity: 0;
+  translate: 0 calc(var(--im-navbar-height) * -1);
+  pointer-events: none;
+  transition: opacity var(--im-duration-fast) var(--im-ease-out), translate var(--im-duration-fast) var(--im-ease-out);
+
+  &.is-stuck { opacity: 1; translate: 0; pointer-events: auto; }
+}
+
+.im-rbar-inner {
+  display: flex;
+  align-items: center;
+  gap: var(--im-space-3);
+  height: var(--im-navbar-height);
+  padding-inline: var(--im-space-3);
+  border-radius: var(--im-radius-full);
+  background: color-mix(in srgb, var(--im-canvas) 82%, transparent);
+  backdrop-filter: blur(12px) saturate(1.4);
+  -webkit-backdrop-filter: blur(12px) saturate(1.4);
+  box-shadow: inset 0 0 0 1px var(--im-line), var(--im-shadow-float);
+}
+
+.im-rbar-back {
+  display: grid;
+  place-items: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  flex: 0 0 auto;
+  border-radius: var(--im-radius-full);
+  color: var(--im-ink);
+  text-decoration: none;
+  @include im-hover-fill;
+}
+
+.im-rbar-avatar { width: 2rem; height: 2rem; flex: 0 0 auto; border-radius: var(--im-radius-full); object-fit: cover; }
+.im-rbar-name { font-weight: var(--im-weight-semibold); letter-spacing: var(--im-tracking-tight); white-space: nowrap; }
+
+.im-rbar-meta {
+  display: flex;
+  align-items: center;
+  gap: var(--im-space-4);
+  min-width: 0;
+  font-size: var(--im-text-sm);
+  color: var(--im-muted);
+  white-space: nowrap;
+
+  i { color: var(--im-faint); }
+  a { color: inherit; text-decoration: none; &:hover { color: var(--im-ink); } }
+  > * { overflow: hidden; text-overflow: ellipsis; }
+}
+
+.im-rbar-social { margin-left: auto; }
+.im-rbar-print { flex: 0 0 auto; }
+
+// What drops out as the bar narrows, in the order it stops earning room.
+@include mq-down($bp-xl) { .im-rbar-meta > a { display: none; } }
+@include mq-down($bp-lg) { .im-rbar-meta { display: none; } }
+@include mq-down($bp-md) {
+  .im-rbar-social { display: none; }
+  .im-rbar-name { overflow: hidden; text-overflow: ellipsis; }
+  .im-rbar-print span { display: none; }
+}
+
+// ---- Identity head ----------------------------------------------------
+.im-resume-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--im-space-5);
+  padding-bottom: var(--im-space-6);
+  margin-bottom: var(--im-space-6);
+  border-bottom: 1px solid var(--im-line);
+}
+.im-resume-avatar {
+  width: 5.5rem;
+  height: 5.5rem;
+  border-radius: var(--im-radius-full);
+  object-fit: cover;
+  box-shadow: inset 0 0 0 1px var(--im-line);
+}
+.im-resume-head-body { flex: 1 1 16rem; min-width: 0; }
+.im-resume-name { margin: 0; font-size: var(--im-text-3xl); letter-spacing: -0.02em; }
+.im-resume-tagline { margin: var(--im-space-1) 0 0; color: var(--im-muted); font-size: var(--im-text-base); }
+.im-resume-contact {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--im-space-2) var(--im-space-4);
+  margin: var(--im-space-3) 0 0;
+  padding: 0;
+  list-style: none;
+  font-size: var(--im-text-sm);
+  color: var(--im-muted);
+
+  a { color: inherit; text-decoration: none; transition: color var(--im-duration-fast) var(--im-ease-out); }
+  a:hover { color: var(--im-ink); }
+  i { margin-right: var(--im-space-1); }
+}
+.im-resume-open {
+  margin: var(--im-space-3) 0 0;
+  font-size: var(--im-text-sm);
+  color: var(--im-body);
+  strong { color: var(--im-ink); }
+}
+
+// ---- Layout -----------------------------------------------------------
+.im-resume-layout { row-gap: var(--im-space-7); }
+.im-resume-main { min-width: 0; }
+.im-resume-aside { min-width: 0; }
+.im-resume-aside-sticky {
+  display: flex;
+  flex-direction: column;
+  gap: var(--im-space-4);
+  @include mq($bp-lg) {
+    position: sticky;
+    // Below the navbar *and* the resume bar.
+    top: calc(var(--im-navbar-height) + var(--im-navbar-height-sm) + var(--im-space-5));
+  }
+}
+
+// ---- Sections ---------------------------------------------------------
+.im-resume-section + .im-resume-section { margin-top: var(--im-space-7); }
+.im-resume-heading {
+  display: flex;
+  align-items: center;
+  gap: var(--im-space-2);
+  margin: 0 0 var(--im-space-4);
+  padding-bottom: var(--im-space-2);
+  border-bottom: 1px solid var(--im-line);
+  font-size: var(--im-text-lg);
+  font-weight: var(--im-weight-semibold);
+  i { color: var(--im-muted); }
+}
+.im-resume-summary { margin: 0; font-size: var(--im-text-base); line-height: var(--im-leading-base); color: var(--im-body); }
+
+// Core skills: <dl> of grouped chip rows.
+.im-resume-skillgroups { margin: 0; display: flex; flex-direction: column; gap: var(--im-space-3); }
+.im-resume-skillgroup {
+  display: grid;
+  gap: var(--im-space-1) var(--im-space-4);
+  @include mq($bp-sm) { grid-template-columns: 9rem 1fr; align-items: baseline; }
+  dt { font-size: var(--im-text-sm); font-weight: var(--im-weight-semibold); color: var(--im-ink); }
+  dd { margin: 0; display: flex; flex-wrap: wrap; gap: var(--im-space-2); }
+}
+// Every chip on this page is the theme's chip: a hairline at rest, the
+// hover fill when it is pointed at. A chip that is also a LINK says so by
+// carrying its ink and an arrow — not by sharpening its border, which is
+// the one move the system does not make.
+.im-resume-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--im-space-1);
+  min-height: 1.75rem;
+  padding: 0 var(--im-space-3);
+  border: 0;
+  border-radius: var(--im-radius-full);
+  box-shadow: inset 0 0 0 1px var(--im-line);
+  background: transparent;
+  font-size: var(--im-text-xs);
+  font-weight: var(--im-weight-medium);
+  color: var(--im-body);
+  text-decoration: none;
+}
+a.im-resume-chip {
+  color: var(--im-ink);
+  transition: background-color var(--im-duration-instant);
+  &:hover { background: var(--im-hover-bg); color: var(--im-ink); }
+}
+.im-resume-chip-link { color: var(--im-ink); }
+
+// Experience / education / project entries.
+.im-resume-entries, .im-resume-projects { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: var(--im-space-5); }
+.im-resume-entry, .im-resume-project {
+  position: relative;
+  padding-left: var(--im-space-5);
+  break-inside: avoid;
+  &::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0.55em;
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: var(--im-radius-full);
+    // A rail mark is a POSITION, not an action. The accent is reserved for
+    // the thing you can do; a column of red dots down a CV is neither.
+    background: var(--im-ink);
+  }
+  &::after {
+    content: "";
+    position: absolute;
+    left: 0.22rem;
+    top: 1.2em;
+    bottom: calc(var(--im-space-5) * -1);
+    border-left: 1px solid var(--im-line);
+  }
+  &:last-child::after { display: none; }
+}
+.im-resume-entry-head {
+  display: grid;
+  gap: 0 var(--im-space-3);
+
+  // The names only exist inside the query. Declared on the children
+  // unconditionally they would place all three in the SAME implicit cell
+  // on a phone — three lines of type stacked on top of each other — which
+  // is exactly what a named area with no template does.
+  @include mq($bp-md) {
+    grid-template-columns: 1fr auto;
+    grid-template-areas: "title when" "org when";
+    align-items: baseline;
+
+    > .im-resume-entry-title { grid-area: title; }
+    > .im-resume-entry-org   { grid-area: org; }
+    > .im-resume-entry-when  { grid-area: when; }
+  }
+}
+.im-resume-entry-title { margin: 0; font-size: var(--im-text-base); font-weight: var(--im-weight-semibold); }
+.im-resume-entry-org { margin: 0; font-size: var(--im-text-sm); color: var(--im-muted); }
+.im-resume-entry-when {
+  margin: 0;
+  font-size: var(--im-text-xs);
+  font-variant-numeric: tabular-nums;
+  color: var(--im-faint);
+  white-space: nowrap;
+}
+.im-resume-entry-body { margin: var(--im-space-2) 0 0; font-size: var(--im-text-sm); color: var(--im-body); }
+.im-resume-points { margin: var(--im-space-2) 0 0; padding-left: 1.1rem; font-size: var(--im-text-sm); color: var(--im-body); li + li { margin-top: var(--im-space-1); } }
+.im-resume-tags { margin: var(--im-space-3) 0 0; display: flex; flex-wrap: wrap; gap: var(--im-space-2); }
+
+// Certifications / awards / languages / links: two-part rows.
+.im-resume-certs {
+  list-style: none; margin: 0; padding: 0;
+  display: flex; flex-direction: column;
+  li {
+    display: flex; flex-wrap: wrap; justify-content: space-between; gap: var(--im-space-1) var(--im-space-4);
+    padding: var(--im-space-2) 0;
+    border-bottom: 1px dashed var(--im-line);
+    font-size: var(--im-text-sm);
+    &:last-child { border-bottom: 0; }
+  }
+}
+.im-resume-cert-title { font-weight: var(--im-weight-medium); color: var(--im-ink); }
+.im-resume-cert-meta { color: var(--im-muted); text-decoration: none; }
+a.im-resume-cert-meta:hover { color: var(--im-ink); text-decoration: underline; }
+
+// ---- Sidebar widgets --------------------------------------------------
+.im-resume-widget { gap: var(--im-space-3); padding: var(--im-space-5); box-shadow: none; }
+.im-resume-widget-title {
+  display: flex; align-items: center; gap: var(--im-space-2);
+  margin: 0;
+  font-size: var(--im-text-xs);
+  font-weight: var(--im-weight-semibold);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--im-faint);
+  i { color: var(--im-muted); }
+}
+.im-resume-now p { margin: 0; font-size: var(--im-text-sm); color: var(--im-body); }
+.im-resume-tiles { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--im-space-2); }
+.im-resume-tile {
+  display: flex; flex-direction: column; gap: var(--im-space-1);
+  padding: var(--im-space-3);
+  border: 1px solid var(--im-line);
+  border-radius: var(--im-radius-lg);
+  background: var(--im-surface);
+  text-align: center;
+  i { color: var(--im-muted); }
+  strong { font-size: var(--im-text-lg); letter-spacing: -0.02em; line-height: 1.1; }
+  span { font-size: 0.625rem; line-height: 1.25; color: var(--im-muted); }
+}
+.im-resume-widget-list {
+  list-style: none; margin: 0; padding: 0;
+  display: flex; flex-direction: column; gap: var(--im-space-2);
+  font-size: var(--im-text-sm);
+  li { display: flex; align-items: center; gap: var(--im-space-2); }
+  i { color: var(--im-muted); flex: 0 0 auto; }
+  a { color: var(--im-body); text-decoration: none; &:hover { color: var(--im-ink); text-decoration: underline; } }
+}
+
+.im-resume-skills { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: var(--im-space-3); }
+.im-resume-skill-label {
+  display: flex; justify-content: space-between; gap: var(--im-space-2);
+  font-size: var(--im-text-xs); margin-bottom: var(--im-space-1);
+  span:last-child { color: var(--im-muted); }
+}
+.im-resume-skill-bar {
+  height: 0.35rem;
+  border-radius: var(--im-radius-full);
+  background: var(--im-surface-2);
+  overflow: hidden;
+  span {
+    display: block; height: 100%; border-radius: inherit;
+    background: var(--im-ink);
+    transform-origin: left;
+    @media (prefers-reduced-motion: no-preference) { animation: im-skill-grow var(--im-duration-base) var(--im-ease-out) both; }
+  }
+}
+@keyframes im-skill-grow { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+
+.im-resume-links {
+  list-style: none; margin: 0; padding: 0;
+  display: flex; flex-direction: column; gap: var(--im-space-2);
+  font-size: var(--im-text-sm);
+  a {
+    display: inline-flex; align-items: center; gap: var(--im-space-2);
+    color: var(--im-body); text-decoration: none;
+    transition: color var(--im-duration-fast) var(--im-ease-out), transform var(--im-duration-fast) var(--im-ease-out);
+    &:hover { color: var(--im-ink); transform: translateX(2px); }
+  }
+}
+
+// ---- Print / "Save as PDF" ---------------------------------------------
+// One clean column, black on white, no site chrome; link targets printed
+// after the anchor text so URLs survive on paper.
+@media print {
+  .im-navbar, .im-footer, .im-rail, .im-sticky-ad, .im-no-print, .im-toc-mobile,
+  .im-rhero, .im-rbar, .im-resume-aside { display: none !important; }
+  // The identity block is the printed header: it is the only place the
+  // name and contact details appear on paper, since the hero is gone.
+  .im-print-only { display: flex !important; }
+  .im-rails { display: block !important; }
+  .im-resume { max-width: none; padding: 0; }
+  .im-resume-layout { display: block; }
+  .im-resume-main { max-width: none; }
+  .im-resume-head { border-bottom-color: #000; }
+  .im-resume-section { margin-top: 1.1rem !important; }
+  .im-resume-entry, .im-resume-project, .im-resume-certs li, .im-resume-skillgroup { break-inside: avoid; page-break-inside: avoid; }
+  .im-resume-heading { break-after: avoid; page-break-after: avoid; border-bottom-color: #000; }
+  .im-resume-heading i { display: none; }
+  .im-resume-chip { border-color: #000; background: none; color: #000; }
+  .im-resume-entry::before { background: #000; }
+  .im-resume-entry::after { border-left-color: #000; }
+  body, .im-resume { background: #fff !important; color: #000 !important; }
+  .im-resume-summary, .im-resume-entry-body, .im-resume-points, .im-resume-entry-org, .im-resume-cert-meta, .im-resume-open { color: #000 !important; }
+  a { color: #000; text-decoration: none; }
+  .im-resume-main a[href^="http"]::after { content: " (" attr(href) ")"; font-size: 0.8em; color: #333; }
+  .im-resume-contact a::after { content: none; }  // contact line already shows the address
+}

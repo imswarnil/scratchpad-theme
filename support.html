@@ -1,0 +1,39 @@
+---
+layout: default
+title: Support
+permalink: /support/
+description: "Ways to support the work — most of them free."
+sidebar: false
+ad_rails: false
+---
+{%- assign s = site.support -%}
+<section class="im-home im-page im-pg">
+  <header class="im-pg-head im-grid-12 im-reveal">
+    <div class="im-span-12 im-span-lg-8">
+      <span class="im-sec-eyebrow">Support</span>
+      <h1 class="im-pg-title">Ways to support the work.</h1>
+      {%- if s.intro %}<p class="im-pg-lede">{{ s.intro }}</p>{% endif -%}
+    </div>
+  </header>
+
+  {%- if s.ways.size > 0 -%}
+  <ul class="im-cards im-reveal">
+    {%- for w in s.ways -%}
+    <li>
+      <article class="im-card im-card-link">
+        <span class="im-card-icon"><i class="ph-bold ph-{{ w.icon | default: 'heart' }}" aria-hidden="true"></i></span>
+        <h2 class="im-card-title">{{ w.title }}</h2>
+        <p class="im-card-text">{{ w.text }}</p>
+        <div class="im-card-footer">
+          <a class="im-card-cta" href="{{ w.url | relative_url }}"{% if w.url contains '//' %} target="_blank" rel="noopener"{% endif %}>
+            {{ w.cta | default: "Go" }} <i class="ph-bold ph-arrow-right" aria-hidden="true"></i>
+          </a>
+        </div>
+      </article>
+    </li>
+    {%- endfor -%}
+  </ul>
+  {%- else -%}
+  <p class="im-collection-empty">Nothing is listed yet. Add entries under <code>support.ways</code> in <code>_config.yml</code>.</p>
+  {%- endif -%}
+</section>

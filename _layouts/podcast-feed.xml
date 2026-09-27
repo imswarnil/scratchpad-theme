@@ -1,0 +1,35 @@
+---
+layout: null
+---
+{%- assign s = page.series -%}
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>{{ s.title | xml_escape }}</title>
+    <link>{{ '/podcast/' | absolute_url }}</link>
+    <atom:link href="{{ page.url | absolute_url }}" rel="self" type="application/rss+xml"/>
+    <description>{{ s.description | default: site.description | xml_escape }}</description>
+    <language>{{ site.lang | default: 'en' }}</language>
+    <itunes:author>{{ site.author | default: site.title | xml_escape }}</itunes:author>
+    <itunes:explicit>false</itunes:explicit>
+    {%- if site.avatarurl %}<itunes:image href="{{ site.avatarurl | absolute_url }}"/>{% endif %}
+    {%- for e in page.episodes %}
+    <item>
+      <title>{{ e.title | xml_escape }}</title>
+      <link>{{ e.url | absolute_url }}</link>
+      <guid isPermaLink="true">{{ e.url | absolute_url }}</guid>
+      <pubDate>{{ e.date | date_to_rfc822 }}</pubDate>
+      <description>{{ e.description | default: e.excerpt | strip_html | xml_escape }}</description>
+      {%- if e.duration %}<itunes:duration>{{ e.duration }}</itunes:duration>{% endif %}
+      {%- if e.episode %}<itunes:episode>{{ e.episode }}</itunes:episode>{% endif %}
+      {%- comment -%}
+        An enclosure is what a player downloads. With no `audio:` there is
+        nothing to enclose, and a feed item without one is still a valid
+        item — it just is not playable, which is the honest state of an
+        episode whose file has not been uploaded yet.
+      {%- endcomment -%}
+      {%- if e.audio and e.audio != "" %}<enclosure url="{{ e.audio | absolute_url }}" type="audio/mpeg" length="0"/>{% endif %}
+    </item>
+    {%- endfor %}
+  </channel>
+</rss>

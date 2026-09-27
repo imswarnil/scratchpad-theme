@@ -1,0 +1,289 @@
+---
+layout: default
+title: Sitemap
+permalink: /sitemap/
+description: "Every page on this site, in one tree — blog, portfolio, videos, snippets, prompts and every standalone page."
+ad_rails: false
+sidebar: false
+---
+{%- comment -%}
+  Human-facing sitemap: a centred, collapsible connector-line tree diagram
+  in a horizontally-scrollable stage (scrolled to centre on load), plus a
+  plain nested list underneath (always rendered — mobile view + the real,
+  fully-crawlable text content for SEO). NOT the XML sitemap (that's
+  jekyll-sitemap's /sitemap.xml, for search engines). Also emits JSON-LD
+  (BreadcrumbList + WebSite + SiteNavigationElement + a full ItemList of
+  every page) describing the same structure for crawlers.
+{%- endcomment -%}
+{%- assign static_pages = site.pages | where_exp: "p", "p.sitemap != false" | where_exp: "p", "p.list_collection == nil" -%}
+{%- assign leaf_cap = 8 -%}
+
+<section class="im-home im-page">
+  <nav class="im-breadcrumb" aria-label="Breadcrumb">
+    <a href="{{ '/' | relative_url }}">Home</a><span aria-hidden="true">/</span><span>Sitemap</span>
+  </nav>
+
+  <header class="im-sitemap-head im-reveal">
+    <span class="im-collection-icon"><i class="ph-bold ph-tree-structure" aria-hidden="true"></i></span>
+    <div>
+      <h1 class="im-collection-title">Sitemap</h1>
+      <p class="im-collection-desc">Every page on this site, in one tree. Looking for the machine-readable version? <a class="im-flink" href="{{ '/sitemap.xml' | relative_url }}">/sitemap.xml</a>.</p>
+    </div>
+    <div class="im-collection-stats">
+      <span><strong>{{ site.collections.size }}</strong> collections</span>
+      <span><strong>{{ static_pages.size }}</strong> pages</span>
+    </div>
+  </header>
+
+  {%- comment -%} ── Controls: tree/list view + expand/collapse all ── {%- endcomment -%}
+  <div class="im-sitemap-controls im-reveal">
+    <div class="im-sitemap-toggle" role="group" aria-label="Sitemap view">
+      <button type="button" class="im-sitemap-toggle-btn" data-sitemap-view-btn="tree"><i class="ph-bold ph-tree-structure" aria-hidden="true"></i> Tree</button>
+      <button type="button" class="im-sitemap-toggle-btn" data-sitemap-view-btn="list"><i class="ph-bold ph-list-bullets" aria-hidden="true"></i> List</button>
+    </div>
+    <div class="im-sitemap-expand" role="group" aria-label="Expand or collapse branches">
+      <button type="button" class="im-btn im-btn-sm im-btn-outline" data-orgtree-all="expand"><i class="ph-bold ph-arrows-out-line-vertical" aria-hidden="true"></i> Expand all</button>
+      <button type="button" class="im-btn im-btn-sm im-btn-outline" data-orgtree-all="collapse"><i class="ph-bold ph-arrows-in-line-vertical" aria-hidden="true"></i> Collapse all</button>
+    </div>
+  </div>
+
+  <div class="im-sitemap-views" data-sitemap-views>
+
+  {%- comment -%} ── Visual tree diagram — centred, collapsible org chart ── {%- endcomment -%}
+  <h2 class="im-visually-hidden">Site tree diagram</h2>
+  <div class="im-orgtree-stage im-reveal" data-orgtree-stage>
+    <ul class="im-orgtree" data-orgtree>
+      <li>
+        <a class="im-orgnode im-orgnode-root" href="{{ '/' | relative_url }}">
+          <span class="im-orgnode-thumb"><i class="ph-bold ph-house" aria-hidden="true"></i></span>
+          <span class="im-orgnode-label">{{ site.title }}</span>
+        </a>
+
+        <ul>
+          {%- for c in site.collections -%}
+            {%- if c.docs.size > 0 -%}
+            {%- assign sorted_docs = c.docs | sort: "date" | reverse -%}
+            <li class="im-orgtree-branch" data-orgtree-branch>
+              <div class="im-orgnode-wrap">
+                <a class="im-orgnode" href="{{ c.landing | default: c.url | relative_url }}">
+                  <span class="im-orgnode-thumb"><i class="ph-bold ph-{{ c.icon | default: 'folder' }}" aria-hidden="true"></i></span>
+                  <span class="im-orgnode-label">{{ c.title }}</span>
+                  <span class="im-sitetree-count">{{ c.docs.size }}</span>
+                </a>
+                <button type="button" class="im-orgtoggle" data-orgtree-toggle aria-expanded="true" aria-controls="orgtree-{{ c.label }}" aria-label="Collapse {{ c.title }}"><i class="ph-bold ph-caret-down" aria-hidden="true"></i></button>
+              </div>
+              <ul id="orgtree-{{ c.label }}">
+                {%- for doc in sorted_docs limit: leaf_cap -%}
+                {%- assign dcover = doc.image | default: doc.cover -%}
+                {%- if dcover == site.placeholder_image %}{% assign dcover = nil %}{% endif -%}
+                <li>
+                  <a class="im-orgnode im-orgnode-leaf" href="{{ doc.url | relative_url }}">
+                    <span class="im-orgnode-thumb">
+                      {%- if dcover and dcover != "" -%}<img src="{{ dcover | relative_url }}" alt="" loading="lazy" width="48" height="48">
+                      {%- else -%}{% include utility/thumb.html item=doc size="sm" %}{%- endif -%}
+                    </span>
+                    <span class="im-orgnode-label">{{ doc.title | truncate: 24 }}</span>
+                  </a>
+                </li>
+                {%- endfor -%}
+                {%- if sorted_docs.size > leaf_cap -%}
+                <li>
+                  <a class="im-orgnode im-orgnode-more" href="{{ c.landing | default: c.url | relative_url }}">
+                    <span class="im-orgnode-thumb"><i class="ph-bold ph-dots-three" aria-hidden="true"></i></span>
+                    <span class="im-orgnode-label">+{{ sorted_docs.size | minus: leaf_cap }} more</span>
+                  </a>
+                </li>
+                {%- endif -%}
+              </ul>
+            </li>
+            {%- endif -%}
+          {%- endfor -%}
+
+          <li class="im-orgtree-branch" data-orgtree-branch>
+            <div class="im-orgnode-wrap">
+              <a class="im-orgnode" href="{{ '/sitemap/' | relative_url }}">
+                <span class="im-orgnode-thumb"><i class="ph-bold ph-file-text" aria-hidden="true"></i></span>
+                <span class="im-orgnode-label">Pages</span>
+                <span class="im-sitetree-count">{{ static_pages.size }}</span>
+              </a>
+              <button type="button" class="im-orgtoggle" data-orgtree-toggle aria-expanded="true" aria-controls="orgtree-pages" aria-label="Collapse Pages"><i class="ph-bold ph-caret-down" aria-hidden="true"></i></button>
+            </div>
+            <ul id="orgtree-pages">
+              {%- for p in static_pages limit: leaf_cap -%}
+                {%- if p.url != "/" and p.title -%}
+                <li>
+                  <a class="im-orgnode im-orgnode-leaf" href="{{ p.url | relative_url }}">
+                    <span class="im-orgnode-thumb"><i class="ph-bold ph-{{ p.nav_icon | default: 'file' }}" aria-hidden="true"></i></span>
+                    <span class="im-orgnode-label">{{ p.title | truncate: 24 }}</span>
+                  </a>
+                </li>
+                {%- endif -%}
+              {%- endfor -%}
+            </ul>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+
+  {%- comment -%} ── Plain nested list — always rendered: mobile view + fully-crawlable text ── {%- endcomment -%}
+  <h2 class="im-visually-hidden">Site tree, list view</h2>
+  <ul class="im-sitetree im-sitetree-list im-reveal">
+    <li>
+      <a class="im-sitetree-link im-sitetree-root" href="{{ '/' | relative_url }}"><i class="ph-bold ph-house" aria-hidden="true"></i> {{ site.title }}</a>
+
+      <ul>
+        {%- for c in site.collections -%}
+          {%- if c.docs.size > 0 -%}
+          <li>
+            <details open>
+              <summary class="im-sitetree-link"><i class="ph-bold ph-{{ c.icon | default: 'folder' }}" aria-hidden="true"></i> <a href="{{ c.landing | default: c.url | relative_url }}">{{ c.title }}</a> <span class="im-sitetree-count">{{ c.docs.size }}</span></summary>
+              <ul>
+                {%- assign sorted_docs = c.docs | sort: "date" | reverse -%}
+                {%- for doc in sorted_docs -%}
+                <li><a class="im-sitetree-link" href="{{ doc.url | relative_url }}">{{ doc.title }}</a>{% if doc.date %}<span class="im-sitetree-date">{{ doc.date | date: "%b %Y" }}</span>{% endif %}</li>
+                {%- endfor -%}
+              </ul>
+            </details>
+          </li>
+          {%- endif -%}
+        {%- endfor -%}
+
+        <li>
+          <details open>
+            <summary class="im-sitetree-link"><i class="ph-bold ph-file-text" aria-hidden="true"></i> Pages <span class="im-sitetree-count">{{ static_pages.size }}</span></summary>
+            <ul>
+              {%- for p in static_pages -%}
+                {%- if p.url != "/" and p.title -%}
+                <li><a class="im-sitetree-link" href="{{ p.url | relative_url }}">{{ p.title }}</a></li>
+                {%- endif -%}
+              {%- endfor -%}
+            </ul>
+          </details>
+        </li>
+      </ul>
+    </li>
+  </ul>
+
+  </div>
+
+  <script>
+  (function () {
+    // ---- Tree / list view ----
+    var KEY = "im-sitemap-view";
+    var root = document.querySelector("[data-sitemap-views]");
+    var btns = document.querySelectorAll("[data-sitemap-view-btn]");
+    if (!root || !btns.length) return;
+
+    function centreStage() {
+      var stage = document.querySelector("[data-orgtree-stage]");
+      var tree = stage && stage.querySelector("[data-orgtree]");
+      if (!stage || !tree) return;
+      // Scroll the horizontal stage so the root node sits in the middle.
+      stage.scrollLeft = Math.max(0, (tree.scrollWidth - stage.clientWidth) / 2);
+    }
+
+    function setView(view, persist) {
+      root.setAttribute("data-view", view);
+      btns.forEach(function (btn) {
+        var on = btn.getAttribute("data-sitemap-view-btn") === view;
+        btn.classList.toggle("is-active", on);
+        btn.setAttribute("aria-pressed", on);
+      });
+      if (persist) { try { localStorage.setItem(KEY, view); } catch (e) {} }
+      var expand = document.querySelector(".im-sitemap-expand");
+      if (expand) expand.hidden = view !== "tree";   // branch toggles only mean something in the tree
+      if (view === "tree") window.requestAnimationFrame(centreStage);
+    }
+
+    var saved = null;
+    try { saved = localStorage.getItem(KEY); } catch (e) {}
+    setView(saved || (window.innerWidth >= 992 ? "tree" : "list"), false);
+    document.querySelector(".im-sitemap-controls").classList.add("is-ready");
+    btns.forEach(function (btn) {
+      btn.addEventListener("click", function () { setView(btn.getAttribute("data-sitemap-view-btn"), true); });
+    });
+    window.addEventListener("resize", centreStage, { passive: true });
+
+    // ---- Branch toggles ----
+    function setBranch(branch, open) {
+      var btn = branch.querySelector("[data-orgtree-toggle]");
+      var name = branch.querySelector(".im-orgnode-label");
+      branch.classList.toggle("is-collapsed", !open);
+      if (btn) {
+        btn.setAttribute("aria-expanded", open ? "true" : "false");
+        btn.setAttribute("aria-label", (open ? "Collapse " : "Expand ") + (name ? name.textContent.trim() : "branch"));
+      }
+    }
+    var branches = document.querySelectorAll("[data-orgtree-branch]");
+    branches.forEach(function (branch) {
+      var btn = branch.querySelector("[data-orgtree-toggle]");
+      if (!btn) return;
+      btn.addEventListener("click", function () {
+        setBranch(branch, branch.classList.contains("is-collapsed"));
+        window.requestAnimationFrame(centreStage);
+      });
+    });
+    document.querySelectorAll("[data-orgtree-all]").forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        var open = btn.getAttribute("data-orgtree-all") === "expand";
+        branches.forEach(function (b) { setBranch(b, open); });
+        window.requestAnimationFrame(centreStage);
+      });
+    });
+  })();
+  </script>
+</section>
+
+{%- comment -%} ── JSON-LD: Breadcrumb + WebSite + primary nav + full page list ── {%- endcomment -%}
+{%- assign nav_elements = "" | split: "" -%}
+{%- for item in site.navigation_header -%}
+  {%- capture el -%}{"@type":"SiteNavigationElement","name":{{ item.title | jsonify }},"url":{{ item.url | absolute_url | jsonify }}}{%- endcapture -%}
+  {%- assign nav_elements = nav_elements | push: el -%}
+{%- endfor -%}
+
+{%- assign page_list = "" | split: "" -%}
+{%- assign position = 0 -%}
+{%- for c in site.collections -%}
+  {%- assign sorted_docs = c.docs | sort: "date" | reverse -%}
+  {%- for doc in sorted_docs -%}
+    {%- assign position = position | plus: 1 -%}
+    {%- capture el -%}{"@type":"ListItem","position":{{ position }},"url":{{ doc.url | absolute_url | jsonify }},"name":{{ doc.title | jsonify }}}{%- endcapture -%}
+    {%- assign page_list = page_list | push: el -%}
+  {%- endfor -%}
+{%- endfor -%}
+{%- for p in static_pages -%}
+  {%- if p.title -%}
+    {%- assign position = position | plus: 1 -%}
+    {%- capture el -%}{"@type":"ListItem","position":{{ position }},"url":{{ p.url | absolute_url | jsonify }},"name":{{ p.title | jsonify }}}{%- endcapture -%}
+    {%- assign page_list = page_list | push: el -%}
+  {%- endif -%}
+{%- endfor -%}
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Home", "item": {{ "/" | absolute_url | jsonify }} },
+        { "@type": "ListItem", "position": 2, "name": "Sitemap", "item": {{ page.url | absolute_url | jsonify }} }
+      ]
+    },
+    {
+      "@type": "WebSite",
+      "name": {{ site.title | jsonify }},
+      "url": {{ "/" | absolute_url | jsonify }},
+      "hasPart": [ {{ nav_elements | join: "," }} ]
+    },
+    {
+      "@type": "ItemList",
+      "name": "Full sitemap",
+      "url": {{ page.url | absolute_url | jsonify }},
+      "numberOfItems": {{ page_list.size }},
+      "itemListElement": [ {{ page_list | join: "," }} ]
+    }
+  ]
+}
+</script>

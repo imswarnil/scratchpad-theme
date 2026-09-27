@@ -1,0 +1,87 @@
+{%- comment -%} Command-palette search overlay. Reads /assets/search.json {%- endcomment -%}
+<div class="im-search" id="im-search" hidden>
+  <div class="im-search-overlay" data-im-search-close></div>
+  <div class="im-search-panel" role="dialog" aria-modal="true" aria-label="Search">
+    <div class="im-search-field">
+      <i class="ph-bold ph-magnifying-glass" aria-hidden="true"></i>
+      <input type="search" id="im-search-input" placeholder="Search guides, videos, notes…" autocomplete="off" aria-label="Search query">
+      <kbd class="im-search-esc">esc</kbd>
+    </div>
+    <ul class="im-search-results" id="im-search-results" role="listbox"></ul>
+    <div class="im-search-foot">
+      <span><kbd>↑</kbd><kbd>↓</kbd> navigate</span>
+      <span><kbd>↵</kbd> open</span>
+      <span><a href="{{ '/search/' | relative_url }}">Full search →</a></span>
+    </div>
+  </div>
+</div>
+<script>
+(function () {
+  var root = document.getElementById('im-search');
+  if (!root || window.__imSearch) return;
+  window.__imSearch = true;
+  var input = document.getElementById('im-search-input');
+  var list  = document.getElementById('im-search-results');
+  var data = [], loaded = false, active = -1;
+
+  function load() {
+    if (loaded) return Promise.resolve();
+    return fetch('{{ "/assets/search.json" | relative_url }}')
+      .then(function (r) { return r.json(); })
+      .then(function (d) { data = d; loaded = true; });
+  }
+  function open() {
+    root.hidden = false; document.body.style.overflow = 'hidden';
+    load().then(function () { input.focus(); render(''); });
+  }
+  function close() { root.hidden = true; document.body.style.overflow = ''; input.value = ''; active = -1; }
+
+  function render(q) {
+    q = (q || '').trim().toLowerCase();
+    var items = data;
+    if (q) {
+      items = data.filter(function (it) {
+        return (it.title || '').toLowerCase().indexOf(q) > -1 ||
+               (it.content || '').toLowerCase().indexOf(q) > -1;
+      });
+    }
+    items = items.slice(0, 8);
+    active = items.length ? 0 : -1;
+    if (!items.length) { list.innerHTML = '<li class="im-search-empty">No matches</li>'; return; }
+    list.innerHTML = items.map(function (it, i) {
+      var coll = it.collection ? '<span class="im-search-chip">' + it.collection + '</span>' : '';
+      return '<li class="im-search-item' + (i === 0 ? ' is-active' : '') + '" role="option" data-url="' + it.url + '">' +
+               '<span class="im-search-item-title">' + (it.title || 'Untitled') + '</span>' + coll +
+               '<span class="im-search-item-excerpt">' + ((it.excerpt || '').slice(0, 90)) + '</span>' +
+             '</li>';
+    }).join('');
+  }
+  function move(d) {
+    var els = list.querySelectorAll('.im-search-item'); if (!els.length) return;
+    els[active] && els[active].classList.remove('is-active');
+    active = (active + d + els.length) % els.length;
+    els[active].classList.add('is-active'); els[active].scrollIntoView({ block: 'nearest' });
+  }
+  function go() {
+    var el = list.querySelectorAll('.im-search-item')[active];
+    if (el) window.location.href = el.getAttribute('data-url');
+  }
+
+  input.addEventListener('input', function () { render(input.value); });
+  input.addEventListener('keydown', function (e) {
+    if (e.key === 'ArrowDown') { e.preventDefault(); move(1); }
+    else if (e.key === 'ArrowUp') { e.preventDefault(); move(-1); }
+    else if (e.key === 'Enter') { e.preventDefault(); go(); }
+  });
+  list.addEventListener('click', function (e) {
+    var li = e.target.closest('.im-search-item'); if (li) window.location.href = li.getAttribute('data-url');
+  });
+  document.querySelectorAll('[data-im-search-open]').forEach(function (b) { b.addEventListener('click', open); });
+  document.querySelectorAll('[data-im-search-close]').forEach(function (b) { b.addEventListener('click', close); });
+  document.addEventListener('keydown', function (e) {
+    var typing = /^(input|textarea|select)$/i.test((e.target.tagName || '')) || e.target.isContentEditable;
+    if (e.key === '/' && !typing && root.hidden) { e.preventDefault(); open(); }
+    else if (e.key === 'Escape' && !root.hidden) { close(); }
+  });
+})();
+</script>

@@ -1,0 +1,27 @@
+{%- comment -%}
+  Runtime theme overrides — the one place _config.yml reaches the CSS.
+
+  Scratchpad has exactly one brand colour. Everything tinted on the site
+  (links, the focus ring, the active nav item, the reading-progress bar,
+  every generated cover, every collection chip) derives from --im-accent,
+  so setting `accent_color:` in _config.yml re-tints the whole site without
+  touching a line of SCSS. That is what the setup wizard writes.
+
+  Per-collection hues are derived by rotating the accent's hue. A site can
+  pin any of them explicitly with `color:` on the collection in
+  _config.yml — useful when a collection has a colour of its own already
+  (a channel's red, a language's blue).
+
+  Emitted inline and last, so it wins over assets/styles.css without
+  !important and without a second network request.
+{%- endcomment -%}
+{%- capture theme_css -%}
+{%- if site.accent_color -%}--im-accent:{{ site.accent_color }};{%- endif -%}
+{%- if site.theme_radius -%}--im-radius-2:{{ site.theme_radius }};--im-radius-3:{{ site.theme_radius }};{%- endif -%}
+{%- if site.theme_width -%}--im-width-wide:{{ site.theme_width }};{%- endif -%}
+{%- for c in site.collections -%}
+  {%- if c.color -%}--im-c-{{ c.label }}:{{ c.color }};{%- endif -%}
+{%- endfor -%}
+{%- endcapture -%}
+{%- assign theme_css = theme_css | strip -%}
+{%- if theme_css != "" -%}<style>:root{ {{- theme_css -}} }</style>{%- endif -%}

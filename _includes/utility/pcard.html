@@ -1,0 +1,43 @@
+{%- comment -%}
+  Shared post-card body used by every collection card in _includes/cards/.
+  Params:
+    item    (required) the collection document
+    accent  (required) modifier key: guide|review|trip|video|podcast|project|note
+    kicker  (required) human label shown as type chip / eyebrow
+    media   (default true) render the cover image block
+    play    (default false) show play overlay (video/podcast)
+    badge   (optional) small badge text bottom-right of media
+    score   (optional) review score (out of 5)
+    snippet (optional) override excerpt text
+{%- endcomment -%}
+{%- assign it = include.item -%}
+{%- assign cover = it.cover | default: it.image -%}
+{%- assign snip = include.snippet | default: it.excerpt | default: it.description -%}
+<article class="im-pcard im-pcard--{{ include.accent }}">
+  {%- unless include.media == false -%}
+  <a class="im-pcard-media" href="{{ it.url | relative_url }}" tabindex="-1" aria-hidden="true">
+    {%- comment -%} A real cover if the doc has one; otherwise art generated from its front matter. {%- endcomment -%}
+    {%- if cover and cover != "" and cover != site.placeholder_image -%}
+    <img src="{{ cover | relative_url }}" alt="" loading="lazy" width="1200" height="675">
+    {%- else -%}
+    {%- include utility/thumb.html item=it -%}
+    {%- endif -%}
+    <span class="im-pcard-type">{{ include.kicker }}</span>
+    {%- if include.play %}<span class="im-pcard-play"><i class="ph-bold ph-play"></i></span>{% endif -%}
+    {%- if include.badge %}<span class="im-pcard-badge">{{ include.badge }}</span>{% endif -%}
+  </a>
+  {%- endunless -%}
+  <div class="im-pcard-body">
+    {%- if include.media == false %}<span class="im-kicker">{{ include.kicker }}</span>{% endif -%}
+    <h3 class="im-pcard-title"><a href="{{ it.url | relative_url }}">{{ it.title }}</a></h3>
+    {%- if snip %}<p class="im-pcard-excerpt">{{ snip | strip_html | truncate: 140 }}</p>{% endif -%}
+    <div class="im-pcard-meta">
+      {%- if it.date %}<time datetime="{{ it.date | date_to_xmlschema }}">{{ it.date | date: "%b %-d, %Y" }}</time>{% endif -%}
+      {%- if include.score %}<span class="im-pcard-score">★ {{ include.score }}/5</span>{% endif -%}
+      {%- if it.read_time %}<span>· {{ it.read_time }} min</span>{% endif -%}
+    </div>
+    {%- if it.tags.size > 0 -%}
+    <div class="im-pcard-tagrow">{%- for t in it.tags limit: 3 -%}<span class="im-pcard-tag">#{{ t }}</span>{%- endfor -%}</div>
+    {%- endif -%}
+  </div>
+</article>

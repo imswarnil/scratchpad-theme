@@ -1,0 +1,9 @@
+{%- assign n = site.footer.newsletter -%}
+<section class="im-widget im-widget-cta">
+  <h2 class="im-widget-title"><i class="ph-bold ph-envelope-simple" aria-hidden="true"></i> {{ n.title | default: "Newsletter" }}</h2>
+  <p class="im-widget-text">{{ n.text | default: "New posts, films and snippets — occasionally, never spam." }}</p>
+  <form class="im-footer-form" action="{{ n.action }}" method="post" target="_blank">
+    <input type="email" name="{{ n.field | default: 'email' }}" placeholder="you@example.com" aria-label="Email address" required{% if n.action == nil or n.action == '' %} disabled{% endif %}>
+    <button class="im-btn im-btn-sm im-btn-primary im-w-full" type="submit"{% if n.action == nil or n.action == '' %} disabled title="Set footer.newsletter.action in _config.yml"{% endif %}>Subscribe</button>
+  </form>
+</section>

@@ -1,0 +1,34 @@
+{%- comment -%}
+  A cover, drawn rather than photographed.
+
+  Used wherever a card, a list or a share image needs a picture and the
+  entry did not provide one. Nothing is fetched and nothing is built: an
+  inline SVG, made from the entry's collection.
+
+  It is a SOLID GROUND and a MARK, and nothing else. No title — that is
+  already under the card in real type that wraps and can be selected, and
+  setting it again inside a picture means it is set twice, at a size
+  nobody chose, clipped the moment the card is narrower than the artwork.
+  No gradient, no pattern, no corner glow either: three treatments
+  competing on a picture whose whole job is to say what KIND of thing
+  this is. The colour says the collection; the mark says the rest.
+
+  The file-based twin is tools/thumbs.mjs (`npm run thumbs`), which draws
+  the same picture as a real .svg for the cases that need a URL.
+
+  Params:  item (required)
+           size (kept for callers; the art is the same at every size)
+{%- endcomment -%}
+{%- assign it = include.item -%}
+{%- assign label = it.collection | default: "pages" -%}
+<svg class="im-thumb" viewBox="0 0 1200 675" role="img"
+     aria-label="{{ it.title | escape }}" preserveAspectRatio="xMidYMid slice"
+     style="--im-c-this: var(--im-c-{{ label }}, var(--im-accent));">
+
+  <rect class="im-thumb-bg" width="1200" height="675"/>
+
+  {%- comment -%} The mark, centred, on a 24-unit grid scaled to 240. {%- endcomment -%}
+  <g class="im-thumb-icon" transform="translate(480 218) scale(10)">
+    {% include utility/mark.html collection=label %}
+  </g>
+</svg>

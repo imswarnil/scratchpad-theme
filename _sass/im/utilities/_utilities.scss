@@ -1,0 +1,140 @@
+// ======================================================================
+// im/_utilities.scss — IM CSS Framework utility classes
+// Verbose, predictable helper names, all prefixed `im-`.
+//   im-padding-top-2 · im-margin-bottom-4 · im-text-small · im-gap-3 …
+// Values come straight from the --im-* tokens so utilities re-theme too.
+// ======================================================================
+
+// ---- Spacing (margin / padding) ---------------------------------------
+// Sides map -> property fragments. `x`/`y` expand to two declarations.
+$im-sides: (
+  "":      ("padding": padding,            "margin": margin),
+  "-top":    ("padding": padding-top,      "margin": margin-top),
+  "-right":  ("padding": padding-right,    "margin": margin-right),
+  "-bottom": ("padding": padding-bottom,   "margin": margin-bottom),
+  "-left":   ("padding": padding-left,     "margin": margin-left),
+);
+
+@each $step, $val in $im-space {
+  @each $suffix, $props in $im-sides {
+    .im-padding#{$suffix}-#{$step} { #{map-get($props, "padding")}: var(--im-space-#{$step}) !important; }
+    .im-margin#{$suffix}-#{$step}  { #{map-get($props, "margin")}:  var(--im-space-#{$step}) !important; }
+  }
+  // Axis helpers
+  .im-padding-x-#{$step} { padding-left: var(--im-space-#{$step}) !important; padding-right: var(--im-space-#{$step}) !important; }
+  .im-padding-y-#{$step} { padding-top: var(--im-space-#{$step}) !important;  padding-bottom: var(--im-space-#{$step}) !important; }
+  .im-margin-x-#{$step}  { margin-left: var(--im-space-#{$step}) !important;  margin-right: var(--im-space-#{$step}) !important; }
+  .im-margin-y-#{$step}  { margin-top: var(--im-space-#{$step}) !important;   margin-bottom: var(--im-space-#{$step}) !important; }
+  // Gap (flex / grid)
+  .im-gap-#{$step} { gap: var(--im-space-#{$step}) !important; }
+}
+.im-margin-auto   { margin-inline: auto !important; }
+.im-margin-x-auto { margin-left: auto !important; margin-right: auto !important; }
+
+// ---- Display ----------------------------------------------------------
+.im-block        { display: block !important; }
+.im-inline       { display: inline !important; }
+.im-inline-block { display: inline-block !important; }
+.im-flex         { display: flex !important; }
+.im-inline-flex  { display: inline-flex !important; }
+.im-grid         { display: grid !important; }
+.im-hidden       { display: none !important; }
+
+// ---- Flexbox ----------------------------------------------------------
+.im-flex-row     { flex-direction: row !important; }
+.im-flex-col     { flex-direction: column !important; }
+.im-flex-wrap    { flex-wrap: wrap !important; }
+.im-flex-nowrap  { flex-wrap: nowrap !important; }
+.im-flex-1       { flex: 1 1 0% !important; }
+.im-flex-auto    { flex: 1 1 auto !important; }
+.im-flex-none    { flex: none !important; }
+.im-items-start    { align-items: flex-start !important; }
+.im-items-center   { align-items: center !important; }
+.im-items-end      { align-items: flex-end !important; }
+.im-items-stretch  { align-items: stretch !important; }
+.im-justify-start   { justify-content: flex-start !important; }
+.im-justify-center  { justify-content: center !important; }
+.im-justify-end     { justify-content: flex-end !important; }
+.im-justify-between { justify-content: space-between !important; }
+.im-justify-around  { justify-content: space-around !important; }
+
+// ---- Text -------------------------------------------------------------
+@each $name, $val in $im-text {
+  .im-text-#{$name} { font-size: var(--im-text-#{$name}) !important; }
+}
+// Friendly aliases
+.im-text-small { font-size: var(--im-text-sm) !important; }
+.im-text-large { font-size: var(--im-text-lg) !important; }
+
+.im-text-left    { text-align: left !important; }
+.im-text-center  { text-align: center !important; }
+.im-text-right   { text-align: right !important; }
+.im-text-balance { text-wrap: balance !important; }
+
+.im-text-regular  { font-weight: var(--im-weight-normal) !important; }
+.im-text-medium   { font-weight: var(--im-weight-medium) !important; }
+.im-text-semibold { font-weight: var(--im-weight-semibold) !important; }
+.im-text-bold     { font-weight: var(--im-weight-bold) !important; }
+.im-uppercase     { text-transform: uppercase !important; letter-spacing: 0.06em; }
+.im-mono          { font-family: var(--im-font-mono) !important; }
+
+.im-text-muted    { color: var(--im-muted) !important; }
+.im-text-contrast { color: var(--im-ink) !important; }
+.im-text-accent   { color: var(--im-accent) !important; }
+.im-text-success  { color: var(--im-success) !important; }
+.im-text-danger   { color: var(--im-danger) !important; }
+
+.im-truncate { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.im-clamp-2,
+.im-clamp-3 { display: -webkit-box; -webkit-box-orient: vertical; overflow: hidden; }
+.im-clamp-2 { -webkit-line-clamp: 2; }
+.im-clamp-3 { -webkit-line-clamp: 3; }
+
+// ---- Backgrounds ------------------------------------------------------
+.im-bg-surface { background: var(--im-canvas) !important; }
+.im-bg-muted   { background: var(--im-surface) !important; }
+.im-bg-100     { background: var(--im-surface) !important; }
+.im-bg-200     { background: var(--im-surface-2) !important; }
+.im-bg-accent  { background: var(--im-accent) !important; color: var(--im-on-accent) !important; }
+
+// ---- Borders & shape --------------------------------------------------
+.im-border        { border: 1px solid var(--im-line) !important; }
+.im-border-top    { border-top: 1px solid var(--im-line) !important; }
+.im-border-bottom { border-bottom: 1px solid var(--im-line) !important; }
+.im-rounded       { border-radius: var(--im-radius-xl) !important; }
+.im-rounded-sm    { border-radius: var(--im-radius-md) !important; }
+.im-rounded-lg    { border-radius: var(--im-radius-2xl) !important; }
+.im-rounded-pill  { border-radius: var(--im-radius-full) !important; }
+.im-rounded-none  { border-radius: 0 !important; }
+.im-shadow        { box-shadow: var(--im-shadow) !important; }
+.im-shadow-sm     { box-shadow: var(--im-shadow-sm) !important; }
+.im-shadow-lg     { box-shadow: var(--im-shadow-lg) !important; }
+.im-shadow-none   { box-shadow: none !important; }
+
+// ---- Sizing & overflow ------------------------------------------------
+.im-w-full   { width: 100% !important; }
+.im-w-auto   { width: auto !important; }
+.im-h-full   { height: 100% !important; }
+.im-mw-full  { max-width: 100% !important; }
+.im-overflow-hidden { overflow: hidden !important; }
+.im-overflow-auto   { overflow: auto !important; }
+
+// ---- Position ---------------------------------------------------------
+.im-relative { position: relative !important; }
+.im-absolute { position: absolute !important; }
+.im-sticky   { position: sticky !important; }
+
+// ---- Accessibility & visibility --------------------------------------
+.im-visually-hidden {
+  position: absolute !important;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0, 0, 0, 0);
+  white-space: nowrap; border: 0;
+}
+.im-hide-mobile  { @media (max-width: $bp-md - 1px) { display: none !important; } }
+.im-hide-desktop { @media (min-width: $bp-md)        { display: none !important; } }
+
+// Shown only on paper. The screen already said it another way — /resume/
+// puts its identity in the hero and this block in the print stylesheet.
+.im-print-only { display: none !important; }

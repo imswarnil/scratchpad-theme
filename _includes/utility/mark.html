@@ -1,0 +1,50 @@
+{%- comment -%}
+  The mark for a collection, as SVG paths on a 24×24 grid.
+
+  Drawn here rather than taken from the icon font, because a cover has to
+  work as a standalone .svg file — a social card, a collection's fallback
+  image — where no font is loaded and no stylesheet applies. Simple
+  shapes on purpose: at the size a card shows them, detail is noise.
+
+  Params: collection (label), stroke (width, default 1.6)
+
+  A few marks fill a shape (a play triangle, a dot). That is right on a
+  cover, where the mark is solid — but a filled shape cannot be DRAWN, so
+  the hero's animated copy passes a thin stroke and the CSS overrides the
+  fill to none for the whole group.
+{%- endcomment -%}
+{%- assign w = include.stroke | default: "1.6" -%}
+<g fill="none" stroke="currentColor" stroke-width="{{ w }}" stroke-linecap="round" stroke-linejoin="round">
+{%- case include.collection -%}
+{%- when "posts" -%}
+  <path d="M4 20h4L20 8a2.8 2.8 0 0 0-4-4L4 16v4Z"/><path d="M14 6l4 4"/>
+{%- when "portfolio" -%}
+  <rect x="3" y="7" width="18" height="13" rx="2"/><path d="M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2"/><path d="M3 12h18"/>
+{%- when "videos" -%}
+  <rect x="2" y="4" width="20" height="16" rx="3"/><path d="M10 9l5 3-5 3V9Z" fill="currentColor" stroke="none"/>
+{%- when "webseries" -%}
+  <rect x="2" y="4" width="20" height="13" rx="2"/><path d="M8 21h8"/><path d="M12 17v4"/><path d="M10 8.5l4 2.5-4 2.5v-5Z" fill="currentColor" stroke="none"/>
+{%- when "episodes" -%}
+  <rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 9h20M2 15h20"/><path d="M7 5v14M17 5v14"/>
+{%- when "courses" -%}
+  <path d="M12 4 2 9l10 5 10-5-10-5Z"/><path d="M6 11.5V17c0 1.7 2.7 3 6 3s6-1.3 6-3v-5.5"/>
+{%- when "lessons" -%}
+  <path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v15H6.5A2.5 2.5 0 0 0 4 20.5V5.5Z"/><path d="M8 8h8M8 12h5"/>
+{%- when "snippets" -%}
+  <path d="M8 6 3 12l5 6"/><path d="M16 6l5 6-5 6"/><path d="M13 4l-2 16"/>
+{%- when "prompts" -%}
+  <path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9L12 3Z"/><path d="M18.5 16.5l.7 1.8 1.8.7-1.8.7-.7 1.8-.7-1.8-1.8-.7 1.8-.7.7-1.8Z"/>
+{%- when "podcast" -%}
+  <rect x="9" y="2" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0"/><path d="M12 18v3"/>
+{%- when "newsletter" -%}
+  <rect x="2" y="5" width="20" height="14" rx="2"/><path d="m2.5 7 9.5 6 9.5-6"/>
+{%- when "travel" -%}
+  <path d="M12 21s7-6.2 7-11a7 7 0 1 0-14 0c0 4.8 7 11 7 11Z"/><circle cx="12" cy="10" r="2.6"/>
+{%- when "uses" -%}
+  <path d="M15 4.5a4.5 4.5 0 0 0-5.9 5.7L3.6 15.7a2 2 0 0 0 2.8 2.8l5.5-5.5A4.5 4.5 0 0 0 17.5 7L15 9.5 13 8l2.5-2.5Z"/>
+{%- when "tags" -%}
+  <path d="M3 11V4h7l10 10-7 7L3 11Z"/><circle cx="7.5" cy="7.5" r="1.4" fill="currentColor" stroke="none"/>
+{%- else -%}
+  <rect x="3" y="4" width="18" height="16" rx="2"/><path d="M8 9h8M8 13h8M8 17h5"/>
+{%- endcase -%}
+</g>

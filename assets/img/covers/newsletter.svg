@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" width="1200" height="675" role="img" aria-label="Newsletter">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="hsl(36 26% 12%)"/><stop offset="1" stop-color="hsl(36 39% 22%)"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="82%" cy="14%" r="70%">
+      <stop offset="0" stop-color="hsl(36 79% 52% / 0.38)"/><stop offset="1" stop-color="hsl(36 79% 52% / 0.38)" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="p" width="28" height="28" patternUnits="userSpaceOnUse"><circle cx="3" cy="3" r="1.7" fill="hsl(36 35% 75% / 0.16)"/></pattern>
+  </defs>
+  <rect width="1200" height="675" fill="url(#bg)"/>
+  <rect width="1200" height="675" fill="url(#p)"/>
+  <rect width="1200" height="675" fill="url(#glow)"/>
+  <g transform="translate(480 217.5) scale(10)" fill="none" stroke="#fff" stroke-opacity="0.85"
+     stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" color="#fff">
+    <rect x="2" y="5" width="20" height="14" rx="2"/><path d="m2.5 7 9.5 6 9.5-6"/>
+  </g>
+</svg>

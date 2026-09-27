@@ -1,0 +1,15 @@
+{%- comment -%}
+  The sidebar is a LIST, not a layout: `single.widgets` in _config.yml says
+  which widgets a collection's entries get and in what order, and each name
+  is a file in _includes/widgets/. Add a widget by dropping a file there
+  and naming it; no template is edited.
+
+  A single entry can override the list with `widgets:` in its front matter.
+{%- endcomment -%}
+{%- assign w_list = page.widgets | default: single.widgets | default: site.layout.single.widgets -%}
+<div class="im-sidebar-sticky">
+  {%- for w in w_list -%}
+    {%- assign w_file = "widgets/" | append: w | append: ".html" -%}
+    {% include {{ w_file }} %}
+  {%- endfor -%}
+</div>

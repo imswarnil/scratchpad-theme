@@ -1,0 +1,73 @@
+// ======================================================================
+// im/tokens/_dark-mode.scss — the dark theme
+// ----------------------------------------------------------------------
+// Emitted straight after tokens/_tokens.scss. Only the SEMANTIC layer
+// flips: the primitives (the grey ramp, space, type, radius, motion) are
+// the same in both themes, and every legacy --im-color-* alias points at
+// a semantic token, so re-mapping the semantics re-themes everything
+// underneath it with no second list to keep in sync.
+//
+//   :root[data-color-scheme="dark"]    explicit
+//   :root[data-color-scheme="system"]  under prefers-color-scheme: dark
+//
+// _includes/head.html writes the attribute before first paint, so there
+// is no flash; the navbar toggle persists it to localStorage.
+// ======================================================================
+
+@mixin im-dark-tokens {
+  color-scheme: dark;
+
+  // Surfaces, from the page upward
+  --im-canvas:    var(--im-gray-950);
+  --im-surface:   var(--im-gray-900);
+  --im-surface-2: var(--im-gray-800);
+  --im-surface-3: var(--im-gray-700);
+  --im-line:  color-mix(in oklab, var(--im-gray-400) 26%, transparent);
+  --im-scrim: rgb(0 0 0 / 72%);
+
+  // Text, loudest to quietest
+  --im-ink:     var(--im-white);
+  --im-body:    var(--im-gray-400);
+  --im-muted:   var(--im-gray-500);
+  --im-faint:   var(--im-gray-600);
+
+  // Status — lifted, because the same hue over a dark canvas reads dimmer
+  --im-success: #{tone(success, dark)};
+  --im-warning: #{tone(warning, dark)};
+  --im-danger:  #{tone(danger,  dark)};
+  --im-info:    #{tone(info,    dark)};
+
+  // The accent lightens on hover here instead of darkening: over a dark
+  // canvas, "more" means brighter.
+  --im-accent-hover:  oklch(from var(--im-accent) calc(l + 0.07) c h);
+  --im-accent-active: oklch(from var(--im-accent) calc(l + 0.13) c h);
+
+  // On a dark page the canvas is already gray-950, so the code slab steps
+  // UP one shade to stay a distinct surface. Nothing else about it moves.
+  --im-code-bg: var(--im-gray-900);
+
+  --im-shadow-float: #{$shadow-dark};
+  --im-on-accent: #fff;
+
+  // Legacy aliases whose LIGHT value was a literal, not a var()
+  --im-color-accent-foreground: var(--im-canvas);
+  --im-color-black: #000;
+  --im-color-white: #fff;
+}
+
+:root[data-color-scheme="dark"] { @include im-dark-tokens; }
+
+@media (prefers-color-scheme: dark) {
+  :root[data-color-scheme="system"] { @include im-dark-tokens; }
+  // Visitors who arrive before the no-flash script runs, and visitors with
+  // JavaScript off, still get the right theme.
+  :root:not([data-color-scheme]) { @include im-dark-tokens; }
+}
+
+@supports not (color: oklch(from #000 l c h)) {
+  :root[data-color-scheme="dark"],
+  :root[data-color-scheme="system"] {
+    --im-accent-hover:  var(--im-accent);
+    --im-accent-active: var(--im-accent);
+  }
+}

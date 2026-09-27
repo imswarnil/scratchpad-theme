@@ -1,0 +1,496 @@
+// ======================================================================
+// im/_navbar.scss — configurable site header
+// Variants: --full / --island, .is-sticky, .is-blur
+// Pieces: brand, nav links, dropdown, mega menu, gh-star, sponsor, icon btns
+// ======================================================================
+
+.im-navbar {
+  position: relative;
+  z-index: var(--im-z-header);
+  padding-inline: var(--im-gutter);
+
+  &.is-sticky { position: sticky; top: 0; }
+}
+
+.im-navbar-inner {
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  align-items: center;
+  gap: var(--im-space-4);
+  width: 100%;
+  // Same max-width as the site's wide container (matches .im-home) — the
+  // bar lines up with the content below it instead of running narrower.
+  max-width: calc(var(--im-container-wide) + var(--im-gutter) * 2);
+  margin-inline: auto;
+  min-height: var(--im-navbar-height);
+}
+
+// ---- Full-width bar ---------------------------------------------------
+.im-navbar--full {
+  background: color-mix(in srgb, var(--im-canvas) 88%, transparent);
+  border-bottom: 1px solid transparent;
+  transition: border-color var(--im-duration-base) var(--im-ease-out), box-shadow var(--im-duration-base) var(--im-ease-out), background-color var(--im-duration-base) var(--im-ease-out);
+  &.is-blur { backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
+  &.is-scrolled {
+    border-bottom-color: var(--im-line);
+    background: color-mix(in srgb, var(--im-canvas) 96%, transparent);
+  }
+}
+
+// ---- Island: normal bar at top → floating pill on scroll --------------
+.im-navbar--island {
+  // At the top of the page it reads as a normal full-width bar.
+  padding-top: 0;
+  background: color-mix(in srgb, var(--im-canvas) 88%, transparent);
+  border-bottom: 1px solid transparent;
+  transition: background-color var(--im-duration-base) var(--im-ease-out),
+    border-color var(--im-duration-base) var(--im-ease-out),
+    padding-top var(--im-duration-base) var(--im-ease-out);
+
+  &.is-blur { backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
+
+  .im-navbar-inner {
+    max-width: calc(var(--im-container-wide) + var(--im-gutter) * 2);
+    min-height: var(--im-navbar-height);
+    // Gutter inset in BOTH states — the shell (.im-home etc.) pads its
+    // content by the gutter, so this is what puts the brand mark on the
+    // hero's exact content edge (measured: 0 here left it 20px outboard).
+    padding-inline: var(--im-gutter);
+    border: 1px solid transparent;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+    transition: max-width var(--im-duration-base) var(--im-ease-out),
+      min-height var(--im-duration-base) var(--im-ease-out),
+      padding var(--im-duration-base) var(--im-ease-out),
+      border-color var(--im-duration-base) var(--im-ease-out),
+      border-radius var(--im-duration-base) var(--im-ease-out),
+      background-color var(--im-duration-base) var(--im-ease-out),
+      box-shadow var(--im-duration-base) var(--im-ease-out);
+  }
+
+  // On scroll it detaches into a floating rounded island. It keeps the
+  // site width — only the height, padding, radius and surface change — so
+  // the bar's left/right edges stay locked to the hero and everything
+  // else below it instead of jumping inward as you start scrolling.
+  &.is-scrolled {
+    padding-top: var(--im-space-3);
+    background: transparent;
+    border-bottom-color: transparent;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+
+    .im-navbar-inner {
+      min-height: var(--im-navbar-height-sm);
+      // Same inset as the site gutter, so the brand mark and the last
+      // action button sit on exactly the hero's content edges below.
+      padding-inline: var(--im-gutter);
+      border-color: var(--im-line);
+      border-radius: var(--im-radius-2xl);
+      background: color-mix(in srgb, var(--im-canvas) 82%, transparent);
+      box-shadow: var(--im-shadow-lg);
+    }
+  }
+  &.is-scrolled.is-blur .im-navbar-inner { backdrop-filter: blur(12px) saturate(1.4); -webkit-backdrop-filter: blur(12px) saturate(1.4); }
+
+}
+
+// ---- Page / reading progress as a border that follows the pill -------
+// An SVG path traces the island's own rounded outline, left -> bottom ->
+// right -> top (see navbar.js for the path + why SVG, not conic-gradient:
+// stroke-dashoffset moves at one constant rate around straights *and*
+// corners, where an angle-based conic sweep would bunch up on curves).
+// Fine, light grey — not the accent colour, and not a heavy/dark line.
+.im-navbar-progress-ring {
+  display: none;
+  position: absolute;
+  // .im-navbar-inner has a 1px border, and inset:0 on an absolutely
+  // positioned child sits against its PADDING box (border excluded) —
+  // 2px smaller in each dimension than the border-box rect navbar.js
+  // measures with getBoundingClientRect(). Inset by -1px so this SVG's
+  // own box lines up with that same border-box exactly; without it the
+  // path is drawn to the wrong size and every corner reads visibly off.
+  inset: -1px;
+  z-index: 1;
+  overflow: visible;
+  pointer-events: none;
+
+  path {
+    fill: none;
+    stroke: color-mix(in srgb, var(--im-ink) 30%, transparent);
+    stroke-width: 1.5px;
+    stroke-dasharray: 1;
+    stroke-dashoffset: calc(1 - var(--im-progress-ratio, 0));
+  }
+}
+.im-navbar--island.is-scrolled .im-navbar-progress-ring { display: block; }
+
+// ---- Brand ------------------------------------------------------------
+.im-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--im-space-2);
+  font-weight: var(--im-weight-bold);
+  font-size: var(--im-text-lg);
+  letter-spacing: -0.02em;
+  color: var(--im-ink);
+  text-decoration: none;
+  // The ONE thing in the bar that may give way. Everything else — the
+  // mark, the action buttons, the menu toggle — is a fixed size and has
+  // to stay tappable; a long site name is the only part that can shrink
+  // without breaking something, so it is the part that does.
+  flex: 0 1 auto;
+  min-width: 0;
+}
+.im-brand-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.im-brand-logo { height: 1.6rem; width: auto; }
+
+// Island brand mark: a small circle carrying the initials ("Swarnil
+// Singhai" -> "SS"). Always the initials — never a photo, and the same in
+// the top bar as in the scrolled pill.
+.im-brand-avatar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  width: 1.9rem; height: 1.9rem;
+  border: 1px solid var(--im-line);
+  border-radius: var(--im-radius-full);
+  background: var(--im-ink);
+  color: var(--im-canvas);
+  font-size: 0.65rem;
+  font-weight: var(--im-weight-bold);
+  letter-spacing: 0.02em;
+}
+// ---- Primary nav ------------------------------------------------------
+.im-nav-wrap { margin-inline: auto; }
+.im-nav {
+  display: flex;
+  align-items: center;
+  gap: var(--im-space-1);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.im-nav-item { position: relative; }
+
+.im-nav-link {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--im-space-2);
+  // Short pill highlight — small in height, so it doesn't fill the bar.
+  padding: var(--im-space-1) var(--im-space-3);
+  border-radius: var(--im-radius-full);
+  font-size: var(--im-text-sm);
+  font-weight: var(--im-weight-medium);
+  color: var(--im-body);
+  text-decoration: none;
+  white-space: nowrap;
+  transition: color var(--im-duration-fast) var(--im-ease-out),
+    background var(--im-duration-fast) var(--im-ease-out);
+
+  // The system has exactly two states and this is both of them: HOVER, the
+  // thing fills; CURRENT, "you are here" — a fill one step stronger and a
+  // bolder label. Neither is a change of COLOUR: the accent belongs to the
+  // primary action, to a link's hover and to the focus ring, and a nav item
+  // that turns red is a third state nobody asked for. The icon inherits, so
+  // a label and the mark beside it always agree.
+  &:hover { background: var(--im-hover-bg); color: var(--im-ink); }
+  &[aria-current="page"] {
+    background: var(--im-current-bg);
+    color: var(--im-current-fg);
+    font-weight: var(--im-current-weight);
+  }
+
+  > i { font-size: 1.05em; color: inherit; opacity: 0.7; transition: opacity var(--im-duration-instant); }
+  &:hover > i,
+  &[aria-current="page"] > i { opacity: 1; }
+}
+.im-nav-caret { font-size: 0.7em !important; opacity: 0.6; transition: transform var(--im-duration-fast) var(--im-ease-out); }
+.im-nav-item:hover > .im-nav-link .im-nav-caret { transform: rotate(180deg); }
+
+// ---- Dropdown ---------------------------------------------------------
+.im-dropdown,
+.im-mega {
+  position: absolute;
+  top: calc(100% + var(--im-space-2));
+  left: 0;
+  z-index: 5;
+  padding: var(--im-space-2);
+  border-radius: var(--im-radius-xl);
+  background: var(--im-canvas);
+  box-shadow: inset 0 0 0 1px var(--im-line), var(--im-shadow-float);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(6px);
+  transition: opacity var(--im-duration-fast) var(--im-ease-out), transform var(--im-duration-fast) var(--im-ease-out), visibility var(--im-duration-fast);
+}
+.im-nav-item:hover > .im-dropdown,
+.im-nav-item:focus-within > .im-dropdown,
+.im-nav-item:hover > .im-mega,
+.im-nav-item:focus-within > .im-mega { opacity: 1; visibility: visible; transform: translateY(0); }
+
+.im-dropdown { min-width: 13rem; list-style: none; margin: 0; }
+.im-dropdown-item { position: relative; list-style: none; }
+.im-dropdown-link {
+  display: flex;
+  align-items: center;
+  gap: var(--im-space-2);
+  padding: var(--im-space-2) var(--im-space-3);
+  border-radius: var(--im-radius-md);
+  font-size: var(--im-text-sm);
+  font-weight: var(--im-weight-medium);
+  color: var(--im-body);
+  text-decoration: none;
+  &:hover { background: var(--im-surface); color: var(--im-ink); }
+  > i { color: var(--im-muted); }
+}
+.im-dropdown-caret { margin-left: auto; font-size: 0.75em; opacity: 0.6; }
+.im-dropdown-item.has-sub:hover > .im-dropdown-link { background: var(--im-surface); color: var(--im-ink); }
+
+// ---- Second-level nested flyout --------------------------------------
+.im-subdropdown {
+  position: absolute;
+  top: calc(-1 * var(--im-space-2));
+  left: calc(100% + var(--im-space-1));
+  z-index: 6;
+  min-width: 12rem;
+  list-style: none;
+  margin: 0;
+  padding: var(--im-space-2);
+  border-radius: var(--im-radius-xl);
+  background: var(--im-canvas);
+  box-shadow: inset 0 0 0 1px var(--im-line), var(--im-shadow-float);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateX(6px);
+  transition: opacity var(--im-duration-fast) var(--im-ease-out), transform var(--im-duration-fast) var(--im-ease-out), visibility var(--im-duration-fast);
+}
+.im-dropdown-item.has-sub:hover > .im-subdropdown,
+.im-dropdown-item.has-sub:focus-within > .im-subdropdown { opacity: 1; visibility: visible; transform: translateX(0); }
+
+// A nested flyout opens to the RIGHT of its parent, which is fine on a
+// wide screen and runs off the edge on a narrow one — the About menu sits
+// near the right of the bar, so its "More" panel is the first casualty.
+// Below the widest breakpoint it opens to the LEFT instead, back over the
+// menu it came from, where there is always room.
+@media (min-width: $bp-lg) and (max-width: $bp-xl - 1px) {
+  .im-subdropdown {
+    left: auto;
+    right: calc(100% + var(--im-space-1));
+    transform: translateX(6px);
+  }
+  .im-dropdown-item.has-sub:hover > .im-subdropdown,
+  .im-dropdown-item.has-sub:focus-within > .im-subdropdown { transform: translateX(0); }
+}
+
+// ---- Mega menu (large, grouped) --------------------------------------
+.im-mega {
+  width: min(46rem, calc(100vw - var(--im-gutter) * 2));
+  max-width: calc(100vw - var(--im-gutter) * 2);
+  left: 50%;
+  transform: translate(-50%, 6px);
+  padding: var(--im-space-4);
+}
+.im-nav-item:hover > .im-mega,
+.im-nav-item:focus-within > .im-mega { transform: translate(-50%, 0); }
+
+.im-mega-blurb { margin: var(--im-space-2) var(--im-space-2) var(--im-space-4); font-size: var(--im-text-sm); color: var(--im-muted); }
+
+.im-mega-body { display: grid; grid-template-columns: 1fr; gap: var(--im-space-4); }
+@media (min-width: $bp-md) { .im-mega-body { grid-template-columns: 1.6fr 1fr; } }
+
+.im-mega-groups { display: grid; grid-template-columns: 1fr 1fr; gap: var(--im-space-5); }
+.im-mega-group-title {
+  margin: var(--im-space-1) var(--im-space-3) var(--im-space-2);
+  font-size: var(--im-text-xs);
+  font-weight: var(--im-weight-bold);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--im-faint);
+}
+.im-mega-item {
+  display: flex;
+  align-items: center;
+  gap: var(--im-space-3);
+  padding: var(--im-space-3);
+  border-radius: var(--im-radius-md);
+  text-decoration: none;
+  color: var(--im-ink);
+  transition: background-color var(--im-duration-instant);
+  // One answer, the same one the nav links give: it fills. The icon plate
+  // steps with it instead of turning a different colour.
+  &:hover { background: var(--im-hover-bg); }
+  &:hover .im-mega-icon { background: var(--im-surface-2); color: var(--im-ink); }
+}
+.im-mega-icon {
+  display: grid; place-items: center;
+  width: 2.5rem; height: 2.5rem; flex: 0 0 auto;
+  border-radius: var(--im-radius-md);
+  background: var(--im-surface);
+  font-size: 1.25rem; color: var(--im-muted);
+  transition: background-color var(--im-duration-instant), color var(--im-duration-instant);
+}
+.im-mega-text { display: flex; flex-direction: column; }
+.im-mega-title { font-weight: var(--im-weight-semibold); font-size: var(--im-text-sm); }
+.im-mega-sub { font-size: var(--im-text-xs); color: var(--im-muted); }
+
+// Featured panel on the right of the mega
+.im-mega-featured {
+  display: flex;
+  flex-direction: column;
+  gap: var(--im-space-1);
+  padding: var(--im-space-4);
+  border-radius: var(--im-radius-xl);
+  text-decoration: none;
+  color: var(--im-ink);
+  background:
+    radial-gradient(120% 120% at 100% 0%, color-mix(in oklab, var(--im-accent) 14%, transparent), transparent 60%),
+    var(--im-surface);
+  transition: background-color var(--im-duration-fast) var(--im-ease-out);
+  // The featured panel is a card, and a card answers by filling.
+  &:is(:hover, :focus-within) {
+    background:
+      radial-gradient(120% 120% at 100% 0%, color-mix(in oklab, var(--im-accent) 20%, transparent), transparent 60%),
+      var(--im-surface-2);
+  }
+}
+.im-mega-featured-icon { font-size: 1.5rem; color: var(--im-accent); }
+.im-mega-featured-title { font-weight: var(--im-weight-semibold); font-size: var(--im-text-base); margin-top: var(--im-space-1); }
+.im-mega-featured-text { font-size: var(--im-text-sm); color: var(--im-body); }
+// The featured link is the one place in the menu the accent belongs: it is
+// a call to action, and its arrow leans the way it goes.
+.im-mega-featured-cta {
+  margin-top: var(--im-space-2);
+  display: inline-flex; align-items: center; gap: var(--im-space-1);
+  font-size: var(--im-text-sm); font-weight: var(--im-weight-semibold);
+  color: var(--im-ink);
+  > i { transition: translate var(--im-duration-instant) var(--im-ease-out); }
+}
+.im-mega-featured:hover .im-mega-featured-cta { color: var(--im-accent); }
+.im-mega-featured:hover .im-mega-featured-cta > i { translate: 3px 0; }
+
+// ---- Actions ----------------------------------------------------------
+.im-nav-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--im-space-2);
+  flex: 0 0 auto;
+  margin-left: auto;
+}
+
+.im-iconbtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.25rem; height: 2.25rem;
+  border: 1px solid var(--im-line);
+  border-radius: var(--im-radius-full);
+  background: transparent;
+  color: var(--im-ink);
+  cursor: pointer;
+  transition: background var(--im-duration-fast) var(--im-ease-out);
+  &:hover { background: var(--im-surface); }
+  .im-icon-dark { display: none; }
+}
+:root[data-color-scheme="dark"] .im-iconbtn {
+  .im-icon-light { display: none; }
+  .im-icon-dark  { display: inline-flex; }
+}
+
+// GitHub star pill
+.im-ghstar {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--im-space-2);
+  height: 2.25rem;
+  padding: 0 var(--im-space-3);
+  border: 1px solid var(--im-line);
+  border-radius: var(--im-radius-full);
+  font-size: var(--im-text-sm);
+  font-weight: var(--im-weight-semibold);
+  color: var(--im-ink);
+  text-decoration: none;
+  &:hover { background: var(--im-surface); }
+}
+.im-ghstar-count {
+  padding-left: var(--im-space-2);
+  margin-left: var(--im-space-1);
+  border-left: 1px solid var(--im-line);
+  color: var(--im-muted);
+}
+
+.im-sponsor { border-color: #db61a2; color: #db61a2; }
+.im-sponsor:hover { background: #db61a2; color: #fff; }
+
+// ---- Mobile -----------------------------------------------------------
+.im-nav-toggle {
+  display: none;
+  width: 2.25rem; height: 2.25rem;
+  align-items: center; justify-content: center;
+  border: 1px solid var(--im-line);
+  border-radius: var(--im-radius-md);
+  background: transparent; color: var(--im-ink);
+  cursor: pointer;
+}
+
+// Below a phone-and-a-half, the bar has room for the brand, three round
+// buttons and the menu toggle — and nothing else. The GitHub star is the
+// first thing to go: it is the only action that is not about THIS site.
+@include mq-down($bp-sm) {
+  .im-ghstar { display: none; }
+  .im-navbar-inner { gap: var(--im-space-2); }
+}
+
+@include mq-down($bp-lg) {
+  .im-nav-toggle { display: inline-flex; }
+  // hide desktop-only action buttons to keep the bar tidy
+  .im-ghstar-label, .im-sponsor span { display: none; }
+
+  .im-nav-wrap {
+    position: absolute;
+    inset: 100% var(--im-gutter) auto;
+    margin-top: var(--im-space-2);
+    max-height: calc(100vh - var(--im-navbar-height) - var(--im-space-5));
+    overflow-y: auto;
+    padding: var(--im-space-3);
+    border-radius: var(--im-radius-xl);
+    background: var(--im-canvas);
+    box-shadow: inset 0 0 0 1px var(--im-line), var(--im-shadow-float);
+    opacity: 0; visibility: hidden; transform: translateY(-8px);
+    transition: opacity var(--im-duration-fast) var(--im-ease-out), transform var(--im-duration-fast) var(--im-ease-out), visibility var(--im-duration-fast);
+  }
+  .im-navbar.is-nav-open .im-nav-wrap { opacity: 1; visibility: visible; transform: translateY(0); }
+
+  .im-nav { flex-direction: column; align-items: stretch; gap: var(--im-space-1); }
+  .im-nav-link { padding: var(--im-space-3); justify-content: flex-start; }
+  .im-nav-caret { margin-left: auto; }
+
+  // Dropdowns / mega / nested flyouts become inline, always-expanded panels
+  .im-dropdown, .im-mega, .im-subdropdown,
+  .im-nav-item:hover > .im-mega,
+  .im-dropdown-item.has-sub:hover > .im-subdropdown {
+    position: static;
+    left: auto; right: auto; top: auto;
+    opacity: 1; visibility: visible; transform: none;
+    width: auto;
+    min-width: 0;
+    margin: 0 0 var(--im-space-2) var(--im-space-4);
+    padding-inline: 0;
+    box-shadow: none;
+    background: transparent;
+    border: 0;
+    border-left: 1px solid var(--im-line);
+    border-radius: 0;
+  }
+  .im-mega-body { grid-template-columns: 1fr; gap: var(--im-space-2); }
+  .im-mega-groups { grid-template-columns: 1fr; gap: var(--im-space-2); }
+  .im-mega-featured { border-radius: var(--im-radius-lg); }
+  .im-dropdown-caret { display: none; }
+}

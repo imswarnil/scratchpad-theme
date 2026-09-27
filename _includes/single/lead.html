@@ -1,0 +1,10 @@
+{%- comment -%}
+  The block between the title and the prose. Which one a collection gets is
+  `single.lead` in _config.yml — "video", "prompt", "snippet", "portfolio",
+  "cover", or any other file you drop into _includes/leads/.
+{%- endcomment -%}
+{%- assign lead_name = page.lead | default: single.lead | default: "cover" -%}
+{%- if lead_name != "none" -%}
+  {%- assign lead_file = "leads/" | append: lead_name | append: ".html" -%}
+  {% include {{ lead_file }} %}
+{%- endif -%}

@@ -1,0 +1,101 @@
+---
+layout: default
+---
+{%- comment -%}
+  ONE single-entry layout for every collection, composed from parts.
+
+  What a collection's entry page looks like is DATA, not a template: each
+  collection's `single:` block in _config.yml names the parts to stack, in
+  order, and the widgets to put beside them —
+
+    collections:
+      portfolio:
+        single:
+          lead: portfolio                         # _includes/leads/portfolio.html
+          parts: [breadcrumbs, head, lead, prose, tags, share, ask, comments, author, nav]
+          widgets: [details, toc, collection, cta]
+          sidebar: true
+
+  Every name is a file: `parts` are _includes/single/<name>.html, `widgets`
+  are _includes/widgets/<name>.html, the lead is _includes/leads/<name>.html.
+  Adding a part means adding a file and naming it — nothing here changes.
+  A single entry can override any of the three in its own front matter.
+{%- endcomment -%}
+{%- assign coll = site.collections | where: "label", page.collection | first -%}
+{%- assign single = coll.single | default: site.layout.single -%}
+{%- assign parts = page.parts | default: single.parts | default: site.layout.single.parts -%}
+
+{%- assign has_sidebar = true -%}
+{%- if site.layout.sidebar == false %}{% assign has_sidebar = false %}{% endif -%}
+{%- if single.sidebar == false %}{% assign has_sidebar = false %}{% endif -%}
+{%- if page.sidebar == false %}{% assign has_sidebar = false %}{% endif -%}
+{%- if page.sidebar == true %}{% assign has_sidebar = true %}{% endif -%}
+
+{%- comment -%}
+  How WIDE the page is, and whether anything sits beside it, is the
+  collection's `single.shell` — the third thing that makes one kind of
+  entry a different page from another:
+
+    reading  a reading column, centred, no sidebar   (a post, a snippet)
+    aside    a reading column with a rail beside it  (the default)
+    wide     the full fluid container, nothing beside it — for a page
+             whose subject is a PICTURE: a film, an episode
+    split    70 / 30, the rail sticky — a project, a case study
+    course   a contents rail on the LEFT and the lesson beside it, because
+             in a course "where am I" is the first question, not the last
+
+  A reel overrides all of it: a 9:16 player wants the film on one side and
+  the words on the other, which is none of the four.
+{%- endcomment -%}
+{%- assign shell = page.shell | default: single.shell | default: "aside" -%}
+{%- comment -%}
+  A shell decides WIDTH. Whether anything sits beside the article is a
+  separate question, answered by `single.sidebar` (or the entry's own
+  `sidebar:`) — tying the two together is what quietly removed the
+  contents rail from every collection that wanted a reading measure.
+  The `course` shell is the one exception: its rail is on the left, and
+  two rails is a corridor.
+{%- endcomment -%}
+{%- if shell == "course" %}{% assign has_sidebar = false %}{% endif -%}
+
+{%- assign is_reel = false -%}
+{%- if page.orientation == "portrait" or page.reel %}{% assign is_reel = true %}{% endif -%}
+{%- if is_reel %}{% assign has_sidebar = false %}{% endif -%}
+
+{%- comment -%}
+  A lesson's bar is the page's ONLY chrome, so it is lifted out of the
+  shell entirely — a full-width element inside a grid column cannot span
+  the window, and a bar that stops at the content's edge on a page with
+  no header above it reads as a stray pill.
+{%- endcomment -%}
+{%- assign parts_rest = parts -%}
+{%- if shell == "course" and page.collection == "lessons" -%}
+  {% include single/coursebar.html %}
+  {%- assign parts_rest = parts | where_exp: "p", "p != 'coursebar'" -%}
+{%- endif -%}
+
+<div class="im-shell is-{{ shell }}{% if has_sidebar %} has-sidebar{% endif %}{% if is_reel %} is-reel{% endif %} im-page is-{{ page.collection }}">
+  {%- if shell == "course" -%}
+  <aside class="im-shell-rail" aria-label="Contents">
+    {%- if page.collection == "docs" -%}{% include single/docsnav.html %}
+    {%- else -%}{% include single/coursenav.html %}{%- endif -%}
+  </aside>
+  {%- endif -%}
+
+  <div class="im-shell-main">
+    <article class="im-article">
+      {%- for part in parts_rest -%}
+        {%- assign part_file = "single/" | append: part | append: ".html" -%}
+        {% include {{ part_file }} %}
+      {%- endfor -%}
+    </article>
+  </div>
+
+  {%- if has_sidebar -%}
+  <aside class="im-sidebar" aria-label="Sidebar">{% include sidebar.html %}</aside>
+  {%- endif -%}
+</div>
+
+{% include toc-script.html %}
+<script src="{{ '/assets/scripts/copy.js' | relative_url }}?v={{ site.time | date: '%s' }}" defer></script>
+{%- if page.screenshots or page.gallery -%}<script src="{{ '/assets/scripts/carousel.js' | relative_url }}?v={{ site.time | date: '%s' }}" defer></script>{%- endif -%}

@@ -1,0 +1,24 @@
+{%- comment -%}
+  A trip, as a photograph with the facts over it: where, when, how far.
+{%- endcomment -%}
+{%- assign it = include.item -%}
+{%- assign cover = it.cover | default: it.image -%}
+{%- if cover == site.placeholder_image %}{% assign cover = nil %}{% endif -%}
+<article class="im-tripcard" style="--im-c-this: var(--im-c-{{ it.collection }}, var(--im-accent));">
+  <a class="im-tripcard-link" href="{{ it.url | relative_url }}">
+    <div class="im-tripcard-art">
+      {%- if cover %}<img src="{{ cover | relative_url }}" alt="" loading="lazy" width="1200" height="800">
+      {%- else %}{% include utility/thumb.html item=it size="sm" %}{% endif -%}
+      <span class="im-tripcard-scrim" aria-hidden="true"></span>
+      <div class="im-tripcard-copy">
+        {%- if it.place %}<span class="im-tripcard-place"><i class="ph-bold ph-map-pin" aria-hidden="true"></i> {{ it.place }}</span>{% endif -%}
+        <h3 class="im-tripcard-title">{{ it.title }}</h3>
+        <p class="im-tripcard-meta">
+          {%- if it.date %}<span>{{ it.date | date: "%b %Y" }}</span>{% endif -%}
+          {%- if it.days %}<span>{{ it.days }} days</span>{% endif -%}
+          {%- if it.distance %}<span>{{ it.distance }}</span>{% endif -%}
+        </p>
+      </div>
+    </div>
+  </a>
+</article>

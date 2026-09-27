@@ -1,0 +1,127 @@
+---
+layout: default
+title: Tags
+permalink: /tags/
+description: "Every tag on the site, and everything filed under it — across all five collections."
+ad_rails: false
+---
+{%- comment -%}
+  Cross-collection tag index. Every tag used by any entry in any collection
+  gets a chip in the cloud and a section of its own below it, so a tag link
+  on a post has somewhere real to land: /tags/#t-<slug>.
+
+  Liquid has no cross-collection tag map — `site.tags` only ever sees posts —
+  so the index is built here, which keeps the page buildable on GitHub Pages
+  with no plugin. Tags are grouped by their SLUG, not by their spelling, so
+  `Analytics` and `analytics` are one subject with one anchor rather than two
+  sections sharing a duplicate id. The first spelling seen (newest entry
+  first) is the one displayed.
+
+  The index is carried in one string of `slug::label::count` records because
+  Liquid cannot build an array of objects. A tag containing `|` or `::` would
+  split wrongly — no real tag does, and a slug never can.
+{%- endcomment -%}
+{%- assign entries = "" | split: "" -%}
+{%- for c in site.collections -%}
+  {%- assign entries = entries | concat: c.docs -%}
+{%- endfor -%}
+{%- assign entries = entries | sort: "date" | reverse -%}
+
+{%- comment -%} 1. unique slugs, each with the first spelling seen {%- endcomment -%}
+{%- assign seen = "|" -%}
+{%- assign pairblob = "" -%}
+{%- for d in entries -%}
+  {%- for t in d.tags -%}
+    {%- assign sl = t | slugify -%}
+    {%- assign key = "|" | append: sl | append: "|" -%}
+    {%- unless seen contains key -%}
+      {%- assign seen = seen | append: sl | append: "|" -%}
+      {%- assign pairblob = pairblob | append: sl | append: "::" | append: t | append: "|" -%}
+    {%- endunless -%}
+  {%- endfor -%}
+{%- endfor -%}
+{%- assign pairs = pairblob | split: "|" | sort_natural -%}
+
+{%- comment -%} 2. count each one once, so the cloud and the headings agree {%- endcomment -%}
+{%- assign statblob = "" -%}
+{%- for pair in pairs -%}
+  {%- assign bits = pair | split: "::" -%}
+  {%- assign sl = bits[0] -%}
+  {%- assign n = 0 -%}
+  {%- for d in entries -%}
+    {%- assign hit = false -%}
+    {%- for t in d.tags -%}
+      {%- assign ts = t | slugify -%}
+      {%- if ts == sl %}{% assign hit = true %}{% endif -%}
+    {%- endfor -%}
+    {%- if hit %}{% assign n = n | plus: 1 %}{% endif -%}
+  {%- endfor -%}
+  {%- assign statblob = statblob | append: pair | append: "::" | append: n | append: "|" -%}
+{%- endfor -%}
+{%- assign stats = statblob | split: "|" -%}
+
+<section class="im-collection im-page im-tagpage">
+  {% include utility/collection-head.html
+     title="Tags"
+     desc="Every subject on the site, and everything filed under it. Each one has a page of its own."
+     icon="hash"
+     count=pairs.size
+     count_label="tags" %}
+
+  {%- if pairs.size > 0 -%}
+  <nav class="im-tagcloud im-reveal" aria-label="All tags">
+    <ul>
+      {%- for row in stats -%}
+      {%- assign bits = row | split: "::" -%}
+      <li>
+        <a href="/tags/{{ bits[0] }}/">
+          <span class="im-tagcloud-hash" aria-hidden="true">#</span>{{ bits[1] }}
+          <span class="im-tagcloud-count">{{ bits[2] }}</span>
+        </a>
+      </li>
+      {%- endfor -%}
+    </ul>
+  </nav>
+
+  <div class="im-tagsecs">
+    {%- for row in stats -%}
+    {%- assign bits = row | split: "::" -%}
+    {%- assign sl = bits[0] -%}
+    <section class="im-tagsec im-reveal" id="t-{{ sl }}">
+      <h2 class="im-tagsec-title">
+        <a href="/tags/{{ sl }}/"><span class="im-tagsec-hash" aria-hidden="true">#</span>{{ bits[1] }}</a>
+        <span class="im-tagsec-count">{{ bits[2] }} {% if bits[2] == "1" %}entry{% else %}entries{% endif %}</span>
+      </h2>
+      <ul class="im-tagrows">
+        {%- for it in entries -%}
+        {%- assign hit = false -%}
+        {%- for t in it.tags -%}
+          {%- assign ts = t | slugify -%}
+          {%- if ts == sl %}{% assign hit = true %}{% endif -%}
+        {%- endfor -%}
+        {%- if hit -%}
+        {%- assign coll = site.collections | where: "label", it.collection | first -%}
+        <li class="im-tagrow" style="--im-c-this: var(--im-c-{{ it.collection }}, var(--im-accent));">
+          <a class="im-tagrow-link" href="{{ it.url | relative_url }}">
+            <span class="im-tagrow-icon" aria-hidden="true"><i class="ph-bold ph-{{ coll.icon | default: 'folder' }}"></i></span>
+            <span class="im-tagrow-text">
+              <span class="im-tagrow-title">{{ it.title | default: it.name }}</span>
+              {%- assign snip = it.description | default: it.excerpt -%}
+              {%- if snip and snip != "" %}<span class="im-tagrow-desc">{{ snip | strip_html | strip_newlines | truncate: 120 }}</span>{% endif -%}
+            </span>
+            <span class="im-tagrow-meta">
+              <span class="im-tagrow-kind">{{ it.kind | default: coll.singular | default: it.collection }}</span>
+              {%- if it.date %}<time datetime="{{ it.date | date_to_xmlschema }}">{{ it.date | date: "%b %Y" }}</time>{% endif -%}
+            </span>
+          </a>
+        </li>
+        {%- endif -%}
+        {%- endfor -%}
+      </ul>
+    </section>
+    {%- endfor -%}
+  </div>
+  {%- else -%}
+  <p class="im-collection-empty">Nothing is tagged yet. Add <code>tags: [something]</code> to an entry's front matter and it will appear here.</p>
+  {%- endif -%}
+</section>

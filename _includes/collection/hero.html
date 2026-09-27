@@ -1,0 +1,118 @@
+{%- comment -%}
+  The head of a listing, at the page's full width rather than the reading
+  column's: the collection's pattern on the right, a display title, and
+  along its foot the two things a reader does here — pick a topic, and
+  pick how to look at the list.
+
+  One partial for every collection, because a collection's head is always
+  the same four things. What differs is DATA: the caption, the hue, the
+  icon and the counts come from the collection itself; the pattern, an
+  optional loop behind it, a CTA and the view switch come from its `hero:`
+  block in _config.yml.
+
+  Params: coll, docs, title, views (show the view switch), tags (show the
+          topic chips — off where the page has a real filter of its own).
+{%- endcomment -%}
+{%- assign c = include.coll -%}
+{%- assign docs = include.docs -%}
+{%- assign h = c.hero -%}
+{%- assign latest = docs | first -%}
+{%- assign bg = h.video -%}
+
+{%- comment -%} The topics in this collection, most-used first is overkill: alphabetical is findable. {%- endcomment -%}
+{%- assign tagblob = "" -%}
+{%- for d in docs -%}{%- for t in d.tags -%}{%- assign tagblob = tagblob | append: t | append: "|" -%}{%- endfor -%}{%- endfor -%}
+{%- assign coll_tags = tagblob | split: "|" | uniq | sort_natural -%}
+
+<header class="im-collhero{% if h.full %} im-collhero-full{% endif %} im-reveal" style="--im-c-this: var(--im-c-{{ c.label }}, var(--im-accent));">
+  {%- if bg and bg != "" -%}
+  <span class="im-collhero-film" aria-hidden="true">
+    <iframe src="https://www.youtube.com/embed/{{ bg }}?autoplay=1&amp;mute=1&amp;loop=1&amp;playlist={{ bg }}&amp;controls=0&amp;playsinline=1" title="" tabindex="-1" allow="autoplay; encrypted-media"></iframe>
+  </span>
+  {%- else -%}
+  <span class="im-collhero-art im-pattern-{{ h.pattern | default: 'rules' }}" aria-hidden="true"></span>
+
+  {%- comment -%}
+    The collection's own mark, drawn large on the right — and DRAWN: the
+    strokes run on as the page loads, which is the one thing on a listing
+    page that says "this is a place" before you have read a word of it.
+    It is the same shape the cards and the covers use, so the page and
+    the things on it are recognisably one collection.
+
+    Under prefers-reduced-motion the line is simply already complete.
+  {%- endcomment -%}
+  <svg class="im-collhero-mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+    {% include utility/mark.html collection=c.label stroke="0.55" %}
+  </svg>
+  {%- endif -%}
+
+  <div class="im-collhero-copy">
+    <p class="im-caption" data-index="{{ docs.size }}">{{ c.title }}</p>
+    <h1 class="im-collhero-title">{{ include.title | default: c.title }}</h1>
+    {%- if c.description %}<p class="im-collhero-text">{{ c.description }}</p>{% endif -%}
+    <p class="im-collhero-meta">
+      <span>{{ docs.size }} {{ c.title | downcase }}</span>
+      {%- if latest.date %}<span>Updated {{ latest.date | date: "%b %Y" }}</span>{% endif -%}
+      {%- if h.cta %}<a href="{{ h.cta.url }}"{% if h.cta.url contains '//' %} target="_blank" rel="noopener"{% endif %}>{{ h.cta.label }}</a>{% endif -%}
+      <a href="{{ '/feed.xml' | relative_url }}">RSS</a>
+    </p>
+  </div>
+
+  {%- if include.views or include.tags or include.filters -%}
+  <div class="im-collhero-bar"{% if include.filters %} data-im-filter{% endif %}>
+    {%- if include.filters -%}
+    {%- comment -%}
+      Filtering, in the bar rather than in a column of its own: a rail of
+      chips down the left takes a quarter of the page from the work it is
+      there to show. These are buttons, wired to assets/scripts/filter.js,
+      and the state lives in the URL hash so a filtered view can be sent
+      to someone.
+    {%- endcomment -%}
+    {%- capture kinds_raw -%}{%- for d in docs -%}{{ d.kind | default: "project" }}|{%- endfor -%}{%- endcapture -%}
+    {%- assign kinds = kinds_raw | split: "|" | uniq | sort -%}
+    <div class="im-collbar-filters">
+      <button class="im-tag im-tag-clear" type="button" data-im-filter-clear hidden>
+        <i class="ph-bold ph-x" aria-hidden="true"></i> Clear
+      </button>
+      {%- for k in kinds -%}{%- if k != "" -%}
+        {%- assign n = 0 -%}
+        {%- for d in docs -%}{%- assign dk = d.kind | default: "project" -%}{%- if dk == k -%}{%- assign n = n | plus: 1 -%}{%- endif -%}{%- endfor -%}
+        <button class="im-tag" type="button" data-filter-key="kind" data-filter-value="{{ k }}" aria-pressed="false">{{ k }} <small>{{ n }}</small></button>
+      {%- endif -%}{%- endfor -%}
+      {%- for t in coll_tags limit: 12 -%}
+        {%- assign ts = t | slugify -%}
+        {%- comment -%} A tag that repeats a kind adds a second chip that does the same thing. {%- endcomment -%}
+        {%- unless kinds contains ts -%}
+        {%- assign n = docs | where_exp: "d", "d.tags contains t" | size -%}
+        <button class="im-tag" type="button" data-filter-key="tag" data-filter-value="{{ ts }}" aria-pressed="false">{{ t }} <small>{{ n }}</small></button>
+        {%- endunless -%}
+      {%- endfor -%}
+    </div>
+    <span class="im-collbar-count" data-im-filter-count>{{ docs.size }} of {{ docs.size }}</span>
+
+    {%- elsif include.tags and coll_tags.size > 0 -%}
+    <div class="im-collbar-filters">
+      {%- for t in coll_tags limit: 14 -%}
+      {%- assign n = docs | where_exp: "d", "d.tags contains t" | size -%}
+      <a class="im-tag" href="/tags/{{ t | slugify }}/">{{ t }} <small>{{ n }}</small></a>
+      {%- endfor -%}
+    </div>
+    {%- endif -%}
+
+    {%- if include.views -%}
+    {%- comment -%}
+      Four dressings of one grid — the cards never change markup, the feed
+      decides their shape. assets/scripts/view.js sets `data-view` on the
+      feed and remembers the choice; without it the feed keeps whatever
+      data-view the page shipped and the CSS does the rest.
+    {%- endcomment -%}
+    <div class="im-btn-group im-viewswitch" role="group" aria-label="How to show the {{ c.title | downcase }}" data-im-view="#feed">
+      <button class="im-btn im-btn-sm" type="button" value="card" aria-pressed="true"><i class="ph-bold ph-layout" aria-hidden="true"></i><span>Card</span></button>
+      <button class="im-btn im-btn-sm" type="button" value="grid" aria-pressed="false"><i class="ph-bold ph-squares-four" aria-hidden="true"></i><span>Grid</span></button>
+      <button class="im-btn im-btn-sm" type="button" value="list" aria-pressed="false"><i class="ph-bold ph-rows" aria-hidden="true"></i><span>List</span></button>
+      <button class="im-btn im-btn-sm" type="button" value="simple" aria-pressed="false"><i class="ph-bold ph-list-dashes" aria-hidden="true"></i><span>Simple</span></button>
+    </div>
+    {%- endif -%}
+  </div>
+  {%- endif -%}
+</header>

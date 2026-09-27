@@ -1,0 +1,445 @@
+// ======================================================================
+// components/_single.scss — the parts a single entry is composed from
+// ----------------------------------------------------------------------
+// One file per idea in _includes/single/, _includes/widgets/ and
+// _includes/leads/; one section per idea here, in the same order. Nothing
+// in this file knows which collection it is rendering — that is what
+// `single.parts` in _config.yml decides.
+// ======================================================================
+
+// ---- Share row --------------------------------------------------------
+// Icons, not labelled buttons: eight named networks as eight words is a
+// paragraph, and nobody reads it. Each is the round action the theme uses
+// everywhere else, so it fills under the pointer.
+.im-share {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--im-space-2);
+  margin: var(--im-space-6) 0;
+}
+
+.im-share-label {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--im-space-2);
+  margin-right: var(--im-space-1);
+  font-size: var(--im-text-sm);
+  font-weight: var(--im-weight-semibold);
+  color: var(--im-muted);
+}
+
+.im-share-btn {
+  display: grid;
+  place-items: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  flex: 0 0 auto;
+  border: 0;
+  border-radius: var(--im-radius-full);
+  box-shadow: inset 0 0 0 1px var(--im-line);
+  background: transparent;
+  color: var(--im-ink);
+  font-size: 1.05rem;
+  cursor: pointer;
+  @include im-hover-fill;
+
+  &.is-copied { background: var(--im-success-tint); color: var(--im-success); }
+}
+
+// ---- Ask an AI --------------------------------------------------------
+.im-ask {
+  display: flex;
+  flex-direction: column;
+  gap: var(--im-space-4);
+  margin: var(--im-space-6) 0;
+  padding: 1.25rem;
+  border-radius: var(--im-radius-xl);
+  background: var(--im-surface);
+}
+.im-ask-head { display: flex; align-items: flex-start; gap: var(--im-space-3); }
+.im-ask-icon {
+  display: grid;
+  place-items: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  flex: 0 0 auto;
+  border-radius: var(--im-radius-md);
+  font-size: 1.1rem;
+  @include im-collection-tint;
+}
+.im-ask-title { margin: 0; font-weight: var(--im-weight-semibold); color: var(--im-ink); }
+.im-ask-text  { margin: 0.15rem 0 0; font-size: var(--im-text-sm); color: var(--im-muted); }
+.im-ask-actions { display: flex; flex-wrap: wrap; gap: var(--im-space-2); }
+
+// ---- Author box -------------------------------------------------------
+.im-authorbox {
+  display: flex;
+  flex-direction: column;
+  gap: var(--im-space-5);
+  margin: var(--im-space-7) 0;
+  padding: 1.25rem;
+  border-radius: var(--im-radius-xl);
+  background: var(--im-surface);
+}
+.im-authorbox-head { display: flex; gap: var(--im-space-4); align-items: flex-start; }
+.im-authorbox-avatar {
+  width: 4rem;
+  height: 4rem;
+  flex: 0 0 auto;
+  border-radius: var(--im-radius-full);
+  object-fit: cover;
+}
+.im-authorbox-id { min-width: 0; display: flex; flex-direction: column; gap: var(--im-space-2); }
+.im-authorbox-name {
+  margin: 0;
+  font-size: var(--im-text-h4);
+  line-height: var(--im-leading-h4);
+  font-weight: var(--im-weight-semibold);
+  letter-spacing: var(--im-tracking-tight);
+  color: var(--im-ink);
+}
+.im-authorbox-bio { margin: 0; font-size: var(--im-text-sm); line-height: 1.55; color: var(--im-body); text-wrap: pretty; }
+.im-authorbox-social a { width: 2rem; height: 2rem; font-size: 1rem; }
+
+.im-authorbox-more { border-top: 1px solid var(--im-line); padding-top: var(--im-space-4); }
+.im-authorbox-more-title {
+  margin: 0 0 var(--im-space-2);
+  font-family: var(--im-font-mono);
+  font-size: var(--im-text-xs);
+  font-weight: var(--im-weight-medium);
+  letter-spacing: var(--im-tracking-wide);
+  text-transform: uppercase;
+  color: var(--im-faint);
+}
+.im-authorbox-list {
+  list-style: none;
+  margin: 0 0 var(--im-space-3);
+  padding: 0;
+  display: grid;
+  gap: 1px;
+
+  a {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--im-space-3);
+    min-width: 0;
+    overflow: hidden;
+    padding: var(--im-space-2);
+    border-radius: var(--im-radius-sm);
+    color: var(--im-body);
+    text-decoration: none;
+    @include im-hover-fill;
+  }
+  time { flex: 0 0 auto; font-size: var(--im-text-xs); color: var(--im-faint); font-variant-numeric: tabular-nums; }
+}
+.im-authorbox-list-title { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--im-ink); }
+
+// ---- Comments ---------------------------------------------------------
+.im-comments { margin: var(--im-space-7) 0; }
+.im-comments-title {
+  display: flex;
+  align-items: center;
+  gap: var(--im-space-2);
+  margin: 0 0 var(--im-space-4);
+  padding-bottom: var(--im-space-2);
+  border-bottom: 1px solid var(--im-line);
+  font-size: var(--im-text-h4);
+  line-height: var(--im-leading-h4);
+}
+.im-comments-placeholder {
+  padding: 1.25rem;
+  border-radius: var(--im-radius-xl);
+  box-shadow: inset 0 0 0 1px var(--im-line);
+  color: var(--im-muted);
+  font-size: var(--im-text-sm);
+
+  p { margin: 0 0 var(--im-space-2); }
+  strong { color: var(--im-ink); }
+}
+
+// ---- Carousel ---------------------------------------------------------
+// A scroll container with snap points, so paging works before any script
+// does. The buttons and dots are the enhancement, not the mechanism.
+.im-carousel { margin: var(--im-space-6) 0; }
+
+.im-carousel-track {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 100%;
+  gap: var(--im-space-3);
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  overscroll-behavior-x: contain;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar { display: none; }
+  &:focus-visible { outline: var(--im-ring-width) solid var(--im-ring); outline-offset: var(--im-ring-offset); }
+}
+
+.im-carousel-slide {
+  scroll-snap-align: center;
+  min-width: 0;
+
+  img {
+    width: 100%;
+    aspect-ratio: 16 / 10;
+    object-fit: cover;
+    border-radius: var(--im-radius-xl);
+    background: var(--im-surface);
+  }
+}
+.im-carousel-caption {
+  margin-top: var(--im-space-2);
+  font-size: var(--im-text-sm);
+  color: var(--im-muted);
+  text-align: center;
+}
+
+.im-carousel-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--im-space-3);
+  margin-top: var(--im-space-3);
+}
+.im-carousel-btn {
+  display: grid;
+  place-items: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  border: 0;
+  border-radius: var(--im-radius-full);
+  box-shadow: inset 0 0 0 1px var(--im-line);
+  background: transparent;
+  color: var(--im-ink);
+  cursor: pointer;
+  @include im-hover-fill;
+
+  &:disabled { opacity: var(--im-opacity-disabled); cursor: default; }
+}
+.im-carousel-dots { display: flex; gap: var(--im-space-2); }
+.im-carousel-dot {
+  width: 0.5rem;
+  height: 0.5rem;
+  padding: 0;
+  border: 0;
+  border-radius: var(--im-radius-full);
+  background: var(--im-surface-3);
+  cursor: pointer;
+  transition: background-color var(--im-duration-instant), width var(--im-duration-fast) var(--im-ease-out);
+
+  &.is-current { width: 1.25rem; background: var(--im-ink); }
+}
+
+// ---- The snippet window (leads/snippet.html) --------------------------
+// Dark in both themes, in the system's own --im-code-* colours.
+.im-editor {
+  margin: var(--im-space-6) 0;
+  overflow: hidden;
+  border-radius: var(--im-radius-lg);
+  background: var(--im-code-bg);
+  box-shadow: inset 0 0 0 1px var(--im-code-line);
+  color-scheme: dark;
+}
+.im-editor-bar {
+  display: flex;
+  align-items: center;
+  gap: var(--im-space-3);
+  padding: var(--im-space-2) var(--im-space-3);
+  border-bottom: 1px solid var(--im-code-line);
+  background: color-mix(in oklab, var(--im-code-bg) 82%, #000);
+  font-size: var(--im-text-xs);
+  color: var(--im-code-muted);
+}
+.im-editor-dots {
+  display: inline-flex; gap: 6px; flex: 0 0 auto;
+  i { width: 11px; height: 11px; border-radius: var(--im-radius-full); background: var(--im-code-line); }
+}
+.im-editor-tab {
+  display: inline-flex; align-items: center; gap: var(--im-space-1);
+  min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  font-family: var(--im-font-mono);
+  color: var(--im-code-fg);
+}
+.im-editor-lang { text-transform: uppercase; letter-spacing: var(--im-tracking-wide); }
+.im-editor-copy {
+  margin-left: auto;
+  display: inline-flex; align-items: center; gap: var(--im-space-1);
+  flex: 0 0 auto;
+  padding: 0.15rem var(--im-space-2);
+  border: 0;
+  border-radius: var(--im-radius-full);
+  background: transparent;
+  color: var(--im-code-muted);
+  font: inherit;
+  cursor: pointer;
+  transition: background-color var(--im-duration-instant), color var(--im-duration-instant);
+  &:hover { background: var(--im-code-hover); color: var(--im-code-fg); }
+}
+.im-editor-code {
+  margin: 0;
+  max-height: 26rem;
+  padding: var(--im-space-4);
+  border-radius: 0;
+  box-shadow: none;
+  background: var(--im-code-bg);
+  color: var(--im-code-fg);
+  font-size: var(--im-text-xs);
+  line-height: 1.7;
+}
+
+// ---- Prompt + its result (leads/prompt.html) --------------------------
+.im-resultbox {
+  margin: var(--im-space-4) 0 var(--im-space-6);
+  padding: 1.25rem;
+  border-radius: var(--im-radius-xl);
+  background: var(--im-surface);
+}
+.im-resultbox-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--im-space-2) var(--im-space-3);
+  margin-bottom: var(--im-space-3);
+}
+.im-promptbox-label {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--im-space-2);
+  font-family: var(--im-font-mono);
+  font-size: var(--im-text-xs);
+  font-weight: var(--im-weight-medium);
+  letter-spacing: var(--im-tracking-wide);
+  text-transform: uppercase;
+  color: var(--im-muted);
+}
+.im-promptbox-copy { margin-left: auto; }
+.im-resultbox-note { font-size: var(--im-text-xs); color: var(--im-faint); }
+.im-resultbox-image { width: 100%; border-radius: var(--im-radius-lg); margin-bottom: var(--im-space-3); }
+.im-resultbox-body { font-size: var(--im-text-sm); color: var(--im-body); > :last-child { margin-bottom: 0; } }
+
+// ---- Sidebar extras ---------------------------------------------------
+.im-deflist {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: var(--im-space-2) var(--im-space-4);
+  margin: 0 0 var(--im-space-4);
+  font-size: var(--im-text-sm);
+
+  dt { color: var(--im-muted); }
+  dd { margin: 0; color: var(--im-ink); }
+}
+.im-widget-sublabel {
+  margin: 0 0 var(--im-space-2);
+  font-family: var(--im-font-mono);
+  font-size: var(--im-text-xs);
+  letter-spacing: var(--im-tracking-wide);
+  text-transform: uppercase;
+  color: var(--im-faint);
+}
+.im-widget-actions { display: grid; gap: var(--im-space-2); margin-top: var(--im-space-4); }
+.im-widget-share .im-share { margin: 0; }
+
+// ---- A portrait film (leads/video.html, orientation: portrait) --------
+// A reel is shot 9:16. Giving it the 16:9 frame and letterboxing it is the
+// one thing a video page must not do.
+.im-post-media.is-portrait {
+  max-width: 24rem;
+  margin-inline: auto;
+  aspect-ratio: 9 / 16;
+}
+
+// What the author has actually published, counted from the site rather
+// than typed in — so the number cannot go stale, and each one is a way in.
+.im-authorbox-stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--im-space-2);
+  margin: var(--im-space-1) 0 0;
+  padding: 0;
+  list-style: none;
+
+  a {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 0.35rem;
+    min-height: 1.75rem;
+    padding: 0 var(--im-space-3);
+    border-radius: var(--im-radius-full);
+    box-shadow: inset 0 0 0 1px var(--im-line);
+    color: var(--im-muted);
+    font-size: var(--im-text-xs);
+    text-decoration: none;
+    @include im-hover-fill;
+
+    strong {
+      color: color-mix(in oklab, var(--im-c-this, var(--im-accent)) 72%, var(--im-ink));
+      font-variant-numeric: tabular-nums;
+    }
+  }
+}
+
+// ---- A two-column opening (single/head-split.html) --------------------
+// The words on one side, the picture on the other, across the full width
+// of the shell — then the body and its rail below. It breaks OUT of the
+// article's measure, because the whole point is the second column.
+.im-splithead {
+  display: grid;
+  gap: var(--im-space-6);
+  margin-bottom: var(--im-space-7);
+  align-items: center;
+
+  @include mq($bp-md) {
+    grid-template-columns: minmax(0, 6fr) minmax(0, 5fr);
+    gap: clamp(2rem, 4vw, 3.5rem);
+  }
+  &.is-solo { grid-template-columns: minmax(0, 1fr); max-width: var(--im-content); }
+}
+
+.im-splithead-copy { min-width: 0; }
+.im-splithead-lede {
+  margin: 0 0 var(--im-space-4);
+  max-width: 46ch;
+  font-size: var(--im-text-lg);
+  line-height: var(--im-leading-lg);
+  color: var(--im-body);
+  text-wrap: pretty;
+}
+
+.im-splithead-facts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--im-space-3) var(--im-space-6);
+  margin: var(--im-space-5) 0 0;
+
+  > div { display: flex; flex-direction: column-reverse; }
+  dt { font-size: var(--im-text-xs); letter-spacing: var(--im-tracking-wide); text-transform: uppercase; color: var(--im-muted); }
+  dd {
+    margin: 0;
+    font-size: var(--im-text-h4);
+    font-weight: var(--im-weight-semibold);
+    letter-spacing: var(--im-tracking-tight);
+    color: var(--im-ink);
+  }
+}
+
+.im-splithead-media {
+  margin: 0;
+
+  img {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    border-radius: var(--im-radius-2xl);
+    background: var(--im-surface);
+  }
+  figcaption { margin-top: var(--im-space-2); color: var(--im-muted); font-size: var(--im-text-sm); text-align: center; }
+}
+
+// Inside a wide shell the opening is allowed the whole container; the
+// prose under it still sets itself on the reading measure.
+.im-shell.is-wide .im-splithead,
+.im-shell.is-split .im-splithead { max-width: none; }

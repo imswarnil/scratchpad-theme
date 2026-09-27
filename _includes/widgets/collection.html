@@ -1,0 +1,12 @@
+{%- comment -%} More from the collection this entry belongs to. {%- endcomment -%}
+{%- assign w_coll = site.collections | where: "label", page.collection | first -%}
+{%- assign related = w_coll.docs | where_exp: "d", "d.url != page.url" | sort: "date" | reverse -%}
+{%- if related.size > 0 -%}
+<section class="im-widget">
+  <h2 class="im-widget-title"><i class="ph-bold ph-{{ w_coll.icon | default: 'folder' }}" aria-hidden="true"></i> More {{ w_coll.title | downcase }}</h2>
+  <ul class="im-widget-list">
+    {%- for it in related limit: 4 -%}<li><a href="{{ it.url | relative_url }}">{{ it.title }}</a></li>{%- endfor -%}
+  </ul>
+  <a class="im-card-cta" href="{{ w_coll.landing | default: '/' | relative_url }}">All {{ w_coll.title | downcase }} <i class="ph-bold ph-arrow-right" aria-hidden="true"></i></a>
+</section>
+{%- endif -%}

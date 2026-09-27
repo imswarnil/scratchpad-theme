@@ -1,0 +1,50 @@
+{%- comment -%}
+  Per-collection JSON-LD structured data.
+
+  NOT emitted for `posts`: jekyll-seo-tag already publishes a BlogPosting
+  for those, and two BlogPostings describing one URL is an ambiguity, not
+  extra information. Everywhere else seo-tag says only "WebPage", so this
+  is the block that carries the actual type — a VideoObject, a Course, a
+  PodcastEpisode — and the two sit together without contradicting.
+{%- endcomment -%}
+{%- unless page.collection == "posts" -%}
+{%- comment -%}
+  Per-collection JSON-LD structured data. Picks @type from the collection's
+  `schema` key (Article / TechArticle / Review / VideoObject / PodcastEpisode
+  / CreativeWork). Image falls back: page → collection cover → placeholder.
+{%- endcomment -%}
+{%- assign _coll = site.collections | where: "label", page.collection | first -%}
+{%- assign _schema = page.schema | default: _coll.schema | default: "Article" -%}
+{%- assign _img = page.cover | default: page.image -%}
+{%- if _img == nil or _img == "" -%}{%- assign _img = _coll.image | default: site.placeholder_image -%}{%- endif -%}
+{%- assign _imgabs = _img | absolute_url -%}
+{%- assign _desc = page.description | default: page.excerpt | strip_html | strip_newlines | truncate: 240 -%}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "{{ _schema }}",
+  "headline": {{ page.title | jsonify }},
+  "name": {{ page.title | jsonify }},
+  "description": {{ _desc | jsonify }},
+  "image": ["{{ _imgabs }}"],
+  "url": "{{ page.url | absolute_url }}",
+  "mainEntityOfPage": "{{ page.url | absolute_url }}",
+  "datePublished": "{{ page.date | date_to_xmlschema }}",
+  "dateModified": "{{ page.last_modified_at | default: page.date | date_to_xmlschema }}",
+  "author": { "@type": "Person", "name": {{ page.author | default: site.author | jsonify }} },
+  "publisher": { "@type": "Person", "name": {{ site.author | jsonify }}, "url": "{{ '/' | absolute_url }}" }
+  {%- case _schema -%}
+  {%- when "VideoObject" -%}
+  ,"uploadDate": "{{ page.date | date_to_xmlschema }}"
+  {%- if page.duration %},"duration": "{{ page.duration }}"{% endif -%}
+  {%- if page.video_id %},"embedUrl": "https://www.youtube.com/embed/{{ page.video_id }}"{% endif -%}
+  {%- when "PodcastEpisode" -%}
+  {%- if page.audio_src %},"associatedMedia": { "@type": "MediaObject", "contentUrl": "{{ page.audio_src | absolute_url }}" }{% endif -%}
+  {%- if page.duration %},"timeRequired": "{{ page.duration }}"{% endif -%}
+  {%- when "Review" -%}
+  {%- if page.rating %},"reviewRating": { "@type": "Rating", "ratingValue": "{{ page.rating }}", "bestRating": "5" }{% endif -%}
+  {%- if page.item_reviewed %},"itemReviewed": { "@type": "Thing", "name": {{ page.item_reviewed | jsonify }} }{% endif -%}
+  {%- endcase -%}
+}
+</script>
+{%- endunless -%}

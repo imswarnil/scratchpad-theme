@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+# Local dev server + livereload.
+# Pins the chruby ruby-3.4.1 toolchain (the macOS system Ruby 2.6 cannot
+# build this site: sass-embedded / google-protobuf fail to load).
+set -e
+# Prefer chruby's ruby-3.4.1 if present (macOS system Ruby 2.6 can't build this);
+# otherwise trust the shell's Ruby (rbenv/asdf/etc., pinned by .ruby-version).
+[ -d "$HOME/.rubies/ruby-3.4.1/bin" ] && export PATH="$HOME/.rubies/ruby-3.4.1/bin:$PATH"
+cd "$(dirname "$0")/.."
+rm -f Gemfile.lock
+bundle check >/dev/null 2>&1 || bundle install
+exec bundle exec jekyll serve --livereload "$@"

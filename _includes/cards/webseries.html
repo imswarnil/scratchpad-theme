@@ -1,0 +1,35 @@
+{%- comment -%}
+  A series, shown the way a streaming service shows one: a portrait poster
+  that carries the title, and the facts — seasons, episodes, status — only
+  once you are looking at it. Reads: title, poster|image|cover, seasons,
+  status, year, genre, excerpt/description.
+{%- endcomment -%}
+{%- assign it = include.item -%}
+{%- assign poster = it.poster | default: it.cover | default: it.image -%}
+{%- if poster == site.placeholder_image %}{% assign poster = nil %}{% endif -%}
+{%- assign eps = site.episodes | where: "series", it.slug -%}
+<article class="im-poster" style="--im-c-this: var(--im-c-{{ it.collection }}, var(--im-accent));">
+  <a class="im-poster-link" href="{{ it.url | relative_url }}">
+    <div class="im-poster-art">
+      {%- if poster and poster != "" -%}
+        <img src="{{ poster | relative_url }}" alt="" loading="lazy" width="600" height="900">
+      {%- else -%}
+        {% include utility/thumb.html item=it size="sm" %}
+      {%- endif -%}
+      <span class="im-poster-scrim" aria-hidden="true"></span>
+      {%- if it.status %}<span class="im-poster-flag">{{ it.status }}</span>{% endif -%}
+      <span class="im-poster-play" aria-hidden="true"><i class="ph-fill ph-play"></i></span>
+      <div class="im-poster-copy">
+        <h3 class="im-poster-title">{{ it.title }}</h3>
+        <p class="im-poster-meta">
+          {%- if it.year %}<span>{{ it.year }}</span>{% endif -%}
+          {%- if it.seasons %}<span>{{ it.seasons }} season{% if it.seasons != 1 %}s{% endif %}</span>{% endif -%}
+          {%- if eps.size > 0 %}<span>{{ eps.size }} episode{% if eps.size != 1 %}s{% endif %}</span>{% endif -%}
+          {%- if it.genre %}<span>{{ it.genre }}</span>{% endif -%}
+        </p>
+      </div>
+    </div>
+  </a>
+  {%- assign snip = it.description | default: it.excerpt -%}
+  {%- if snip and snip != "" -%}<p class="im-poster-text">{{ snip | strip_html | truncate: 120 }}</p>{% endif -%}
+</article>

@@ -1,0 +1,21 @@
+{%- comment -%} One episode, as a row: still, number, title, runtime. {%- endcomment -%}
+{%- assign it = include.item -%}
+{%- assign still = it.cover | default: it.image -%}
+{%- if still == site.placeholder_image %}{% assign still = nil %}{% endif -%}
+<article class="im-eprow" style="--im-c-this: var(--im-c-webseries, var(--im-accent));">
+  <a class="im-eprow-link" href="{{ it.url | relative_url }}">
+    <span class="im-eprow-n">{{ it.episode | default: forloop.index }}</span>
+    <span class="im-eprow-still">
+      {%- if it.video_id -%}<img src="https://i.ytimg.com/vi/{{ it.video_id }}/mqdefault.jpg" alt="" loading="lazy" width="320" height="180">
+      {%- elsif still -%}<img src="{{ still | relative_url }}" alt="" loading="lazy" width="320" height="180">
+      {%- else -%}{% include utility/thumb.html item=it size="sm" %}{%- endif -%}
+      <i class="ph-fill ph-play" aria-hidden="true"></i>
+    </span>
+    <span class="im-eprow-body">
+      <span class="im-eprow-title">{{ it.title }}</span>
+      {%- assign snip = it.description | default: it.excerpt -%}
+      {%- if snip and snip != "" %}<span class="im-eprow-text">{{ snip | strip_html | truncate: 110 }}</span>{% endif -%}
+    </span>
+    {%- if it.duration %}<span class="im-eprow-time">{{ it.duration }}</span>{% endif -%}
+  </a>
+</article>

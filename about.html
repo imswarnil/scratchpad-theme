@@ -1,0 +1,157 @@
+---
+layout: default
+title: About
+permalink: /about/
+description: "Software engineer and filmmaker in Bengaluru — engineering meets storytelling."
+sidebar: false
+ad_rails: false
+---
+<section class="im-home im-page im-pg">
+
+  <header class="im-pg-head im-grid-12 im-reveal">
+    <div class="im-span-12 im-span-lg-8">
+      <span class="im-sec-eyebrow">About</span>
+      <h1 class="im-pg-title">Engineer by trade, filmmaker by instinct.</h1>
+      <p class="im-pg-lede">I'm Swarnil Singhai — {{ site.work.role | downcase }} based in {{ site.location }}. I build analytics and quote-to-cash systems for sales teams, and I make films that try to earn your attention in the first three seconds. This site is where the two meet.</p>
+    </div>
+    <div class="im-span-12 im-span-lg-4 im-pg-head-aside">
+      <ul class="im-pg-facts">
+        <li><i class="ph-bold ph-map-pin" aria-hidden="true"></i> {{ site.location }}</li>
+        <li><i class="ph-bold ph-briefcase" aria-hidden="true"></i> {{ site.work.role }}{% if site.work.company %} · {{ site.work.company }}{% endif %}</li>
+        <li><i class="ph-bold ph-envelope-simple" aria-hidden="true"></i> <a class="im-flink" href="mailto:{{ site.email }}">{{ site.email }}</a></li>
+      </ul>
+    </div>
+  </header>
+
+  {%- comment -%}
+    The story, in chapters. The rail on the left lists them by year and
+    marks the one you are reading; the chapters stack on the right. Both
+    come from `about.chapters` in _config.yml, so the page is edited as
+    data rather than as markup.
+  {%- endcomment -%}
+  {%- assign chapters = site.about.chapters -%}
+  {%- if chapters.size > 0 -%}
+  <div class="im-story">
+    <nav class="im-story-rail" aria-label="Chapters">
+      <p class="im-story-rail-title">The long version</p>
+      <ol class="im-story-rail-list">
+        {%- for c in chapters -%}
+        <li>
+          <a href="#{{ c.id }}" data-story-link="{{ c.id }}">
+            <span class="im-story-year">{{ c.year }}</span>
+            <span class="im-story-label">{{ c.title }}</span>
+          </a>
+        </li>
+        {%- endfor -%}
+      </ol>
+    </nav>
+
+    <div class="im-story-body">
+      <figure class="im-story-photo im-reveal">
+        <img src="{{ '/assets/img/brand/portrait.svg' | relative_url }}" alt="{{ site.author }}" width="900" height="900" loading="lazy">
+        <figcaption>Bengaluru, most days. A camera bag, most weekends.</figcaption>
+      </figure>
+
+      {%- for c in chapters -%}
+      <section class="im-story-ch im-reveal" id="{{ c.id }}" data-story-section="{{ c.id }}">
+        <p class="im-story-ch-year">{{ c.year }}</p>
+        <h2 class="im-story-ch-title">{{ c.title }}</h2>
+        <div class="im-prose"><p>{{ c.body | strip }}</p></div>
+        {%- if c.link -%}
+        <a class="im-card-cta" href="{{ c.link | relative_url }}">{{ c.link_label | default: "Read more" }} <i class="ph-bold ph-arrow-right" aria-hidden="true"></i></a>
+        {%- endif -%}
+      </section>
+      {%- endfor -%}
+
+      <section class="im-story-ch im-reveal">
+        <h2 class="im-story-ch-title">What I'm good at</h2>
+        <div class="im-prose">
+          <ul>
+            <li><strong>Analytics engineering</strong> — CRM Analytics, SAQL, data flows and the dashboards on top of them.</li>
+            <li><strong>Quote-to-cash</strong> — Conga CPQ, quote automation, approval flows, pricing logic that finance can audit.</li>
+            <li><strong>Web craft</strong> — Jekyll and Next.js sites, hand-written CSS systems (this one included), fast by default.</li>
+            <li><strong>Film</strong> — writing, shooting, grading and cutting short-form films with a documentary sensibility.</li>
+          </ul>
+        </div>
+      </section>
+    </div>
+  </div>
+  {%- endif -%}
+
+  <section class="im-sec im-reveal" aria-labelledby="how">
+    {% include utility/section-head.html id="how" eyebrow="Process" title="How I work" %}
+    <div class="im-grid-12 im-sec-body">
+      <article class="im-span-12 im-span-md-6 im-span-lg-4 im-card im-pg-step">
+        <span class="im-pg-step-num">01</span>
+        <span class="im-card-icon"><i class="ph-bold ph-magnifying-glass" aria-hidden="true"></i></span>
+        <h3 class="im-card-title">Find the real question</h3>
+        <p class="im-card-text">Most "build me a dashboard" requests are really "help me make one decision." I start with the decision, the person making it, and what they'd do differently with a better answer.</p>
+      </article>
+      <article class="im-span-12 im-span-md-6 im-span-lg-4 im-card im-pg-step">
+        <span class="im-pg-step-num">02</span>
+        <span class="im-card-icon"><i class="ph-bold ph-scissors" aria-hidden="true"></i></span>
+        <h3 class="im-card-title">Cut to the story</h3>
+        <p class="im-card-text">Editing discipline, applied to products: one clear message per screen, nothing on the page that isn't earning its place, and a first impression that lands in seconds.</p>
+      </article>
+      <article class="im-span-12 im-span-md-6 im-span-lg-4 im-card im-pg-step">
+        <span class="im-pg-step-num">03</span>
+        <span class="im-card-icon"><i class="ph-bold ph-rocket-launch" aria-hidden="true"></i></span>
+        <h3 class="im-card-title">Ship, measure, write it down</h3>
+        <p class="im-card-text">Small releases, real numbers, and a written record — so the next person (often future me) moves faster. Most of what's on this site started as that record.</p>
+      </article>
+    </div>
+  </section>
+
+  {%- if site.resume.skills.size > 0 -%}
+  <section class="im-sec im-reveal" aria-labelledby="toolbox">
+    {% include utility/section-head.html id="toolbox" eyebrow="Toolbox" title="What I reach for" link_url="/resume/" link_text="Full resume" %}
+    <div class="im-grid-12 im-sec-body">
+      <div class="im-span-12 im-span-lg-8">{% include utility/skills.html %}</div>
+      <aside class="im-span-12 im-span-lg-4">
+        <div class="im-card im-card-muted">
+          <p class="im-card-title">Beyond the pills</p>
+          <p class="im-card-text">Git, GitHub Actions, Cloudflare, SQL, Python for the boring parts, DaVinci Resolve for the grade, Premiere for the cut, and a lot of Notion.</p>
+        </div>
+      </aside>
+    </div>
+  </section>
+  {%- endif -%}
+
+  {%- if site.social_links -%}
+  <section class="im-sec im-reveal" aria-labelledby="elsewhere">
+    {% include utility/section-head.html id="elsewhere" eyebrow="Elsewhere" title="Find me around the web" %}
+    <div class="im-grid-12 im-sec-body">
+      {%- for s in site.social_links -%}
+      {%- assign icon = 'link' -%}
+      {%- case s[0] -%}
+        {%- when 'Twitter'  -%}{% assign icon = 'twitter-logo'  %}
+        {%- when 'LinkedIn' -%}{% assign icon = 'linkedin-logo' %}
+        {%- when 'GitHub'   -%}{% assign icon = 'github-logo'   %}
+        {%- when 'RSS'      -%}{% assign icon = 'rss'           %}
+        {%- when 'YouTube'  -%}{% assign icon = 'youtube-logo'  %}
+      {%- endcase -%}
+      <a class="im-span-12 im-span-md-6 im-span-lg-3 im-pg-social" href="{{ s[1] }}" target="_blank" rel="me noopener">
+        <i class="ph-bold ph-{{ icon }}" aria-hidden="true"></i>
+        <span class="im-pg-social-name">{% if s[0] == 'link' %}Website{% else %}{{ s[0] }}{% endif %}</span>
+        <span class="im-pg-social-url">{{ s[1] | remove: 'https://' | remove: 'http://' | remove: 'www.' }}</span>
+      </a>
+      {%- endfor -%}
+    </div>
+  </section>
+  {%- endif -%}
+
+  <section class="im-sec im-reveal" aria-labelledby="about-cta">
+    <div class="im-cta-band im-grid-12">
+      <div class="im-span-12 im-span-lg-8">
+        <span class="im-sec-eyebrow">Working together</span>
+        <h2 class="im-cta-band-title" id="about-cta">Have a problem that needs both halves?</h2>
+        <p class="im-cta-band-text">Selectively taking on analytics builds, web work and short brand films. Scope and timeline in the first email saves us both a week.</p>
+      </div>
+      <div class="im-span-12 im-span-lg-4 im-cta-band-actions">
+        <a class="im-btn im-btn-lg im-btn-ink" href="{{ '/contact/' | relative_url }}"><i class="ph-bold ph-paper-plane-tilt" aria-hidden="true"></i> Get in touch</a>
+        <a class="im-btn im-btn-lg im-btn-outline" href="{{ '/resume/' | relative_url }}">Resume</a>
+      </div>
+    </div>
+  </section>
+</section>
+<script src="{{ '/assets/scripts/story.js' | relative_url }}?v={{ site.time | date: '%s' }}" defer></script>

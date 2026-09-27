@@ -1,0 +1,11 @@
+{%- comment -%}
+  Badge / pill label.
+    {% include components/badge.html text="New" variant="success" icon="ph-sparkle" %}
+  Variants: (default) | solid | success | warning | danger | info
+{%- endcomment -%}
+{%- assign v = include.variant -%}
+<span class="badge{% if v %} badge--{{ v }}{% endif %}">
+  {%- if include.dot -%}<span class="badge__dot" aria-hidden="true"></span>{%- endif -%}
+  {%- if include.icon -%}<i class="ph-bold {{ include.icon }}" aria-hidden="true"></i>{%- endif -%}
+  {{ include.text }}
+</span>

@@ -1,0 +1,49 @@
+{%- comment -%}
+  GitHub-repo-style project card. Reads: title, kind, summary/excerpt/
+  description, image|cover, repo, demo, lang, stars, forks, date|year,
+  tags, stack, role. Carries data-kind / data-tags for filter.js.
+{%- endcomment -%}
+{%- assign it = include.item -%}
+{%- assign cover = it.cover | default: it.image -%}
+{%- if cover == site.placeholder_image %}{% assign cover = nil %}{% endif -%}
+{%- assign snip = it.summary | default: it.excerpt | default: it.description -%}
+{%- if it.repo contains "github.com/" -%}
+  {%- assign slug = it.repo | split: "github.com/" | last | remove: ".git" | split: "/" | slice: 0, 2 | join: "/" -%}
+{%- else -%}
+  {%- comment -%} slugify the title on its own — applied to "owner/title" it would eat the slash. {%- endcomment -%}
+  {%- assign owner = site.social_links.GitHub | default: "github.com/imswarnil" | split: "/" | last -%}
+  {%- assign _name = it.title | slugify -%}
+  {%- assign slug = owner | append: "/" | append: _name -%}
+{%- endif -%}
+{%- capture taglist -%}{%- for t in it.tags %}{{ t | slugify }} {% endfor -%}{%- for t in it.stack %}{{ t | slugify }} {% endfor -%}{%- endcapture -%}
+{%- assign topics = it.stack | default: it.tags -%}
+<article class="im-rcard" data-kind="{{ it.kind | default: 'project' }}" style="--im-c-this: var(--im-c-{{ it.collection }}, var(--im-accent));" data-tags="{{ taglist | strip }}" data-lang="{{ it.lang | downcase | slugify }}">
+  <a class="im-rcard-media" href="{{ it.url | relative_url }}" tabindex="-1" aria-hidden="true">
+    {%- if cover and cover != "" -%}<img src="{{ cover | relative_url }}" alt="" loading="lazy" width="1200" height="675">
+    {%- else -%}{%- include utility/thumb.html item=it -%}{%- endif -%}
+  </a>
+  <div class="im-rcard-body">
+    <div class="im-rcard-head">
+      <i class="ph-bold {% if it.kind == 'film' %}ph-film-slate{% elsif it.kind == 'design' %}ph-pen-nib{% else %}ph-git-branch{% endif %}" aria-hidden="true"></i>
+      <a class="im-rcard-slug" href="{{ it.url | relative_url }}"><span class="im-rcard-owner">{{ slug | split: "/" | first }}</span>/<strong>{{ slug | split: "/" | last }}</strong></a>
+      <span class="im-rcard-kind">{{ it.kind | default: "project" }}</span>
+    </div>
+    <h3 class="im-rcard-title"><a href="{{ it.url | relative_url }}">{{ it.title }}</a></h3>
+    {%- if snip %}<p class="im-rcard-desc">{{ snip | strip_html | truncate: 140 }}</p>{% endif -%}
+    {%- if topics.size > 0 -%}
+    <div class="im-rcard-topics">{%- for t in topics limit: 5 -%}<span class="im-rcard-topic">{{ t }}</span>{%- endfor -%}</div>
+    {%- endif -%}
+    <div class="im-rcard-meta">
+      {%- if it.lang %}<span class="im-rcard-lang"><i class="im-lang-dot" aria-hidden="true"></i>{{ it.lang }}</span>{% endif -%}
+      {%- if it.stars %}<span><i class="ph-bold ph-star" aria-hidden="true"></i> {{ it.stars }}</span>{% endif -%}
+      {%- if it.forks %}<span><i class="ph-bold ph-git-fork" aria-hidden="true"></i> {{ it.forks }}</span>{% endif -%}
+      {%- if it.role %}<span><i class="ph-bold ph-user-circle" aria-hidden="true"></i> {{ it.role }}</span>{% endif -%}
+      {%- if it.date %}<span>Updated <time datetime="{{ it.date | date_to_xmlschema }}">{{ it.date | date: "%b %Y" }}</time></span>{% elsif it.year %}<span>{{ it.year }}</span>{% endif -%}
+    </div>
+    <div class="im-rcard-foot">
+      <a class="im-card-cta" href="{{ it.url | relative_url }}">View project <i class="ph-bold ph-arrow-right" aria-hidden="true"></i></a>
+      {%- if it.repo %}<a class="im-btn im-btn-sm im-btn-outline" href="{{ it.repo }}" target="_blank" rel="noopener"><i class="ph-bold ph-github-logo" aria-hidden="true"></i> Code</a>{% endif -%}
+      {%- if it.demo %}<a class="im-btn im-btn-sm im-btn-ghost" href="{{ it.demo }}" target="_blank" rel="noopener"><i class="ph-bold ph-arrow-square-out" aria-hidden="true"></i> Live</a>{% endif -%}
+    </div>
+  </div>
+</article>

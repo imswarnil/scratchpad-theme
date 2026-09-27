@@ -1,0 +1,13 @@
+{%- comment -%}
+  A video's lead is the film. `orientation: portrait` (or a `reel: true`)
+  gives it the 9:16 frame a reel is shot in instead of 16:9.
+{%- endcomment -%}
+{%- assign portrait = false -%}
+{%- if page.orientation == "portrait" or page.reel %}{% assign portrait = true %}{% endif -%}
+{%- if page.video_id -%}
+<div class="im-post-media{% if portrait %} is-portrait{% endif %}">
+  <iframe src="https://www.youtube-nocookie.com/embed/{{ page.video_id }}" title="{{ page.title }}" allowfullscreen loading="lazy"></iframe>
+</div>
+{%- elsif page.video_embed -%}
+<div class="im-post-media{% if portrait %} is-portrait{% endif %}">{{ page.video_embed }}</div>
+{%- endif -%}

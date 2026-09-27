@@ -1,0 +1,259 @@
+// ======================================================================
+// im/_collection.scss — collection list pages + per-type post cards
+// One base card (.im-pcard) with per-collection modifiers so each
+// collection reads distinctly while staying DRY.
+// ======================================================================
+
+.im-collection {
+  width: 100%;
+  max-width: calc(var(--im-container-wide) + var(--im-gutter) * 2);
+  margin-inline: auto;
+  padding-inline: var(--im-gutter);
+}
+
+// Compact head band (utility/collection-head.html): one row on the
+// 12-col grid — icon + title + one-liner left, stats right. About half
+// the height of the old stacked box.
+.im-collection-head {
+  padding: var(--im-space-4) var(--im-space-5);
+  margin-bottom: var(--im-space-5);
+  border: 1px solid var(--im-line);
+  border-radius: var(--im-radius-xl);
+  background: var(--im-surface);
+
+  .im-collection-title { margin: 0; font-size: var(--im-text-2xl); letter-spacing: -0.02em; line-height: 1.15; }
+  .im-collection-desc  { margin: var(--im-space-1) 0 0; max-width: 56ch; color: var(--im-muted); font-size: var(--im-text-sm); }
+}
+.im-collection-head-row { align-items: center; row-gap: var(--im-space-3); }
+.im-collection-head-main { display: flex; align-items: center; gap: var(--im-space-4); min-width: 0; }
+.im-collection-head-text { min-width: 0; }
+.im-collection-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: var(--im-radius-lg);
+  font-size: var(--im-text-lg);
+  @include im-collection-tint;
+}
+.im-collection-stats {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--im-space-2) var(--im-space-5);
+  font-size: var(--im-text-sm);
+  color: var(--im-muted);
+  strong { color: var(--im-ink); }
+  @include mq($bp-lg) { justify-content: flex-end; }
+}
+
+// The one empty state a collection page can land on: nothing filed yet.
+.im-collection-empty {
+  margin: var(--im-space-8) 0;
+  padding: var(--im-space-6);
+  border: 1px dashed var(--im-line);
+  border-radius: var(--im-radius-md);
+  background: var(--im-surface);
+  color: var(--im-muted);
+  text-align: center;
+}
+
+.im-cards {
+  display: grid;
+  gap: var(--im-grid-gap);
+  grid-template-columns: 1fr;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+
+  // A grid track is min-content wide by DEFAULT, and a card with a <pre>
+  // in it (the snippet card) has a min-content width of one whole line of
+  // code — which on a phone is wider than the screen. `min-width: 0` on
+  // the item is what lets the track shrink and the code clip instead.
+  //
+  // EQUAL HEIGHTS. A row of cards is one row whatever the cards carry: a
+  // post with a three-line excerpt and one with none end level, and their
+  // feet sit on the same line. The grid already stretches each ITEM to its
+  // row's height; making the item a flex box passes that height down to
+  // the card inside it (a flex child stretches by default), and the card's
+  // own body takes up the slack — see %im-cardbody's `flex: 1` and
+  // %im-cardfoot's `margin-top: auto` in components/_cards.scss.
+  //
+  // Doing it this way rather than with `height: 100%` everywhere means a
+  // card that is used OUTSIDE a grid — in a sidebar, in an article — still
+  // takes the height of its own content.
+  > * {
+    display: flex;
+    min-width: 0;
+    margin: 0;
+  }
+  // `display: flex` above beats the user-agent's `[hidden] { display: none }`,
+  // which would leave a filtered-out card on screen. Say it again, louder.
+  > [hidden] { display: none; }
+  > * > * {
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+
+  @include mq($bp-sm) { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  @include mq($bp-lg) { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+
+// ---- Base post card ---------------------------------------------------
+// The shared card body the collection lists fall back to. A surface, not a
+// box: filled, no border, no resting shadow — and it answers by filling
+// one step deeper, the way every card in the theme does.
+.im-pcard {
+  --im-hover-bg: var(--im-surface-2);
+
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border-radius: var(--im-radius-xl);
+  background: var(--im-surface);
+  color: var(--im-body);
+  transition: background-color var(--im-duration-fast) var(--im-ease-out);
+
+  &:is(:hover, :focus-within) { background: var(--im-hover-bg); }
+
+  @media (hover: hover) and (prefers-reduced-motion: no-preference) {
+    transition:
+      background-color var(--im-duration-fast) var(--im-ease-out),
+      translate var(--im-duration-fast) var(--im-ease-out),
+      box-shadow var(--im-duration-fast) var(--im-ease-out);
+
+    &:is(:hover, :focus-within) { translate: 0 -1px; box-shadow: var(--im-card-hover-shadow); }
+  }
+}
+
+.im-pcard-media {
+  position: relative;
+  display: block;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  background: var(--im-surface-2);
+
+  // The picture does not grow. A feed of twenty cards each twitching a
+  // photograph is a page nobody can read.
+  img { width: 100%; height: 100%; object-fit: cover; }
+}
+
+// Type chip sitting on the media
+.im-pcard-type {
+  position: absolute;
+  top: var(--im-space-3);
+  left: var(--im-space-3);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--im-space-1);
+  padding: var(--im-space-1) var(--im-space-3);
+  border-radius: var(--im-radius-full);
+  background: var(--im-scrim);
+  color: #fff;
+  font-size: var(--im-text-xs);
+  font-weight: var(--im-weight-semibold);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+// Duration / badge bottom-right (video/podcast/trip)
+.im-pcard-badge {
+  position: absolute;
+  bottom: var(--im-space-3);
+  right: var(--im-space-3);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--im-space-1);
+  padding: var(--im-space-1) var(--im-space-2);
+  border-radius: var(--im-radius-sm);
+  background: var(--im-scrim);
+  color: #fff;
+  font-size: var(--im-text-xs);
+  font-weight: var(--im-weight-medium);
+}
+
+// Play glyph overlay for media collections
+.im-pcard-play {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  color: #fff;
+  opacity: 0.92;
+  pointer-events: none;
+  &::before {
+    content: "";
+    width: 3.25rem; height: 3.25rem;
+    border-radius: var(--im-radius-full);
+    background: var(--im-scrim);
+    box-shadow: 0 0 0 1px rgba(255,255,255,0.25) inset;
+  }
+  i, svg { position: absolute; font-size: 1.4rem; }
+}
+
+.im-pcard-body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--im-space-2);
+  padding: var(--im-space-5);
+  flex: 1;
+}
+
+.im-pcard-title {
+  margin: 0;
+  font-size: var(--im-text-xl);
+  font-weight: var(--im-weight-semibold);
+  letter-spacing: -0.01em;
+  a { color: var(--im-ink); text-decoration: none; }
+  a:hover { color: var(--im-accent); }
+}
+
+.im-pcard-excerpt {
+  margin: 0;
+  font-size: var(--im-text-sm);
+  color: var(--im-body);
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.im-pcard-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--im-space-1) var(--im-space-3);
+  margin-top: auto;
+  padding-top: var(--im-space-2);
+  font-size: var(--im-text-xs);
+  color: var(--im-muted);
+}
+
+.im-pcard-tagrow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--im-space-2);
+  font-size: var(--im-text-xs);
+  .im-pcard-tag { color: var(--im-muted); }
+}
+
+// ---- Per-collection accents ------------------------------------------
+.im-pcard--blog      { --im-pcard-accent: #2563eb; }
+.im-pcard--portfolio { --im-pcard-accent: #9333ea; }
+.im-pcard--videos    { --im-pcard-accent: #dc2626; }
+.im-pcard--snippets  { --im-pcard-accent: #16a34a; }
+.im-pcard--prompts   { --im-pcard-accent: #0d9488; }
+
+.im-pcard[class*="im-pcard--"] .im-pcard-type { background: var(--im-pcard-accent, var(--im-scrim)); }
+
+// Text-first cards (snippets / prompts) — no media, accent strip instead
+.im-pcard--snippets,
+.im-pcard--prompts {
+  border-left: 3px solid var(--im-pcard-accent);
+  .im-pcard-body { padding-top: var(--im-space-5); }
+}
+.im-pcard--snippets .im-pcard-title { font-family: var(--im-font-mono); font-size: var(--im-text-lg); }
+
+.im-pcard-score { color: var(--im-warning); font-weight: var(--im-weight-semibold); }

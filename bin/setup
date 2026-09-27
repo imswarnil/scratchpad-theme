@@ -1,0 +1,34 @@
+#!/usr/bin/env bash
+# One-command local setup for contributors.
+#   ./bin/setup
+# Ensures a Ruby 3.x toolchain, clears any stale lockfile, installs gems.
+set -e
+cd "$(dirname "$0")/.."
+
+# Prefer chruby's ruby-3.4.1 if this machine has it (matches .ruby-version);
+# otherwise trust whatever Ruby the shell already provides (rbenv, asdf, …).
+if [ -d "$HOME/.rubies/ruby-3.4.1/bin" ]; then
+  export PATH="$HOME/.rubies/ruby-3.4.1/bin:$PATH"
+fi
+
+echo "Using $(ruby -v)"
+case "$(ruby -e 'print RUBY_VERSION' 2>/dev/null)" in
+  3.*) ;;
+  *)
+    echo ""
+    echo "✗ This project needs Ruby 3.x (see .ruby-version → ruby-3.4.1)."
+    echo "  macOS system Ruby (2.6) cannot build it (sass-embedded/google-protobuf fail)."
+    echo "  Install a modern Ruby with chruby, rbenv or asdf, then re-run ./bin/setup."
+    exit 1
+    ;;
+esac
+
+# Gemfile.lock is gitignored and resolved fresh — drop any stale copy so a
+# mismatched 'BUNDLED WITH' version can't break 'bundle exec'.
+rm -f Gemfile.lock
+
+gem install bundler --conservative >/dev/null 2>&1 || true
+bundle install
+
+echo ""
+echo "✓ Setup complete. Start the dev server with:  ./bin/serve"

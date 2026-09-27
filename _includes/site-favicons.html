@@ -1,0 +1,16 @@
+{%- comment -%}
+  The tab icon.
+
+  The SVG comes first and modern browsers take it: one file, sharp at every
+  size, and it is the same dot the header wears. The PNGs behind it are for
+  the browsers and platforms that still want a raster — `favicons:` in
+  _config.yml maps a size to a path, so replacing them is a config change.
+{%- endcomment -%}
+{%- if site.logo %}<link rel="icon" type="image/svg+xml" href="{{ site.logo | relative_url }}">{% endif -%}
+{%- if site.favicons -%}
+  {%- for icon in site.favicons -%}
+    <link rel="icon" type="image/png" sizes="{{ icon[0] }}x{{ icon[0] }}" href="{{ icon[1] | relative_url }}">
+    {%- if icon[0] == 180 %}<link rel="apple-touch-icon" sizes="180x180" href="{{ icon[1] | relative_url }}">{% endif -%}
+  {%- endfor -%}
+{%- endif -%}
+<link rel="mask-icon" href="{{ site.logo | relative_url }}" color="{{ site.accent_color | default: '#f22f46' }}">

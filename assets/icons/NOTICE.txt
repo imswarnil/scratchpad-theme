@@ -1,0 +1,18 @@
+Icon drawings
+=============
+
+Most of the theme's icons are from Lucide (https://lucide.dev), ISC licensed:
+
+    Copyright (c) 2026 Lucide Icons and Contributors
+
+    Permission to use, copy, modify, and/or distribute this software for any
+    purpose with or without fee is hereby granted, provided that the above
+    copyright notice and this permission notice appear in all copies.
+
+They are compiled into _sass/im/base/_icons.scss by tools/icons/build.mjs —
+only the icons this theme actually uses, as inline SVG in custom properties,
+so a page load fetches nothing from anyone else.
+
+The four brand marks (GitHub, LinkedIn, YouTube, Facebook) are drawn in
+tools/icons/build.mjs. They are simplified shapes for interface use; each
+company's actual trademark remains theirs.

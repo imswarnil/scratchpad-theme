@@ -1,0 +1,399 @@
+// ======================================================================
+// im/tokens/_tokens.scss — the runtime contract
+// ----------------------------------------------------------------------
+// Every value the browser ever sees is a custom property declared here.
+// The vocabulary is the Im Design System's (design.imswarnil.com), so a
+// component written for that system drops into this theme unchanged:
+//
+//   PRIMITIVES  --im-gray-*, --im-space, --im-phi-*, --im-text-*,
+//               --im-radius-*, --im-width-*, --im-duration-*, --im-ease-*
+//   SEMANTIC    --im-canvas, --im-surface, --im-ink, --im-body, --im-muted,
+//               --im-accent, --im-line, --im-c-<collection>, --im-z-*
+//   LEGACY      --im-color-*, --im-space-N, --im-radius-N, --im-dur-N
+//               (kept so older partials keep working; they are ALIASES of
+//               the semantic names above, never independent values)
+//
+// Theme switching mirrors the site-wide data-attribute pattern:
+//   :root                              -> light (default)
+//   :root[data-color-scheme="dark"]    -> dark
+//   :root[data-color-scheme="system"]  -> follows prefers-color-scheme
+// ======================================================================
+
+// ---- Canonical scales the utility generator loops over ----------------
+// Expressed as multiples of the design system's single space unit.
+$im-space: (
+  0:  0,
+  1:  0.25rem,
+  2:  0.5rem,
+  3:  0.75rem,
+  4:  1rem,
+  5:  1.5rem,
+  6:  2rem,
+  7:  3rem,
+  8:  4rem,
+  9:  6rem,
+  10: 8rem,
+) !default;
+
+$im-radius: (
+  1:    0.375rem,
+  2:    0.5rem,
+  3:    0.75rem,
+  4:    1rem,
+  5:    1.25rem,
+  6:    1.5rem,
+  pill: 999px,
+) !default;
+
+$im-text: (
+  xs:   0.75rem,
+  sm:   0.875rem,
+  base: 1rem,
+  lg:   1.125rem,
+  xl:   1.25rem,
+  2xl:  1.5rem,
+  3xl:  2rem,
+  4xl:  2.5rem,
+  5xl:  3.25rem,
+) !default;
+
+// ======================================================================
+// :root — primitives, then semantics, then the legacy bridge
+// ======================================================================
+:root {
+  color-scheme: light;
+
+  // ---- Primitives: the grey ramp -------------------------------------
+  --im-white: #fff;
+  --im-black: #000;
+  @each $step, $val in $gray {
+    --im-gray-#{$step}: #{$val};
+  }
+
+  // ---- Primitives: space ---------------------------------------------
+  // One unit; everything is a multiple of it.
+  --im-space: 0.25rem;
+
+  // ---- Primitives: the golden ratio ----------------------------------
+  // The grid rules the page across; φ rules everything inside a block the
+  // grid has nothing to say about — how tall a picture is against its
+  // width, how far one size of type is from the next.
+  --im-phi: 1.618034;
+  --im-phi-inv: 0.618034;
+  --im-ratio-golden: 1.618034 / 1;
+  --im-phi-1: 0.236rem;
+  --im-phi-2: 0.382rem;
+  --im-phi-3: 0.618rem;
+  --im-phi-4: 1rem;
+  --im-phi-5: 1.618rem;
+  --im-phi-6: 2.618rem;
+  --im-phi-7: 4.236rem;
+  --im-phi-8: 6.854rem;
+
+  // ---- Primitives: type ----------------------------------------------
+  --im-font-sans: #{$ff-body};
+  --im-font-mono: #{$ff-mono};
+  // Geist Pixel is not on Google Fonts. The token exists so a site that
+  // self-hosts it can use it by name; everywhere else it falls back to
+  // the mono face, which is what the pixel face is a variant of.
+  --im-font-pixel: "Geist Pixel", #{$ff-mono};
+  --im-font-heading: var(--im-font-sans);
+  --im-font-body: var(--im-font-sans);
+  --im-font-head: var(--im-font-heading);   // legacy name
+
+  --im-text-xs: 0.75rem;
+  --im-text-sm: 0.875rem;
+  --im-text-base: 1rem;
+  --im-text-lg: 1.125rem;
+  --im-text-h6: 0.875rem;
+  --im-text-h5: 1rem;
+  --im-text-h4: 1.125rem;
+  --im-text-h3: 1.25rem;
+  --im-text-h2: clamp(1.375rem, 1.2rem + 0.7vw, 1.5rem);
+  --im-text-h1: clamp(1.625rem, 1.3rem + 1.3vw, 1.875rem);
+  --im-text-display: clamp(2.25rem, 1.4rem + 3.4vw, 3.75rem);
+
+  --im-leading-xs: 1.4;
+  --im-leading-sm: 1.5;
+  --im-leading-base: 1.6;
+  --im-leading-lg: 1.55;
+  --im-leading-tight: #{$lh-tight};
+  --im-leading-h6: 1.35;
+  --im-leading-h5: 1.35;
+  --im-leading-h4: 1.3;
+  --im-leading-h3: 1.25;
+  --im-leading-h2: 1.2;
+  --im-leading-h1: 1.12;
+  --im-leading-display: 1.02;
+
+  --im-weight-normal:   #{$fw-regular};
+  --im-weight-medium:   #{$fw-medium};
+  --im-weight-semibold: #{$fw-semibold};
+  --im-weight-bold:     #{$fw-bold};
+
+  --im-tracking-tight: -0.02em;
+  --im-tracking-tighter: -0.035em;
+  --im-tracking-normal: 0;
+  --im-tracking-wide: 0.04em;
+
+  // ---- Primitives: radius --------------------------------------------
+  --im-radius-xs: 0.25rem;
+  --im-radius-sm: 0.375rem;
+  --im-radius-md: 0.5rem;
+  --im-radius-lg: 0.75rem;
+  --im-radius-xl: 1rem;
+  --im-radius-2xl: 1.5rem;
+  --im-radius-full: 999px;
+
+  // ---- Primitives: motion --------------------------------------------
+  // Four durations and four curves. `out` for things ARRIVING (the
+  // default), `in` for things leaving, `in-out` for things that travel
+  // and stay, `spring` for a small playful overshoot.
+  --im-duration-instant: #{$dur-instant};
+  --im-duration-fast:    #{$dur-fast};
+  --im-duration-base:    #{$dur-base};
+  --im-duration-slow:    #{$dur-slow};
+  --im-duration-long:    900ms;
+  --im-ease-out:    #{$ease-out};
+  --im-ease-in:     cubic-bezier(0.5, 0, 0.9, 0.4);
+  --im-ease-in-out: #{$ease-in-out};
+  --im-ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --im-ease-glide:  cubic-bezier(0.22, 1, 0.36, 1);
+  --im-distance: 1rem;     // how far an entering thing travels
+  --im-stagger: 70ms;      // the gap between one staggered item and the next
+
+  // ==== Semantics =======================================================
+
+  // ---- Surfaces, from the page upward --------------------------------
+  --im-canvas:    #fff;
+  --im-surface:   var(--im-gray-100);
+  --im-surface-2: var(--im-gray-200);
+  --im-surface-3: var(--im-gray-300);
+  --im-line:  color-mix(in oklab, var(--im-gray-500) 24%, transparent);
+  --im-scrim: rgb(10 10 10 / 60%);
+
+  // ---- Text, loudest to quietest -------------------------------------
+  --im-ink:   var(--im-gray-950);
+  --im-body:  var(--im-gray-600);
+  --im-muted: var(--im-gray-500);
+  --im-faint: var(--im-gray-400);
+  --im-body-fg: var(--im-body);   // alias: --im-body reads oddly beside `body`
+
+  // ---- Accent ----------------------------------------------------------
+  // ONE brand colour for the whole site. `accent_color:` in _config.yml
+  // overrides it at runtime (see _includes/site-theme.html), and every
+  // collection hue below is derived from it — change one value, the whole
+  // site moves. Links, the focus ring, the active nav item and the reading
+  // progress bar all read this.
+  --im-accent: #{$accent-default};
+  --im-on-accent: #fff;
+  --im-accent-hover:  oklch(from var(--im-accent) calc(l - 0.08) c h);
+  --im-accent-active: oklch(from var(--im-accent) calc(l - 0.14) c h);
+  --im-accent-tint:   color-mix(in oklab, var(--im-accent) 10%, var(--im-canvas));
+
+  // ---- Status, and a tint of each over the CURRENT canvas -------------
+  --im-success: #{tone(success, light)};
+  --im-warning: #{tone(warning, light)};
+  --im-danger:  #{tone(danger,  light)};
+  --im-info:    #{tone(info,    light)};
+  --im-success-tint: color-mix(in oklab, var(--im-success) 11%, var(--im-canvas));
+  --im-warning-tint: color-mix(in oklab, var(--im-warning) 13%, var(--im-canvas));
+  --im-danger-tint:  color-mix(in oklab, var(--im-danger)  10%, var(--im-canvas));
+  --im-info-tint:    color-mix(in oklab, var(--im-info)    10%, var(--im-canvas));
+
+  // ---- Interaction -----------------------------------------------------
+  --im-ring: var(--im-accent);
+  --im-ring-width: 2px;
+  --im-ring-offset: 2px;
+  --im-opacity-disabled: 0.5;
+
+  // ---- Over a picture ---------------------------------------------------
+  // Words that sit ON a photograph are the same in both themes, because the
+  // picture is. Never use --im-ink on a picture.
+  --im-on-media: #fff;
+  --im-media-ink: #0a0a0a;
+  --im-on-media-dim:   rgb(255 255 255 / 80%);
+  --im-on-media-faint: rgb(255 255 255 / 70%);
+  --im-glass:       rgb(20 20 20 / 62%);
+  --im-glass-soft:  rgb(20 20 20 / 45%);
+  --im-glass-light: rgb(255 255 255 / 25%);
+  --im-media-scrim: linear-gradient(to top, rgb(0 0 0 / 82%), rgb(0 0 0 / 30%) 55%, rgb(0 0 0 / 5%));
+
+  // ---- Two states, defined once -----------------------------------------
+  // CURRENT — "you are here": a light fill and a bolder label, on every kind
+  // of navigation. HOVER — "this answers": the same idea one step quieter,
+  // the thing FILLS. Nothing sharpens a border, nothing grows 3%.
+  --im-current-bg: var(--im-surface-2);
+  --im-current-fg: var(--im-ink);
+  --im-current-weight: 600;
+  --im-hover-bg: var(--im-surface);
+
+  // ---- One colour per collection ----------------------------------------
+  // DERIVED from the accent by rotating its hue, so no two neighbours in a
+  // mixed feed share one and the whole set moves when the accent does. A
+  // collection's chip, its card rule, its generated cover and its tag face
+  // all read the same variable.
+  --im-c-posts:     var(--im-accent);
+  --im-c-portfolio: oklch(from var(--im-accent) l c calc(h - 140));
+  --im-c-videos:    oklch(from var(--im-accent) l c calc(h - 20));
+  --im-c-snippets:  oklch(from var(--im-accent) l c calc(h - 115));
+  --im-c-prompts:   oklch(from var(--im-accent) l c calc(h - 180));
+  // The rotations the design system publishes for the same kinds of
+  // thing: a series, a course, a trip, a shelf of gear, a newsletter. A
+  // child collection shares its parent's hue — an episode IS the series.
+  --im-c-webseries: oklch(from var(--im-accent) l c calc(h - 65));
+  --im-c-episodes:  var(--im-c-webseries);
+  --im-c-courses:   oklch(from var(--im-accent) l c calc(h - 90));
+  --im-c-lessons:   var(--im-c-courses);
+  --im-c-travel:    oklch(from var(--im-accent) l c calc(h - 160));
+  --im-c-uses:      oklch(from var(--im-accent) l c calc(h - 220));
+  --im-c-newsletter: oklch(from var(--im-accent) l c calc(h - 250));
+  --im-c-podcast:   oklch(from var(--im-accent) l c calc(h - 290));
+  --im-c-docs:      oklch(from var(--im-accent) l c calc(h - 320));
+  // Tags are not a collection but they are a KIND of thing, and the system
+  // gives every kind its own hue off the same accent.
+  --im-c-tags:      oklch(from var(--im-accent) l c calc(h + 45));
+  --im-c-pages:     var(--im-muted);
+  // The colour of the collection being rendered; layouts set this on <body>.
+  --im-c-current: var(--im-accent);
+
+  // ---- Layers -----------------------------------------------------------
+  --im-z-raised: #{$z-raised};
+  --im-z-sticky: #{$z-sticky};
+  --im-z-bar:    #{$z-bar};
+  --im-z-menu:   #{$z-menu};
+  --im-z-modal:  #{$z-modal};
+
+  // ---- Shadow: a hairline of depth, and one for things that float --------
+  --im-shadow-sm: 0 1px 2px rgb(0 0 0 / 12%);
+  --im-shadow-float: #{$shadow-light};
+
+  // ---- Frame metrics -----------------------------------------------------
+  // --im-width-wide is THE site width: the navbar (both states), the hero,
+  // the home page, collection pages and the footer all share it, so every
+  // band of chrome lines up on the same left and right edge. The other two
+  // are whole columns of it, so a centred page and a reading column sit on
+  // the same invisible grid lines.
+  --im-width-wide:   78rem;   // twelve columns — the site width
+  --im-width-page:   64rem;   // ten — the default page
+  --im-width-prose:  42rem;   // six — reading width
+  --im-content:      44rem;   // the article column inside the reading shell
+  --im-sidebar:      18rem;
+  --im-rail:         10rem;
+  --im-gutter:       clamp(1rem, 0.4rem + 2.4vw, 2rem);
+  --im-section-gap:  clamp(3.5rem, 2.5rem + 3vw, 5.5rem);
+  --im-grid-gap:     clamp(1.25rem, 0.9rem + 1.4vw, 2rem);
+  --im-flow:         1.5rem;
+
+  --im-bar-height:       #{$navbar-height};
+  --im-bar-height-sm:    3.25rem;
+  --im-hero-height:      calc(100vh - var(--im-bar-height));
+
+  // ---- Code: one dark slab, in both themes ------------------------------
+  // A code block reads best light-on-dark, and a dark slab gives a page of
+  // prose a clear change of voice — so it does NOT flip with the theme. It
+  // carries its own hairline and muted colours because the page's --im-line
+  // and --im-muted are tuned for the page's background, not for this one.
+  --im-code-bg:      var(--im-gray-950);
+  --im-code-fg:      var(--im-gray-100);
+  --im-code-line:    rgb(255 255 255 / 10%);
+  --im-code-muted:   var(--im-gray-400);
+  --im-code-hover:   rgb(255 255 255 / 9%);
+  --im-code-comment: var(--im-gray-500);
+
+  // ======================================================================
+  // LEGACY BRIDGE — old names, new values. Nothing below is a value of its
+  // own; every one points at a semantic token above. Prefer the canonical
+  // name in new code, and delete an alias once nothing reads it.
+  // ======================================================================
+  @each $key, $val in $theme-light {
+    --im-color-#{$key}: #{$val};
+  }
+  --im-color-accent:            var(--im-accent);
+  --im-color-ink:               var(--im-ink);
+  --im-color-contrast:          var(--im-ink);
+  --im-color-foreground:        var(--im-body);
+  --im-color-secondary:         var(--im-muted);
+  --im-color-mute:              var(--im-faint);
+  --im-color-background:        var(--im-canvas);
+  --im-color-background-100:    var(--im-surface);
+  --im-color-background-200:    var(--im-surface-2);
+  --im-color-background-300:    var(--im-surface-3);
+  --im-color-surface:           var(--im-canvas);
+  --im-color-muted:             var(--im-surface);
+  --im-color-overlay:           var(--im-scrim);
+  --im-color-border:            var(--im-line);
+  --im-color-success:           var(--im-success);
+  --im-color-warning:           var(--im-warning);
+  --im-color-danger:            var(--im-danger);
+  --im-color-accent-foreground: var(--im-canvas);
+
+  @each $key, $val in $im-space  { --im-space-#{$key}:  #{$val}; }
+  @each $key, $val in $im-radius { --im-radius-#{$key}: #{$val}; }
+
+  --im-text-xl:  1.25rem;
+  --im-text-2xl: var(--im-text-h2);
+  --im-text-3xl: var(--im-text-h1);
+  --im-text-4xl: clamp(2rem, 1.5rem + 1.8vw, 2.5rem);
+  --im-text-5xl: var(--im-text-display);
+
+  --im-fw-regular:  var(--im-weight-normal);
+  --im-fw-medium:   var(--im-weight-medium);
+  --im-fw-semibold: var(--im-weight-semibold);
+  --im-fw-bold:     var(--im-weight-bold);
+
+  --im-dur-1: var(--im-duration-fast);
+  --im-dur-2: var(--im-duration-base);
+  --im-ease:  var(--im-ease-out);
+
+  --im-z-header:  var(--im-z-bar);
+  --im-z-overlay: var(--im-z-menu);
+  --im-z-toast:   var(--im-z-modal);
+
+  --im-container:        var(--im-width-page);
+  --im-container-wide:   var(--im-width-wide);
+  --im-container-narrow: var(--im-width-prose);
+  --im-navbar-height:    var(--im-bar-height);
+  --im-navbar-height-sm: var(--im-bar-height-sm);
+  // The design system rests NOTHING on a shadow: a card, a panel and a
+  // section are flat surfaces separated by a hairline, and only a thing
+  // that genuinely floats over the page — a menu, a modal, the island bar
+  // once it detaches — casts --im-shadow-float. This alias stays `none` so
+  // the eleven surfaces that asked for "the" shadow get the right answer.
+  --im-shadow:    none;
+  --im-shadow-lg: var(--im-shadow-float);
+  // What a card casts while the pointer is on it — one hairline of depth.
+  --im-card-hover-shadow: var(--im-shadow-sm);
+}
+
+// svh = the *small* viewport height, i.e. measured with mobile browser
+// chrome showing. Using it means a full-height hero never gets its bottom
+// edge hidden behind an address bar that's still on screen, and doesn't
+// resize as that bar collapses. vh above is the fallback.
+@supports (height: 100svh) {
+  :root { --im-hero-height: calc(100svh - var(--im-bar-height)); }
+}
+
+// A browser without relative colour syntax gets the accent itself for every
+// collection rather than an invalid value (which would fall back to
+// unset/black). One query, five declarations, no JavaScript.
+@supports not (color: oklch(from #000 l c h)) {
+  :root {
+    --im-c-portfolio: var(--im-accent);
+    --im-c-videos:    var(--im-accent);
+    --im-c-snippets:  var(--im-accent);
+    --im-c-prompts:   var(--im-accent);
+    --im-c-tags:      var(--im-accent);
+    --im-c-webseries: var(--im-accent);
+    --im-c-episodes:  var(--im-accent);
+    --im-c-courses:   var(--im-accent);
+    --im-c-lessons:   var(--im-accent);
+    --im-c-travel:    var(--im-accent);
+    --im-c-uses:      var(--im-accent);
+    --im-c-newsletter: var(--im-accent);
+    --im-c-podcast:   var(--im-accent);
+    --im-c-docs:      var(--im-accent);
+    --im-accent-hover:  var(--im-accent);
+    --im-accent-active: var(--im-accent);
+  }
+}

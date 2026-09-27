@@ -1,0 +1,14 @@
+{%- comment -%}
+  Single KPI / stat block. Wrap several in <div class="stats">…</div>.
+    {% include components/stat.html value="28%" label="Faster quotes" icon="ph-chart-line-up" trend="up" trend_text="+12%" %}
+{%- endcomment -%}
+<div class="stat">
+  {%- if include.icon -%}<span class="stat__icon" aria-hidden="true"><i class="ph-bold {{ include.icon }}"></i></span>{%- endif -%}
+  <span class="stat__value">{{ include.value }}</span>
+  <span class="stat__label">{{ include.label }}</span>
+  {%- if include.trend -%}
+  <span class="stat__trend is-{{ include.trend }}">
+    <i class="ph-bold ph-trend-{{ include.trend }}" aria-hidden="true"></i>{{ include.trend_text }}
+  </span>
+  {%- endif -%}
+</div>

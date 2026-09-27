@@ -1,0 +1,29 @@
+{%- comment -%}
+  CSS-only tabs (no JavaScript).
+  Pass an id (unique per page) and a list of tabs:
+    {% include components/tabs.html id="demo" tabs=page.demo_tabs %}
+  Front-matter shape:
+    demo_tabs:
+      - label: "npm"
+        icon: "ph-package"
+        body: "```bash\nnpm i\n```"
+      - label: "yarn"
+        body: "..."
+{%- endcomment -%}
+{%- assign gid = include.id | default: "tabs" -%}
+<div class="tabs" id="tabs-{{ gid }}">
+  {%- for t in include.tabs -%}
+    <input class="tab__radio" type="radio" name="tabset-{{ gid }}" id="tab-{{ gid }}-{{ forloop.index }}" {% if forloop.first %}checked{% endif %}>
+  {%- endfor -%}
+  <nav class="tabs__list" role="tablist">
+    {%- for t in include.tabs -%}
+      <label class="tab__label" for="tab-{{ gid }}-{{ forloop.index }}">
+        {%- if t.icon -%}<i class="ph-bold {{ t.icon }}" aria-hidden="true"></i>{%- endif -%}
+        <span>{{ t.label }}</span>
+      </label>
+    {%- endfor -%}
+  </nav>
+  {%- for t in include.tabs -%}
+    <div class="tab__panel" role="tabpanel">{{ t.body | markdownify }}</div>
+  {%- endfor -%}
+</div>

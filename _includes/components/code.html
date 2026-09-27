@@ -1,0 +1,25 @@
+{%- comment -%}
+  A code block that starts folded.
+
+    {% include components/code.html
+       title="The whole config"
+       lang="yaml"
+       open=false
+       code="…" %}
+
+  For a long block a reader may not need: the point is made in the prose
+  and the proof is one click away, rather than four screens of scrolling
+  between them. It is a <details>, so it is open to find-in-page, it
+  prints open, and it works with no JavaScript at all.
+{%- endcomment -%}
+<details class="im-codefold"{% if include.open %} open{% endif %}>
+  <summary class="im-codefold-summary">
+    <i class="ph-bold ph-caret-right im-codefold-caret" aria-hidden="true"></i>
+    <span class="im-codefold-title">{{ include.title | default: "Show the code" }}</span>
+    {%- if include.lang %}<span class="im-codefold-lang">{{ include.lang }}</span>{% endif -%}
+    {%- if include.code %}<button class="im-codefold-copy" type="button" data-im-copy="{{ include.code | escape }}" aria-label="Copy"><i class="ph-bold ph-copy" aria-hidden="true"></i> Copy</button>{% endif -%}
+  </summary>
+  <div class="im-codefold-body">
+    {%- if include.code -%}<pre><code>{{ include.code }}</code></pre>{%- else -%}{{ include.body | markdownify }}{%- endif -%}
+  </div>
+</details>

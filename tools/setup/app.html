@@ -1,0 +1,660 @@
+<!doctype html>
+<html lang="en" data-theme="auto">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Scratchpad setup</title>
+<style>
+/* This page is built on the same tokens the theme is, so what you pick
+   here looks the way it will look on the site. Self-contained on purpose:
+   `npm run setup` must work offline, on a machine that has just cloned
+   the repo and installed nothing. */
+:root{
+  color-scheme:light;
+  --gray-50:oklch(98.5% 0 0);--gray-100:oklch(97% 0 0);--gray-200:oklch(92.2% 0 0);
+  --gray-300:oklch(87% 0 0);--gray-400:oklch(70.8% 0 0);--gray-500:oklch(55.6% 0 0);
+  --gray-600:oklch(43.9% 0 0);--gray-800:oklch(26.9% 0 0);--gray-900:oklch(20.5% 0 0);
+  --gray-950:oklch(14.5% 0 0);
+  --canvas:#fff;--surface:var(--gray-100);--surface-2:var(--gray-200);
+  --ink:var(--gray-950);--body:var(--gray-600);--muted:var(--gray-500);--faint:var(--gray-400);
+  --line:color-mix(in oklab,var(--gray-500) 24%,transparent);
+  --accent:#f22f46;--on-accent:#fff;
+  --radius:.75rem;--radius-sm:.5rem;--radius-full:999px;
+  --font:"Geist",ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"Geist Mono",ui-monospace,"SF Mono",Menlo,monospace;
+  --ease:cubic-bezier(.2,.8,.2,1);
+}
+@media (prefers-color-scheme:dark){:root{
+  color-scheme:dark;
+  --canvas:var(--gray-950);--surface:var(--gray-900);--surface-2:var(--gray-800);
+  --ink:#fff;--body:var(--gray-400);--muted:var(--gray-500);--faint:var(--gray-600);
+  --line:color-mix(in oklab,var(--gray-400) 26%,transparent);
+}}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;font-family:var(--font);font-size:15px;line-height:1.6;color:var(--body);background:var(--canvas);-webkit-font-smoothing:antialiased}
+h1,h2,h3{color:var(--ink);line-height:1.2;margin:0 0 .35rem;letter-spacing:-.02em}
+h1{font-size:clamp(1.5rem,1.2rem+1.2vw,1.875rem)}
+h2{font-size:1.25rem}
+h3{font-size:.9375rem;font-weight:600}
+p{margin:0 0 1rem}
+a{color:var(--ink)}
+code{font-family:var(--mono);font-size:.85em;background:var(--surface);padding:.1em .35em;border-radius:.25rem}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:.25rem}
+
+/* ── frame ─────────────────────────────────────────────────────────── */
+.wrap{max-width:74rem;margin:0 auto;padding:clamp(1rem,.4rem+2.4vw,2rem);display:grid;gap:clamp(1.25rem,.9rem+1.4vw,2rem);grid-template-columns:1fr}
+@media (min-width:60rem){.wrap{grid-template-columns:15rem 1fr;align-items:start}}
+.mast{grid-column:1/-1;display:flex;flex-wrap:wrap;gap:1rem;align-items:center;justify-content:space-between;padding-bottom:1rem;border-bottom:1px solid var(--line)}
+.mark{display:flex;gap:.75rem;align-items:center}
+.dot{width:.625rem;height:.625rem;border-radius:var(--radius-full);background:var(--accent);flex:0 0 auto;box-shadow:0 0 0 .25rem color-mix(in oklab,var(--accent) 22%,transparent)}
+.mast small{display:block;color:var(--muted);font-size:.8125rem}
+
+/* ── step rail ─────────────────────────────────────────────────────── */
+.rail{position:sticky;top:1rem;display:flex;gap:.25rem;flex-direction:row;overflow-x:auto;padding-bottom:.5rem;scrollbar-width:thin}
+@media (min-width:60rem){.rail{flex-direction:column;overflow:visible}}
+.rail button{all:unset;cursor:pointer;display:flex;gap:.625rem;align-items:center;padding:.5rem .75rem;border-radius:var(--radius-sm);color:var(--body);font-size:.875rem;white-space:nowrap;transition:background-color .12s var(--ease),color .12s var(--ease)}
+.rail button:hover{background:var(--surface)}
+.rail button[aria-current="true"]{background:var(--surface-2);color:var(--ink);font-weight:600}
+.rail .n{display:grid;place-items:center;width:1.375rem;height:1.375rem;flex:0 0 auto;border-radius:var(--radius-full);background:var(--surface-2);font-size:.6875rem;font-weight:600;font-variant-numeric:tabular-nums}
+.rail button[aria-current="true"] .n{background:var(--accent);color:var(--on-accent)}
+.rail button.done .n{background:color-mix(in oklab,var(--accent) 22%,transparent);color:var(--ink)}
+
+/* ── panels ────────────────────────────────────────────────────────── */
+.panel{display:none;animation:in .28s var(--ease)}
+.panel.on{display:block}
+@keyframes in{from{opacity:0;translate:0 .5rem}to{opacity:1;translate:0}}
+@media (prefers-reduced-motion:reduce){.panel{animation:none}}
+.lede{color:var(--muted);max-width:52ch;margin-bottom:1.5rem}
+fieldset{border:0;margin:0 0 1.5rem;padding:0}
+legend{padding:0;font-size:.75rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:.75rem}
+.grid{display:grid;gap:1rem;grid-template-columns:1fr}
+@media (min-width:40rem){.grid.two{grid-template-columns:1fr 1fr}.grid.three{grid-template-columns:repeat(3,1fr)}}
+label.f{display:block}
+label.f>span{display:block;font-size:.8125rem;font-weight:600;color:var(--ink);margin-bottom:.3125rem}
+label.f>em{display:block;font-style:normal;font-size:.75rem;color:var(--muted);margin-top:.3125rem}
+input[type=text],input[type=email],input[type=url],select,textarea{
+  width:100%;padding:.5625rem .75rem;font:inherit;font-size:.875rem;color:var(--ink);
+  background:var(--canvas);border:1px solid var(--line);border-radius:var(--radius-sm);
+  transition:border-color .12s var(--ease)}
+input:focus-visible,select:focus-visible,textarea:focus-visible{border-color:transparent}
+input::placeholder,textarea::placeholder{color:var(--faint)}
+textarea{min-height:5rem;resize:vertical;line-height:1.5}
+
+/* a switch is a label you can click anywhere on */
+.sw{display:flex;gap:.75rem;align-items:flex-start;padding:.6875rem .875rem;border:1px solid var(--line);border-radius:var(--radius-sm);cursor:pointer;transition:background-color .12s var(--ease)}
+.sw:hover{background:var(--surface)}
+.sw input{margin:.25rem 0 0;accent-color:var(--accent);flex:0 0 auto;width:1rem;height:1rem}
+.sw b{display:block;font-size:.875rem;font-weight:600;color:var(--ink)}
+.sw span{display:block;font-size:.75rem;color:var(--muted)}
+
+/* segmented choice */
+.seg{display:flex;flex-wrap:wrap;gap:.375rem}
+.seg label{position:relative;cursor:pointer}
+.seg input{position:absolute;opacity:0;inset:0;cursor:pointer}
+.seg span{display:block;padding:.4375rem .875rem;border:1px solid var(--line);border-radius:var(--radius-full);font-size:.8125rem;font-weight:600;color:var(--body);transition:.12s var(--ease)}
+.seg input:checked+span{background:var(--ink);border-color:var(--ink);color:var(--canvas)}
+.seg input:focus-visible+span{outline:2px solid var(--accent);outline-offset:2px}
+
+/* accent swatches */
+.swatches{display:flex;flex-wrap:wrap;gap:.5rem;align-items:center}
+.swatches button{all:unset;cursor:pointer;width:1.75rem;height:1.75rem;border-radius:var(--radius-full);box-shadow:inset 0 0 0 1px rgb(0 0 0/.15)}
+.swatches button[aria-pressed=true]{box-shadow:0 0 0 2px var(--canvas),0 0 0 4px var(--ink)}
+input[type=color]{width:2.5rem;height:1.75rem;padding:0;border:1px solid var(--line);border-radius:var(--radius-sm);background:none;cursor:pointer}
+
+/* repeatable rows */
+.rows{display:flex;flex-direction:column;gap:.5rem}
+.row{display:grid;gap:.5rem;grid-template-columns:1fr;align-items:center;padding:.625rem;border:1px solid var(--line);border-radius:var(--radius-sm);background:var(--canvas)}
+@media (min-width:46rem){.row{grid-template-columns:1.1fr 1.4fr .9fr auto}}
+.row.two{grid-template-columns:1fr}
+@media (min-width:46rem){.row.two{grid-template-columns:.8fr 2fr auto}}
+.row input{font-size:.8125rem}
+.row .drag{color:var(--faint);cursor:grab;user-select:none;font-size:.875rem;letter-spacing:-.1em}
+.x{all:unset;cursor:pointer;display:grid;place-items:center;width:1.75rem;height:1.75rem;border-radius:var(--radius-sm);color:var(--muted);font-size:1rem;line-height:1}
+.x:hover{background:var(--surface-2);color:var(--ink)}
+.locked{font-size:.6875rem;color:var(--muted);background:var(--surface);padding:.125rem .4375rem;border-radius:var(--radius-full)}
+
+/* collection cards */
+.colls{display:grid;gap:.75rem}
+.coll{border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;background:var(--canvas)}
+.coll>summary{list-style:none;cursor:pointer;display:flex;gap:.75rem;align-items:center;padding:.875rem 1rem}
+.coll>summary::-webkit-details-marker{display:none}
+.coll>summary:hover{background:var(--surface)}
+.coll .hue{width:.5rem;height:2rem;border-radius:var(--radius-full);flex:0 0 auto}
+.coll .who{flex:1;min-width:0}
+.coll .who b{display:block;color:var(--ink);font-size:.9375rem}
+.coll .who span{display:block;font-size:.75rem;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.coll .body{padding:0 1rem 1rem;border-top:1px solid var(--line);padding-top:1rem}
+.coll[data-off] .who b,.coll[data-off] .who span{opacity:.45}
+
+/* buttons */
+.bar{display:flex;flex-wrap:wrap;gap:.625rem;align-items:center;margin-top:2rem;padding-top:1.25rem;border-top:1px solid var(--line)}
+.bar .spacer{flex:1}
+.btn{all:unset;cursor:pointer;display:inline-flex;gap:.5rem;align-items:center;justify-content:center;min-height:2.5rem;padding:0 1.125rem;border-radius:var(--radius-full);font-size:.875rem;font-weight:600;background:var(--surface);color:var(--ink);transition:.12s var(--ease)}
+.btn:hover{background:var(--surface-2)}
+.btn.primary{background:var(--accent);color:var(--on-accent)}
+.btn.primary:hover{filter:brightness(.92)}
+.btn.ink{background:var(--ink);color:var(--canvas)}
+.btn.ink:hover{filter:brightness(1.15)}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.btn.small{min-height:2rem;padding:0 .875rem;font-size:.8125rem}
+
+/* review + result */
+.review{display:grid;gap:.5rem;font-size:.875rem}
+.review div{display:grid;grid-template-columns:11rem 1fr;gap:.75rem;padding:.4375rem 0;border-bottom:1px dashed var(--line)}
+.review dt,.review b{color:var(--muted);font-weight:500}
+.review i{font-style:normal;color:var(--ink)}
+.note{padding:.875rem 1rem;border-radius:var(--radius-sm);background:var(--surface);font-size:.8125rem;border-left:3px solid var(--accent)}
+.done{text-align:center;padding:3rem 1rem}
+.done .tick{width:3.5rem;height:3.5rem;margin:0 auto 1.25rem;border-radius:var(--radius-full);display:grid;place-items:center;background:var(--accent);color:var(--on-accent);font-size:1.5rem}
+.steps{text-align:left;max-width:38rem;margin:1.5rem auto 0;display:grid;gap:.75rem}
+.steps li{list-style:none;display:grid;grid-template-columns:1.5rem 1fr;gap:.75rem;align-items:start}
+.steps b{color:var(--ink)}
+pre{margin:.375rem 0 0;padding:.75rem .875rem;background:var(--surface);border-radius:var(--radius-sm);font-family:var(--mono);font-size:.8125rem;overflow-x:auto;color:var(--ink)}
+.err{border-left-color:#b42318;color:var(--ink)}
+.hide{display:none!important}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="mast">
+    <div class="mark">
+      <span class="dot"></span>
+      <div>
+        <strong style="color:var(--ink)">Scratchpad setup</strong>
+        <small>Answer these, and your site is configured. Nothing leaves this machine.</small>
+      </div>
+    </div>
+    <label class="f" style="margin:0"><span class="hide">Accent</span>
+      <span style="font-size:.75rem;color:var(--muted);font-weight:500">Running locally · <code>npm run setup</code></span>
+    </label>
+  </header>
+
+  <nav class="rail" id="rail" aria-label="Setup steps"></nav>
+
+  <main id="main">
+    <!-- 1 ── You ─────────────────────────────────────────────────── -->
+    <section class="panel on" data-step="You">
+      <h1>Who is this site for?</h1>
+      <p class="lede">The name and the one-line description go everywhere: the tab title, search results, the card that appears when someone shares a link.</p>
+      <fieldset><legend>Identity</legend>
+        <div class="grid two">
+          <label class="f"><span>Site name</span><input type="text" data-k="identity.title" placeholder="Ada Lovelace"><em>Usually your name.</em></label>
+          <label class="f"><span>What you do</span><input type="text" data-k="identity.job_title" placeholder="Mathematician"><em>One line, under the brand in the header.</em></label>
+        </div>
+        <label class="f" style="margin-top:1rem"><span>Description</span><textarea data-k="identity.description" maxlength="180" placeholder="A sentence a stranger could read and know whether to stay."></textarea><em>Under ~155 characters. This is your search result.</em></label>
+        <div class="grid three" style="margin-top:1rem">
+          <label class="f"><span>Byline</span><input type="text" data-k="identity.author" placeholder="Ada Lovelace"><em>The default author on posts.</em></label>
+          <label class="f"><span>Email</span><input type="email" data-k="identity.email" placeholder="hello@example.com"></label>
+          <label class="f"><span>Location</span><input type="text" data-k="identity.location" placeholder="London, UK"></label>
+        </div>
+      </fieldset>
+      <fieldset><legend>Pictures</legend>
+        <div class="grid two">
+          <label class="f"><span>Logo</span><input type="text" data-k="identity.logo" placeholder="/assets/logos/logo.svg"><em>Shown in the header. SVG is best.</em></label>
+          <label class="f"><span>Avatar</span><input type="text" data-k="identity.avatarurl" placeholder="/assets/logos/logo@512px.png"><em>Your face, beside your byline.</em></label>
+        </div>
+        <p class="note" style="margin-top:1rem">Drop your own files into <code>assets/logos/</code> and point these at them. Leave them as they are for now if you would rather do it later — the theme ships with placeholders that look deliberate.</p>
+      </fieldset>
+    </section>
+
+    <!-- 2 ── Address ─────────────────────────────────────────────── -->
+    <section class="panel" data-step="Address">
+      <h1>Where will it live?</h1>
+      <p class="lede">GitHub Pages gives every repository a free address. A custom domain is optional and can be added later.</p>
+      <fieldset><legend>GitHub</legend>
+        <label class="f"><span>Repository</span><input type="text" data-k="extras.github_repo" placeholder="ada/ada.github.io"><em>owner/repo. Used for the live star count in the header — clear it to hide that button.</em></label>
+      </fieldset>
+      <fieldset><legend>Address</legend>
+        <div class="grid two">
+          <label class="f"><span>Site URL</span><input type="url" data-k="identity.url" placeholder="https://ada.github.io"><em>No trailing slash. Every absolute link and the sitemap are built from this.</em></label>
+          <label class="f"><span>Sub-path</span><input type="text" data-k="identity.baseurl" placeholder=""><em>Only if the site is served from <code>/repo-name/</code>. Leave empty otherwise.</em></label>
+        </div>
+        <label class="f" style="margin-top:1rem"><span>Custom domain</span><input type="text" data-k="deploy.cname" placeholder="example.com"><em>Writes the <code>CNAME</code> file GitHub Pages reads. Leave empty to use the github.io address.</em></label>
+      </fieldset>
+      <fieldset><legend>Locale</legend>
+        <div class="grid two">
+          <label class="f"><span>Language</span><input type="text" data-k="identity.lang" placeholder="en"><em>Goes in <code>&lt;html lang&gt;</code>.</em></label>
+          <label class="f"><span>Time zone</span><input type="text" data-k="identity.timezone" placeholder="UTC"><em>Decides what date a post published near midnight gets.</em></label>
+        </div>
+      </fieldset>
+    </section>
+
+    <!-- 3 ── Look ────────────────────────────────────────────────── -->
+    <section class="panel" data-step="Look">
+      <h1>One colour, two layouts</h1>
+      <p class="lede">Scratchpad has exactly one brand colour. Links, the focus ring, the active menu item, the reading-progress bar and every generated cover derive from it — and each collection gets its own hue by rotating it.</p>
+      <fieldset><legend>Accent</legend>
+        <div class="swatches" id="swatches"></div>
+        <div class="swatches" style="margin-top:.75rem">
+          <input type="color" id="accentPicker" aria-label="Pick any accent colour">
+          <input type="text" data-k="look.accent_color" style="max-width:9rem;font-family:var(--mono)" placeholder="#f22f46">
+          <span style="font-size:.75rem;color:var(--muted)">Any CSS colour works.</span>
+        </div>
+      </fieldset>
+      <fieldset><legend>Header</legend>
+        <div class="seg" style="margin-bottom:.75rem" data-seg="look.header.layout">
+          <label><input type="radio" name="hl" value="island"><span>Island — a floating pill</span></label>
+          <label><input type="radio" name="hl" value="full"><span>Full width</span></label>
+        </div>
+        <div class="seg" style="margin-bottom:1rem" data-seg="look.header.brand">
+          <label><input type="radio" name="hb" value="both"><span>Logo + name</span></label>
+          <label><input type="radio" name="hb" value="logo"><span>Logo only</span></label>
+          <label><input type="radio" name="hb" value="title"><span>Name only</span></label>
+        </div>
+        <div class="grid two" id="headerSwitches"></div>
+      </fieldset>
+      <fieldset><legend>Footer</legend>
+        <div class="seg" style="margin-bottom:1rem" data-seg="look.footer.layout">
+          <label><input type="radio" name="fl" value="columns"><span>Columns</span></label>
+          <label><input type="radio" name="fl" value="minimal"><span>Minimal — one line</span></label>
+        </div>
+        <label class="f" style="margin-bottom:1rem"><span>Tagline</span><input type="text" data-k="look.footer.tagline" placeholder="A line about the work."></label>
+        <div class="grid two" id="footerSwitches"></div>
+      </fieldset>
+      <fieldset><legend>Reading a post</legend>
+        <div class="grid two" id="readingSwitches"></div>
+      </fieldset>
+      <fieldset><legend>Hero</legend>
+        <label class="f"><span>Background video</span><input type="text" data-k="look.hero_video" placeholder="dQw4w9WgXcQ"><em>A YouTube id, played muted behind the homepage hero. Leave empty for none.</em></label>
+      </fieldset>
+    </section>
+
+    <!-- 4 ── Menus ───────────────────────────────────────────────── -->
+    <section class="panel" data-step="Menus">
+      <h1>The menus</h1>
+      <p class="lede">Drag to reorder. Icon names come from <a href="https://phosphoricons.com" target="_blank" rel="noopener">Phosphor</a> — type <code>house</code>, not <code>ph-house</code>.</p>
+      <fieldset><legend>Header</legend><div class="rows" id="navHeader"></div>
+        <button class="btn small" style="margin-top:.625rem" data-add="navHeader">Add a link</button></fieldset>
+      <fieldset><legend>Footer</legend><div class="rows" id="navFooter"></div>
+        <button class="btn small" style="margin-top:.625rem" data-add="navFooter">Add a link</button></fieldset>
+      <fieldset><legend>Legal</legend><div class="rows" id="navLegal"></div>
+        <button class="btn small" style="margin-top:.625rem" data-add="navLegal">Add a link</button></fieldset>
+      <p class="note">Dropdowns and megamenus are written by hand in <code>_config.yml</code> (the shapes are documented there and in <code>/docs/navigation/</code>). Any item that has one is marked <span class="locked">nested</span> below and will be <strong>flattened</strong> if you save this step.</p>
+    </section>
+
+    <!-- 5 ── Collections ─────────────────────────────────────────── -->
+    <section class="panel" data-step="Content">
+      <h1>What do you publish?</h1>
+      <p class="lede">A collection is a kind of content. Each one gets a folder, a card design, a landing page, a hue and a place in search, the archive and the footer. Turn off what you will not use — you can add it back any time.</p>
+      <div class="colls" id="colls"></div>
+      <button class="btn small" style="margin-top:.875rem" id="addColl">Add a collection</button>
+      <fieldset style="margin-top:2rem"><legend>The demo content</legend>
+        <label class="sw"><input type="checkbox" data-k="deploy.clean_demo">
+          <div><b>Clear the sample posts and projects</b>
+          <span>Moves them into <code>.scratchpad-backup/</code> and leaves one starter entry per collection, so the site still builds and you can see what a page looks like. Nothing is deleted.</span></div></label>
+      </fieldset>
+    </section>
+
+    <!-- 6 ── Elsewhere ───────────────────────────────────────────── -->
+    <section class="panel" data-step="Elsewhere">
+      <h1>Where else you are</h1>
+      <p class="lede">The label picks the icon and is shown to screen readers. Known labels: GitHub, LinkedIn, Twitter, X, YouTube, Instagram, Mastodon, Bluesky, Dribbble, Behance, Threads, email, link, RSS.</p>
+      <div class="rows" id="social"></div>
+      <button class="btn small" style="margin-top:.625rem" data-add="social">Add a link</button>
+      <fieldset style="margin-top:2rem"><legend>Newsletter &amp; analytics</legend>
+        <div class="grid two">
+          <label class="f"><span>Newsletter endpoint</span><input type="url" data-k="extras.newsletter_action" placeholder="https://buttondown.email/api/emails/embed-subscribe/you"><em>Where the footer form POSTs. Empty = the form is hidden.</em></label>
+          <label class="f"><span>Google Analytics</span><input type="text" data-k="extras.google_analytics" placeholder="G-XXXXXXXXXX"><em>Empty = no analytics script at all.</em></label>
+        </div>
+        <div class="grid two" style="margin-top:1rem" id="extraSwitches"></div>
+      </fieldset>
+    </section>
+
+    <!-- 7 ── Review ──────────────────────────────────────────────── -->
+    <section class="panel" data-step="Review">
+      <h1>Ready?</h1>
+      <p class="lede">Here is everything this will write. <code>_config.yml</code> is backed up first, and so is anything it replaces.</p>
+      <div class="review" id="review"></div>
+      <p class="note" style="margin-top:1.5rem">Jekyll reads <code>_config.yml</code> once, at boot. If a dev server is running, stop it and start it again after this.</p>
+      <div id="applyErr" class="note err hide" style="margin-top:1rem"></div>
+    </section>
+
+    <!-- done ─────────────────────────────────────────────────────── -->
+    <section class="panel" data-step="Done" data-hidden>
+      <div class="done">
+        <div class="tick">✓</div>
+        <h1>Your site is configured</h1>
+        <p class="lede" style="margin:0 auto 0;max-width:40ch">Here is what happens next.</p>
+        <ol class="steps" id="nextSteps"></ol>
+        <div id="wrote" style="max-width:38rem;margin:2rem auto 0;text-align:left"></div>
+        <button class="btn ink" style="margin-top:2rem" id="finish">Close the wizard</button>
+      </div>
+    </section>
+
+    <div class="bar" id="bar">
+      <button class="btn" id="back">Back</button>
+      <div class="spacer"></div>
+      <span id="progress" style="font-size:.8125rem;color:var(--muted)"></span>
+      <button class="btn ink" id="next">Next</button>
+      <button class="btn primary hide" id="apply">Write the files</button>
+    </div>
+  </main>
+</div>
+
+<script>
+const STATE = __STATE__;
+const $  = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+const el = (tag, attrs = {}, kids = []) => {
+  const n = document.createElement(tag);
+  for (const [k, v] of Object.entries(attrs)) {
+    if (k === 'class') n.className = v;
+    else if (k === 'html') n.innerHTML = v;
+    else if (k.startsWith('on')) n.addEventListener(k.slice(2), v);
+    else if (v !== false && v != null) n.setAttribute(k, v === true ? '' : v);
+  }
+  for (const k of [].concat(kids)) n.append(k);
+  return n;
+};
+const get = (p) => p.split('.').reduce((o, k) => (o == null ? o : o[k]), STATE);
+const set = (p, v) => {
+  const ks = p.split('.'); const last = ks.pop();
+  let o = STATE; for (const k of ks) o = (o[k] ??= {});
+  o[last] = v;
+};
+
+/* ── bound plain fields ─────────────────────────────────────────── */
+function bindFields() {
+  for (const n of $$('[data-k]')) {
+    const p = n.dataset.k, v = get(p);
+    if (n.type === 'checkbox') { n.checked = !!v; n.onchange = () => set(p, n.checked); }
+    else { n.value = v ?? ''; n.oninput = () => { set(p, n.value); if (p === 'look.accent_color') paintAccent(n.value); }; }
+  }
+  for (const g of $$('[data-seg]')) {
+    const p = g.dataset.seg, cur = get(p);
+    for (const i of $$('input', g)) {
+      i.checked = i.value === cur;
+      i.onchange = () => set(p, i.value);
+    }
+  }
+}
+
+/* ── switches, declared as data ─────────────────────────────────── */
+const SWITCHES = {
+  headerSwitches: [
+    ['look.header.sticky',      'Stick to the top',      'The bar follows you down the page.'],
+    ['look.header.blur',        'Frosted backdrop',      'Content blurs behind it as it scrolls under.'],
+    ['look.header.show_icons',  'Icons in the menu',     'A small icon before each link.'],
+    ['look.header.search',      'Search',                'A command palette; the / key opens it.'],
+    ['look.header.dark_toggle', 'Light / dark switch',   'Remembers the choice; follows the system by default.'],
+    ['look.header.progress',    'Reading progress',      'A thin bar along the header’s edge.'],
+    ['look.header.dropdowns',   'Allow dropdowns',       'Menu items with children open a submenu.'],
+    ['look.header.megamenu',    'Allow megamenus',       'Items with groups open a wide panel.'],
+  ],
+  footerSwitches: [
+    ['look.footer.boxed',            'Boxed',            'Wrap the footer in a rounded card.'],
+    ['look.footer.show_details',     'Site details',     'Brand, location and email.'],
+    ['look.footer.show_collections', 'Collection cloud', 'One icon pill per collection.'],
+    ['look.footer.show_nav',         'Navigation',       'The footer menu from the previous step.'],
+    ['look.footer.show_social',      'Social links',     'The icons from the next step.'],
+    ['look.footer.show_legal',       'Legal row',        'Privacy and terms, quietly, at the bottom.'],
+  ],
+  readingSwitches: [
+    ['look.reading.sidebar',  'Sidebar',        'Contents, an ad slot and an about card beside the article.'],
+    ['look.reading.toc',      'Table of contents', 'Built from the headings; highlights as you scroll.'],
+    ['look.reading.ad_rails', 'Ad rails',       'Sticky vertical slots on very wide screens.'],
+  ],
+  extraSwitches: [
+    ['extras.service_worker',  'Offline support', 'A service worker caches the site for offline reading.'],
+    ['extras.adsense_enabled', 'AdSense',         'Off shows labelled placeholders so you can see the layout.'],
+  ],
+};
+function buildSwitches() {
+  for (const [id, rows] of Object.entries(SWITCHES)) {
+    const host = $('#' + id); if (!host) continue;
+    host.replaceChildren(...rows.map(([p, title, desc]) => {
+      const box = el('input', { type: 'checkbox' });
+      box.checked = !!get(p);
+      box.onchange = () => set(p, box.checked);
+      return el('label', { class: 'sw' }, [box, el('div', {}, [el('b', {}, title), el('span', {}, desc)])]);
+    }));
+  }
+}
+
+/* ── accent ─────────────────────────────────────────────────────── */
+const PRESETS = ['#f22f46','#2563eb','#0f766e','#c2410c','#7c3aed','#be185d','#15803d','#a16207','#0a0a0a'];
+function paintAccent(c) {
+  if (!c) return;
+  document.documentElement.style.setProperty('--accent', c);
+  try { $('#accentPicker').value = /^#[0-9a-f]{6}$/i.test(c) ? c : '#f22f46'; } catch {}
+  for (const b of $$('#swatches button')) b.setAttribute('aria-pressed', String(b.dataset.c.toLowerCase() === String(c).toLowerCase()));
+}
+function buildAccent() {
+  $('#swatches').replaceChildren(...PRESETS.map((c) => el('button', {
+    type: 'button', 'data-c': c, style: `background:${c}`, 'aria-label': c, 'aria-pressed': 'false',
+    onclick: () => { set('look.accent_color', c); $('[data-k="look.accent_color"]').value = c; paintAccent(c); },
+  })));
+  $('#accentPicker').oninput = (e) => {
+    set('look.accent_color', e.target.value);
+    $('[data-k="look.accent_color"]').value = e.target.value;
+    paintAccent(e.target.value);
+  };
+  paintAccent(get('look.accent_color'));
+}
+
+/* ── repeatable rows ────────────────────────────────────────────── */
+const ROWS = {
+  navHeader: { path: 'nav.header', cols: ['title', 'url', 'icon'], ph: ['Blog', '/blog/', 'pen-nib'] },
+  navFooter: { path: 'nav.footer', cols: ['title', 'url', 'icon'], ph: ['About', '/about/', ''] },
+  navLegal:  { path: 'nav.legal',  cols: ['title', 'url', 'icon'], ph: ['Privacy', '/privacy/', ''] },
+  social:    { path: 'social',     cols: ['label', 'url'],         ph: ['GitHub', 'https://github.com/you'], two: true },
+};
+let dragging = null;
+function renderRows(id) {
+  const spec = ROWS[id], host = $('#' + id);
+  const list = get(spec.path) || [];
+  host.replaceChildren(...list.map((item, i) => {
+    const row = el('div', { class: 'row' + (spec.two ? ' two' : ''), draggable: 'true' });
+    row.addEventListener('dragstart', () => { dragging = { id, i }; row.style.opacity = '.4'; });
+    row.addEventListener('dragend', () => { row.style.opacity = ''; dragging = null; });
+    row.addEventListener('dragover', (e) => e.preventDefault());
+    row.addEventListener('drop', (e) => {
+      e.preventDefault();
+      if (!dragging || dragging.id !== id) return;
+      const arr = get(spec.path);
+      arr.splice(i, 0, arr.splice(dragging.i, 1)[0]);
+      renderRows(id);
+    });
+    spec.cols.forEach((c, ci) => {
+      const inp = el('input', { type: 'text', placeholder: spec.ph[ci] || c, 'aria-label': c });
+      inp.value = item[c] ?? '';
+      inp.oninput = () => { item[c] = inp.value; };
+      row.append(inp);
+    });
+    if (item.locked) row.append(el('span', { class: 'locked', title: 'Has children or groups — saving this step flattens it' }, 'nested'));
+    row.append(el('button', {
+      class: 'x', type: 'button', 'aria-label': 'Remove',
+      onclick: () => { get(spec.path).splice(i, 1); renderRows(id); },
+    }, '×'));
+    return row;
+  }));
+}
+function buildRows() {
+  for (const id of Object.keys(ROWS)) renderRows(id);
+  for (const b of $$('[data-add]')) b.onclick = () => {
+    const id = b.dataset.add, spec = ROWS[id];
+    (get(spec.path) ||= []).push(Object.fromEntries(spec.cols.map((c) => [c, ''])));
+    renderRows(id);
+  };
+}
+
+/* ── collections ────────────────────────────────────────────────── */
+const STYLE_HELP = {
+  numbered: 'A numbered editorial list — best for essays.',
+  gallery:  'A filterable grid with a sticky aside — best for work.',
+  featured: 'One big entry, then a grid — best for video.',
+  compact:  'A dense list — best for short reference entries.',
+  cards:    'An even grid of cards. The safe default.',
+};
+function renderColls() {
+  $('#colls').replaceChildren(...STATE.collections.map((c, i) => {
+    const hue = el('span', { class: 'hue', style: `background:${c.color || 'var(--accent)'};opacity:${c.enabled ? 1 : .25}` });
+    const on = el('input', { type: 'checkbox', 'aria-label': `Publish ${c.title}` });
+    on.checked = !!c.enabled;
+    on.onclick = (e) => e.stopPropagation();
+    on.onchange = () => { c.enabled = on.checked; renderColls(); };
+
+    const field = (key, label, ph, wide) => {
+      const inp = el('input', { type: 'text', placeholder: ph });
+      inp.value = c[key] ?? '';
+      inp.oninput = () => { c[key] = inp.value; };
+      return el('label', { class: 'f', style: wide ? 'grid-column:1/-1' : '' }, [el('span', {}, label), inp]);
+    };
+    const styleSel = el('select', { onchange: (e) => { c.style = e.target.value; $('#cstyle-' + i).textContent = STYLE_HELP[e.target.value]; } },
+      Object.keys(STYLE_HELP).map((s) => el('option', { value: s, selected: c.style === s }, s)));
+
+    const body = el('div', { class: 'body' }, [
+      el('div', { class: 'grid two' }, [
+        field('title', 'Title', 'Blog'),
+        field('singular', 'One of them is called', 'Post'),
+      ]),
+      el('div', { class: 'grid two', style: 'margin-top:1rem' }, [
+        field('icon', 'Icon', 'pen-nib'),
+        el('label', { class: 'f' }, [el('span', {}, 'Landing page layout'), styleSel,
+          el('em', { id: 'cstyle-' + i }, STYLE_HELP[c.style] || '')]),
+      ]),
+      el('label', { class: 'f', style: 'margin-top:1rem' }, [el('span', {}, 'Description'),
+        (() => { const t = el('textarea', { placeholder: 'One line, shown on the landing page.' }); t.value = c.description ?? ''; t.oninput = () => { c.description = t.value; }; return t; })()]),
+      el('p', { style: 'margin:1rem 0 0;font-size:.75rem;color:var(--muted)' },
+        `Folder: _${c.label}/  ·  URL: /${c.label === 'posts' ? 'blog' : c.label}/  ·  colour: derived from the accent`),
+    ]);
+
+    const det = el('details', { class: 'coll', ...(c.enabled ? {} : { 'data-off': true }) }, [
+      el('summary', {}, [hue, el('div', { class: 'who' }, [
+        el('b', {}, c.title || c.label),
+        el('span', {}, c.description || `_${c.label}/`),
+      ]), on]),
+      body,
+    ]);
+    return det;
+  }));
+}
+function buildColls() {
+  renderColls();
+  $('#addColl').onclick = () => {
+    const name = prompt('What is this collection called? (plural, lowercase — e.g. "notes")');
+    if (!name) return;
+    const label = name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+    if (!label || STATE.collections.some((c) => c.label === label)) return;
+    const Title = label[0].toUpperCase() + label.slice(1);
+    STATE.collections.push({ label, enabled: true, title: Title, singular: Title.replace(/s$/, ''), description: '', icon: 'folder', style: 'cards', schema: 'CreativeWork', color: '' });
+    renderColls();
+  };
+}
+
+/* ── review ─────────────────────────────────────────────────────── */
+function renderReview() {
+  const on = STATE.collections.filter((c) => c.enabled).map((c) => c.title || c.label);
+  const off = STATE.collections.filter((c) => !c.enabled).map((c) => c.title || c.label);
+  const rows = [
+    ['Site', `${get('identity.title') || '—'} · ${get('identity.url') || 'no URL set'}`],
+    ['Description', get('identity.description') || '—'],
+    ['Accent', get('look.accent_color')],
+    ['Header', `${get('look.header.layout')}, ${get('look.header.sticky') ? 'sticky' : 'static'}${get('look.header.search') ? ', search' : ''}${get('look.header.dark_toggle') ? ', dark toggle' : ''}`],
+    ['Footer', `${get('look.footer.layout')}${get('look.footer.boxed') ? ', boxed' : ''}`],
+    ['Reading', [get('look.reading.sidebar') && 'sidebar', get('look.reading.toc') && 'contents', get('look.reading.ad_rails') && 'ad rails'].filter(Boolean).join(', ') || 'plain'],
+    ['Header menu', (get('nav.header') || []).map((i) => i.title).filter(Boolean).join(' · ') || '—'],
+    ['Publishing', on.join(', ') || 'nothing — add a collection'],
+    ...(off.length ? [['Turning off', off.join(', ') + ' (moved to .scratchpad-backup/)']] : []),
+    ['Social', (STATE.social || []).map((s) => s.label).filter(Boolean).join(', ') || '—'],
+    ['Domain', get('deploy.cname') || 'the github.io address'],
+    ['Demo content', get('deploy.clean_demo') ? 'cleared (backed up)' : 'kept'],
+  ];
+  $('#review').replaceChildren(...rows.map(([k, v]) => el('div', {}, [el('b', {}, k), el('i', {}, String(v))])));
+}
+
+/* ── steps ──────────────────────────────────────────────────────── */
+const panels = $$('.panel:not([data-hidden])');
+const donePanel = $('.panel[data-hidden]');
+let step = 0;
+function go(n) {
+  step = Math.max(0, Math.min(panels.length - 1, n));
+  panels.forEach((p, i) => p.classList.toggle('on', i === step));
+  $$('#rail button').forEach((b, i) => {
+    b.setAttribute('aria-current', String(i === step));
+    b.classList.toggle('done', i < step);
+  });
+  $('#back').disabled = step === 0;
+  const last = step === panels.length - 1;
+  $('#next').classList.toggle('hide', last);
+  $('#apply').classList.toggle('hide', !last);
+  $('#progress').textContent = `Step ${step + 1} of ${panels.length}`;
+  if (last) renderReview();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+function buildRail() {
+  $('#rail').replaceChildren(...panels.map((p, i) => el('button', {
+    type: 'button', onclick: () => go(i),
+  }, [el('span', { class: 'n' }, String(i + 1)), p.dataset.step])));
+}
+
+/* ── apply ──────────────────────────────────────────────────────── */
+function nextSteps(report) {
+  const repo = get('extras.github_repo') || 'you/your-repo';
+  const cname = get('deploy.cname');
+  const items = [
+    ['Start the site', 'npm run dev', 'Opens <code>http://localhost:4000</code>. Look at it, then come back and change anything you want.'],
+    ['Put it on GitHub', `git add -A && git commit -m "Set up my site" && git push`, `Push to <code>${repo}</code>. The workflow in <code>.github/workflows/</code> builds and deploys on every push to <code>main</code>.`],
+    ['Turn Pages on', null, 'In the repository: <b>Settings → Pages → Source → GitHub Actions</b>. Once only.'],
+  ];
+  if (cname) items.push(['Point the domain', null, `At your DNS provider, add a <code>CNAME</code> record for <code>${cname}</code> → <code>${repo.split('/')[0]}.github.io</code>, then set the custom domain under Settings → Pages.`]);
+  items.push(['Write something', 'npm run new post "My first post"', 'Or read <code>/docs/writing/</code> — it covers front matter, covers, and getting an AI assistant to draft with you.']);
+
+  $('#nextSteps').replaceChildren(...items.map(([title, cmd, desc], i) => el('li', {}, [
+    el('span', { class: 'n', style: 'display:grid;place-items:center;width:1.5rem;height:1.5rem;border-radius:999px;background:var(--surface-2);font-size:.6875rem;font-weight:600' }, String(i + 1)),
+    el('div', {}, [el('b', {}, title), el('div', { html: desc, style: 'font-size:.8125rem;color:var(--muted)' }), ...(cmd ? [el('pre', {}, cmd)] : [])]),
+  ])));
+
+  if (report?.changed?.length) {
+    $('#wrote').replaceChildren(
+      el('h3', {}, 'What was written'),
+      el('ul', { style: 'margin:.5rem 0 0;padding-left:1.1rem;font-size:.8125rem;color:var(--muted)' },
+        report.changed.map((c) => el('li', {}, c))),
+      ...(report.backup ? [el('p', { style: 'margin-top:.75rem;font-size:.8125rem;color:var(--muted)', html: `Replaced files were copied to <code>${report.backup}</code>.` })] : []),
+      ...(report.notes || []).map((n) => el('p', { class: 'note', style: 'margin-top:.75rem' }, n)),
+    );
+  }
+}
+
+async function doApply() {
+  const btn = $('#apply');
+  btn.disabled = true; btn.textContent = 'Writing…';
+  $('#applyErr').classList.add('hide');
+  try {
+    const res = await fetch('/api/apply', {
+      method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(STATE),
+    });
+    const report = await res.json();
+    if (!report.ok) throw new Error(report.error || 'unknown error');
+    panels.forEach((p) => p.classList.remove('on'));
+    donePanel.classList.add('on');
+    $('#bar').classList.add('hide');
+    $('#rail').classList.add('hide');
+    nextSteps(report);
+    window.scrollTo({ top: 0 });
+  } catch (err) {
+    $('#applyErr').textContent = 'Could not write the files: ' + err.message + ' — nothing was changed.';
+    $('#applyErr').classList.remove('hide');
+  } finally {
+    btn.disabled = false; btn.textContent = 'Write the files';
+  }
+}
+
+/* ── boot ───────────────────────────────────────────────────────── */
+buildRail(); bindFields(); buildSwitches(); buildAccent(); buildRows(); buildColls();
+$('#next').onclick = () => go(step + 1);
+$('#back').onclick = () => go(step - 1);
+$('#apply').onclick = doApply;
+$('#finish').onclick = async () => {
+  try { await fetch('/api/done', { method: 'POST' }); } catch {}
+  document.body.innerHTML = '<div style="display:grid;place-items:center;min-height:100vh;font-family:var(--font);color:var(--muted)">You can close this tab. <span style="margin-left:.4rem;color:var(--ink)">Run <code>npm run dev</code> next.</span></div>';
+};
+document.addEventListener('keydown', (e) => {
+  if (e.target.matches('input,textarea,select')) return;
+  if (e.key === 'ArrowRight') go(step + 1);
+  if (e.key === 'ArrowLeft') go(step - 1);
+});
+go(0);
+</script>
+</body>
+</html>

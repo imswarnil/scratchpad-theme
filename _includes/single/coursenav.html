@@ -1,0 +1,46 @@
+{%- comment -%}
+  The course's curriculum, as a rail beside the lesson — so a reader knows
+  where they are in the course, how much is left, and can move without
+  going back to the course page. It is the same list the course page
+  shows, marked with where you are.
+{%- endcomment -%}
+{%- assign parent = site.courses | where: "slug", page.course | first -%}
+{%- assign all = site.lessons | where: "course", page.course | sort: "lesson" -%}
+{%- if all.size > 0 -%}
+{%- assign modules = all | group_by: "module" -%}
+<nav class="im-coursenav" aria-label="Course contents">
+  {%- if parent -%}
+  <a class="im-coursenav-back" href="{{ parent.url | relative_url }}">
+    <i class="ph-bold ph-arrow-left" aria-hidden="true"></i>
+    <span>
+      <span class="im-coursenav-kicker">Course</span>
+      <span class="im-coursenav-course">{{ parent.title }}</span>
+    </span>
+  </a>
+  {%- endif -%}
+
+  {%- assign done = 0 -%}
+  {%- for l in all -%}{%- if l.lesson <= page.lesson %}{% assign done = done | plus: 1 %}{% endif -%}{%- endfor -%}
+  <p class="im-coursenav-progress">
+    <span class="im-coursenav-bar" aria-hidden="true"><span style="width: {{ done | times: 100 | divided_by: all.size }}%"></span></span>
+    <span class="im-coursenav-count">Lesson {{ page.lesson }} of {{ all.size }}</span>
+  </p>
+
+  {%- for m in modules -%}
+  <div class="im-coursenav-module">
+    {%- if m.name and m.name != "" %}<p class="im-coursenav-modtitle">{{ m.name }}</p>{% endif -%}
+    <ol class="im-coursenav-list">
+      {%- for l in m.items -%}
+      <li>
+        <a href="{{ l.url | relative_url }}"{% if l.url == page.url %} aria-current="page"{% endif %}>
+          <span class="im-coursenav-n">{{ l.lesson }}</span>
+          <span class="im-coursenav-title">{{ l.title }}</span>
+          {%- if l.minutes %}<span class="im-coursenav-time">{{ l.minutes }}m</span>{% endif -%}
+        </a>
+      </li>
+      {%- endfor -%}
+    </ol>
+  </div>
+  {%- endfor -%}
+</nav>
+{%- endif -%}

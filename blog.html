@@ -1,0 +1,22 @@
+---
+layout: default
+title: Blog
+permalink: /blog/
+description: "Essays, how-tos and field notes on engineering & craft."
+collection_view: true
+pagination:
+  enabled: true
+  collection: posts
+---
+{%- assign coll = site.collections | where: "label", "posts" | first -%}
+<section class="im-collection im-page is-posts" style="--im-c-current: var(--im-c-posts, var(--im-accent));">
+  {% include collection/hero.html coll=coll docs=site.posts title=page.title views=true tags=true %}
+
+  <ul class="im-cards" id="feed" data-view="{{ coll.view | default: 'card' }}">
+    {%- for it in paginator.posts -%}
+    <li>{% include utility/card.html item=it %}</li>
+    {%- endfor -%}
+  </ul>
+
+  {% include pagination.html %}
+</section>

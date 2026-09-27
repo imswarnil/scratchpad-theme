@@ -1,0 +1,18 @@
+{%- comment -%}
+  Vertical timeline.
+    {% include components/timeline.html items=page.journey %}
+  Front-matter shape:
+    journey:
+      - date: "2021 — Present"
+        title: "Software Engineer · Twilio"
+        body: "Building CRM Analytics dashboards."
+{%- endcomment -%}
+<ol class="timeline">
+  {%- for item in include.items -%}
+  <li class="timeline__item">
+    {%- if item.date -%}<span class="timeline__date">{{ item.date }}</span>{%- endif -%}
+    <h3 class="timeline__title">{{ item.title }}</h3>
+    {%- if item.body -%}<div class="timeline__body">{{ item.body | markdownify }}</div>{%- endif -%}
+  </li>
+  {%- endfor -%}
+</ol>

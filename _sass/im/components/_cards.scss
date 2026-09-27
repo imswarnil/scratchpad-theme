@@ -1,0 +1,543 @@
+// ======================================================================
+// im/_cards.scss — the per-collection cards
+//   .im-ecard   editorial post card          (cards/blog.html)
+//   .im-rcard   GitHub-repo-style project    (cards/portfolio.html)
+//   .im-vcard   video-player-styled          (cards/video.html)
+//   .im-ccard   VS Code-window snippet       (cards/snippet.html)
+//   .im-chcard  chat-window prompt           (cards/prompt.html)
+// plus the portfolio filter sidebar, the /videos/ video band and the
+// single-project repo header. Shared hover/surface treatment first.
+// ======================================================================
+
+// ---- The two shapes a card takes --------------------------------------
+// A card is never a bordered box with a drop shadow: the system rests
+// nothing on a shadow. It is either BARE — a picture and some words with
+// nothing round them — or a HAIRLINE, an outline whose line is drawn as an
+// inset shadow so it costs no layout. Both answer the same way: they FILL.
+
+// BARE. There is no box to fill, so the fill is a panel drawn BEHIND the
+// card, bleeding past its edges. Nothing in the layout moves, nothing is
+// padded at rest, and the card still lines up with the grid it sits in.
+// Only one card is hovered at a time, so two panels overlapping in a tight
+// gap is not a situation that happens.
+%im-cardbare {
+  --im-card-bleed: 1rem;
+  --im-card-radius: var(--im-radius-xl);
+
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--im-space-3);
+  min-width: 0;
+  height: 100%;
+  isolation: isolate;
+
+  &::before {
+    content: "";
+    position: absolute;
+    inset: calc(var(--im-card-bleed) * -1);
+    z-index: -1;
+    border-radius: calc(var(--im-card-radius) + var(--im-card-bleed) * 0.75);
+    background: var(--im-hover-bg);
+    opacity: 0;
+    transition: opacity var(--im-duration-fast) var(--im-ease-out);
+    pointer-events: none;
+  }
+
+  &:is(:hover, :focus-within)::before { opacity: 1; }
+}
+
+// HAIRLINE. Transparent at rest, the line inside it, the fill on hover.
+%im-cardhairline {
+  --im-card-radius: var(--im-radius-lg);
+  --im-hover-bg: var(--im-surface);
+
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--im-space-3);
+  min-width: 0;
+  height: 100%;
+  padding: 1.375rem;
+  border-radius: var(--im-card-radius);
+  background: transparent;
+  box-shadow: inset 0 0 0 1px var(--im-line);
+  color: var(--im-body);
+  transition: background-color var(--im-duration-fast) var(--im-ease-out);
+
+  &:is(:hover, :focus-within) { background: var(--im-hover-bg); }
+}
+
+// ONE movement, shared by every card and every filled button in the theme:
+// a single pixel, and the hairline of depth that goes with it.
+%im-cardlift {
+  @media (hover: hover) and (prefers-reduced-motion: no-preference) {
+    transition:
+      background-color var(--im-duration-fast) var(--im-ease-out),
+      opacity var(--im-duration-fast) var(--im-ease-out),
+      translate var(--im-duration-fast) var(--im-ease-out),
+      box-shadow var(--im-duration-fast) var(--im-ease-out);
+
+    &:is(:hover, :focus-within) {
+      translate: 0 -1px;
+      box-shadow: var(--im-card-hover-shadow);
+    }
+  }
+}
+
+// A card's picture rounds itself — there is no box clipping it any more.
+// It does NOT grow on hover: a feed of twenty cards each twitching a
+// photograph is a page nobody can read.
+%im-cardmedia {
+  position: relative;
+  display: block;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  border-radius: var(--im-card-radius, var(--im-radius-xl));
+  background: var(--im-surface);
+  isolation: isolate;
+
+  img, .im-thumb { width: 100%; height: 100%; object-fit: cover; display: block; }
+}
+
+%im-cardbody { display: flex; flex-direction: column; gap: var(--im-space-2); min-width: 0; flex: 1; }
+
+%im-cardtitle {
+  margin: 0;
+  font-size: var(--im-text-h4);
+  font-weight: var(--im-weight-semibold);
+  letter-spacing: var(--im-tracking-tight);
+  line-height: var(--im-leading-h4);
+  color: var(--im-ink);
+  a { color: inherit; text-decoration: none; }
+}
+
+// One line-under-the-title, every card: the sentence on a card is the same
+// size and leading everywhere, so a grid of mixed collections reads as one
+// typeface and not as five.
+%im-cardexcerpt {
+  margin: 0;
+  font-size: var(--im-text-sm);
+  line-height: 1.55;
+  color: var(--im-body);
+  text-wrap: pretty;
+  display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;
+}
+
+%im-cardfoot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--im-space-2) var(--im-space-3);
+  margin-top: auto;
+  padding-top: var(--im-space-3);
+  font-size: var(--im-text-xs);
+  color: var(--im-muted);
+}
+
+%im-cardtags {
+  display: flex; flex-wrap: wrap; gap: var(--im-space-2);
+  font-size: var(--im-text-xs); color: var(--im-muted);
+}
+
+.im-dot { color: var(--im-faint); }
+
+// The card's action is a LINK whose arrow leans the way it goes, not a
+// button: a feed of twenty pill buttons is a page of twenty primary
+// actions. The lean belongs to the link, so it answers when the card is
+// hovered as well as when the link itself is.
+:is(.im-ecard, .im-rcard, .im-vcard, .im-ccard, .im-chcard):is(:hover, :focus-within) .im-card-cta > i {
+  translate: 3px 0;
+}
+
+// ---- Editorial post card ----------------------------------------------
+.im-ecard { @extend %im-cardbare; @extend %im-cardlift; }
+.im-ecard-media { @extend %im-cardmedia; }
+.im-ecard-body { @extend %im-cardbody; }
+.im-ecard-kicker {
+  display: flex; align-items: center; gap: var(--im-space-2);
+  font-size: var(--im-text-xs); color: var(--im-muted);
+}
+// The kicker wears its collection's colour, the way every chip in the
+// system does — one hue per collection, everywhere it appears.
+.im-ecard-type {
+  font-weight: var(--im-weight-semibold);
+  letter-spacing: var(--im-tracking-wide);
+  text-transform: uppercase;
+  color: color-mix(in oklab, var(--im-c-this, var(--im-c-posts)) 72%, var(--im-ink));
+}
+.im-ecard-title { @extend %im-cardtitle; font-size: var(--im-text-h3); line-height: var(--im-leading-h3); }
+.im-ecard:is(:hover, :focus-within) .im-ecard-title a { color: var(--im-accent); }
+.im-ecard-excerpt { @extend %im-cardexcerpt; }
+.im-ecard-author {
+  display: flex; align-items: center; gap: var(--im-space-2);
+  font-size: var(--im-text-xs); color: var(--im-muted);
+  img { width: 1.5rem; height: 1.5rem; border-radius: var(--im-radius-full); object-fit: cover; }
+  .im-ecard-author-name { color: var(--im-ink); font-weight: var(--im-weight-medium); }
+}
+.im-ecard-foot { @extend %im-cardfoot; }
+.im-ecard-tags { @extend %im-cardtags; }
+
+// ---- GitHub-style project card ----------------------------------------
+.im-rcard { @extend %im-cardhairline; @extend %im-cardlift; gap: var(--im-space-4); }
+.im-rcard-media {
+  @extend %im-cardmedia;
+  aspect-ratio: 2 / 1;
+  // The picture sits inside the hairline, so it pulls out to its edge.
+  margin: calc(1.375rem * -1) calc(1.375rem * -1) 0;
+  border-radius: var(--im-card-radius) var(--im-card-radius) 0 0;
+}
+.im-rcard-body { @extend %im-cardbody; gap: var(--im-space-2); }
+.im-rcard-head {
+  display: flex; align-items: center; gap: var(--im-space-2);
+  font-size: var(--im-text-sm); color: var(--im-muted);
+  > i { flex: 0 0 auto; color: var(--im-c-this, var(--im-c-portfolio)); }
+}
+.im-rcard-slug {
+  min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  color: var(--im-muted); text-decoration: none;
+  strong { color: var(--im-ink); font-weight: var(--im-weight-semibold); }
+  &:hover strong { text-decoration: underline; }
+}
+.im-rcard-kind {
+  margin-left: auto; flex: 0 0 auto;
+  padding: 0.1rem var(--im-space-2);
+  border-radius: var(--im-radius-full);
+  box-shadow: inset 0 0 0 1px var(--im-line);
+  font-size: var(--im-text-xs); font-weight: var(--im-weight-medium);
+  text-transform: capitalize; color: var(--im-muted);
+}
+.im-rcard-title { @extend %im-cardtitle; }
+.im-rcard-desc { @extend %im-cardexcerpt; -webkit-line-clamp: 2; }
+.im-rcard-topics {
+  display: flex; flex-wrap: wrap; gap: var(--im-space-1);
+}
+// A topic chip is the collection's hue over the current canvas — the same
+// tint a tag, a badge and a generated cover use.
+.im-rcard-topic {
+  padding: 0.15rem var(--im-space-2);
+  border-radius: var(--im-radius-full);
+  background: color-mix(in oklab, var(--im-c-this, var(--im-c-portfolio)) 12%, var(--im-canvas));
+  color: color-mix(in oklab, var(--im-c-this, var(--im-c-portfolio)) 70%, var(--im-ink));
+  font-size: var(--im-text-xs); font-weight: var(--im-weight-medium);
+}
+.im-rcard-meta {
+  display: flex; flex-wrap: wrap; align-items: center; gap: var(--im-space-1) var(--im-space-4);
+  font-size: var(--im-text-xs); color: var(--im-muted);
+  i { margin-right: 0.15rem; }
+}
+.im-rcard-lang { display: inline-flex; align-items: center; gap: var(--im-space-2); }
+.im-lang-dot {
+  width: 0.7rem; height: 0.7rem; border-radius: var(--im-radius-full);
+  background: var(--im-faint);
+  // GitHub's language colours for the common ones; anything else stays neutral.
+  [data-lang="javascript"] &, [data-lang="js"] & { background: #f1e05a; }
+  [data-lang="typescript"] &, [data-lang="ts"] & { background: #3178c6; }
+  [data-lang="python"] &   { background: #3572a5; }
+  [data-lang="ruby"] &     { background: #701516; }
+  [data-lang="scss"] &     { background: #c6538c; }
+  [data-lang="css"] &      { background: #663399; }
+  [data-lang="html"] &     { background: #e34c26; }
+  [data-lang="liquid"] &   { background: #67b8de; }
+  [data-lang="shell"] &, [data-lang="bash"] & { background: #89e051; }
+  [data-lang="sql"] &, [data-lang="saql"] & { background: #e38c00; }
+  [data-lang="apex"] &     { background: #1797c0; }
+  [data-lang="go"] &       { background: #00add8; }
+  [data-lang="rust"] &     { background: #dea584; }
+}
+.im-rcard-foot { @extend %im-cardfoot; justify-content: flex-start; }
+
+// ---- Video-player card ------------------------------------------------
+.im-vcard { @extend %im-cardbare; @extend %im-cardlift; --im-card-radius: var(--im-radius-lg); }
+.im-vcard-screen {
+  @extend %im-cardmedia;
+  aspect-ratio: 16 / 9;
+  background: #000;
+}
+// The play mark is the one thing on a thumbnail that may answer, because
+// it IS the affordance: it fills, it does not grow.
+.im-vcard-play {
+  position: absolute; inset: 0; display: grid; place-items: center; color: var(--im-on-media);
+  i {
+    display: grid; place-items: center;
+    width: 3.5rem; height: 3.5rem;
+    padding-left: 0.2rem;
+    border-radius: var(--im-radius-full);
+    background: var(--im-glass);
+    box-shadow: inset 0 0 0 1px var(--im-glass-light);
+    font-size: 1.4rem;
+    transition: background-color var(--im-duration-fast) var(--im-ease-out);
+  }
+  .im-vcard:is(:hover, :focus-within) & i { background: var(--im-accent); color: var(--im-on-accent); }
+}
+.im-vcard-duration {
+  position: absolute; bottom: var(--im-space-3); right: var(--im-space-3);
+  padding: 0.1rem var(--im-space-2); border-radius: var(--im-radius-sm);
+  background: var(--im-glass); color: var(--im-on-media);
+  font-size: var(--im-text-xs); font-weight: var(--im-weight-semibold); font-variant-numeric: tabular-nums;
+}
+// The player's scrubber: a track along the bottom edge with a "played" fill.
+// How far through a viewer got, drawn along the foot of the thumbnail.
+// The width is the DATA — it does not move on hover, because the number
+// does not change when a pointer arrives.
+.im-vcard-bar {
+  position: absolute; left: 0; right: 0; bottom: 0; height: 3px;
+  background: var(--im-glass-light);
+
+  > span { display: block; height: 100%; background: var(--im-c-videos); }
+}
+.im-vcard-body { @extend %im-cardbody; gap: var(--im-space-2); }
+.im-vcard-title { @extend %im-cardtitle; }
+.im-vcard:is(:hover, :focus-within) .im-vcard-title a { color: var(--im-accent); }
+.im-vcard-meta {
+  display: flex; align-items: center; gap: var(--im-space-2);
+  font-size: var(--im-text-xs); color: var(--im-muted);
+  img { width: 1.5rem; height: 1.5rem; border-radius: var(--im-radius-full); object-fit: cover; }
+}
+.im-vcard-excerpt { @extend %im-cardexcerpt; -webkit-line-clamp: 2; }
+.im-vcard-foot { @extend %im-cardfoot; }
+.im-vcard-tags { @extend %im-cardtags; }
+
+// ---- VS Code-window snippet card --------------------------------------
+// The editor is deliberately dark in both themes — it's a window, not a
+// surface — so its colours are fixed rather than tokens.
+// The snippet card: what the code is FOR above the window, the window under
+// it — the sentence is what decides whether the code is worth reading. The
+// window is drawn in the system's own --im-code-* colours, not in any
+// editor's palette.
+.im-ccard { @extend %im-cardbare; @extend %im-cardlift; --im-card-radius: var(--im-radius-lg); }
+.im-ccard-window {
+  display: block; text-decoration: none; color: inherit;
+  overflow: hidden;
+  border-radius: var(--im-card-radius);
+  background: var(--im-code-bg);
+  box-shadow: inset 0 0 0 1px var(--im-code-line);
+  color-scheme: dark;
+}
+.im-ccard-titlebar {
+  display: flex; align-items: center; gap: var(--im-space-3);
+  padding: var(--im-space-2) var(--im-space-3);
+  border-bottom: 1px solid var(--im-code-line);
+  background: color-mix(in oklab, var(--im-code-bg) 82%, #000);
+  font-size: var(--im-text-xs); color: var(--im-code-muted);
+}
+.im-ccard-lights {
+  display: inline-flex; gap: 6px;
+  i { width: 11px; height: 11px; border-radius: var(--im-radius-full); }
+  i:nth-child(1) { background: #ff5f57; }
+  i:nth-child(2) { background: #febc2e; }
+  i:nth-child(3) { background: #28c840; }
+}
+// (The fake tab is gone — see cards/snippet.html. Kept for anyone whose
+// own card markup still uses it.)
+.im-ccard-tab {
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: inline-flex; align-items: center; gap: var(--im-space-1);
+  padding: 0.2rem var(--im-space-2);
+  background: var(--im-code-bg);
+  box-shadow: inset 0 1px 0 var(--im-code-fg);
+  color: var(--im-code-fg);
+  font-family: var(--im-font-mono); font-size: var(--im-text-xs);
+  i { color: var(--im-c-snippets); }
+}
+.im-ccard-lang {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--im-space-1);
+  white-space: nowrap;
+  font-family: var(--im-font-mono);
+  text-transform: uppercase;
+  letter-spacing: var(--im-tracking-wide);
+  color: var(--im-code-muted);
+}
+
+// The one control the card needs: the code, on the clipboard, without
+// opening anything.
+.im-ccard-copy {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--im-space-1);
+  margin-left: auto;
+  padding: 0.15rem var(--im-space-2);
+  border: 0;
+  border-radius: var(--im-radius-full);
+  background: transparent;
+  color: var(--im-code-muted);
+  font: inherit;
+  font-size: var(--im-text-xs);
+  cursor: pointer;
+  transition: background-color var(--im-duration-instant), color var(--im-duration-instant);
+
+  &:hover { background: var(--im-code-hover); color: var(--im-code-fg); }
+}
+.im-ccard-editor {
+  margin: 0; padding: var(--im-space-3) 0;
+  // `white-space: pre` below makes one line of code the min-content width
+  // of this whole card. Without min-width:0 that width wins on a phone.
+  min-width: 0;
+  overflow: hidden;
+  font-family: var(--im-font-mono); font-size: var(--im-text-xs); line-height: 1.7;
+  color: var(--im-code-fg); background: var(--im-code-bg);
+  counter-reset: ln;
+  code { display: block; }
+}
+.im-ccard-line {
+  display: block; white-space: pre; overflow: hidden; text-overflow: ellipsis;
+  padding-right: var(--im-space-3);
+  counter-increment: ln;
+  &::before {
+    content: counter(ln);
+    display: inline-block; width: 2.6rem; padding-right: var(--im-space-3);
+    text-align: right; color: var(--im-code-comment); user-select: none;
+  }
+  &.im-ccard-more { color: var(--im-code-comment); }
+}
+.im-ccard-body { @extend %im-cardbody; gap: var(--im-space-2); }
+.im-ccard-title { @extend %im-cardtitle; font-family: var(--im-font-mono); font-size: var(--im-text-h5); line-height: var(--im-leading-h5); }
+.im-ccard:is(:hover, :focus-within) .im-ccard-title a { color: var(--im-accent); }
+.im-ccard-excerpt { @extend %im-cardexcerpt; -webkit-line-clamp: 2; }
+.im-ccard-foot { @extend %im-cardfoot; }
+.im-ccard-badge, .im-chcard-badge {
+  display: inline-flex; align-items: center; gap: var(--im-space-1);
+  font-size: var(--im-text-xs); color: var(--im-muted);
+}
+.im-ccard-actions, .im-chcard-actions { display: inline-flex; flex-wrap: wrap; gap: var(--im-space-2); }
+
+// ---- Chat-window prompt card ------------------------------------------
+// A prompt printed as a paragraph is indistinguishable from prose ABOUT a
+// prompt. Printed as the turn it is, it is obvious which part gets pasted.
+// The window is this system's own surfaces, radii and type — not a picture
+// of anybody's product.
+.im-chcard { @extend %im-cardbare; @extend %im-cardlift; }
+.im-chcard-window {
+  display: block; text-decoration: none; color: inherit;
+  overflow: hidden;
+  border-radius: var(--im-card-radius);
+  background: var(--im-canvas);
+  box-shadow: inset 0 0 0 1px var(--im-line);
+}
+.im-chcard-head {
+  display: flex; align-items: center; gap: var(--im-space-2);
+  padding: var(--im-space-2) var(--im-space-3);
+  border-bottom: 1px solid var(--im-line);
+  background: var(--im-surface);
+  font-size: var(--im-text-xs);
+}
+.im-chcard-avatar {
+  display: grid; place-items: center; width: 1.6rem; height: 1.6rem;
+  border-radius: var(--im-radius-full);
+  background: var(--im-c-prompts); color: var(--im-on-accent); font-size: 0.8rem;
+}
+.im-chcard-name { font-weight: var(--im-weight-semibold); color: var(--im-ink); }
+.im-chcard-status {
+  margin-left: auto; display: inline-flex; align-items: center; gap: var(--im-space-1); color: var(--im-muted);
+  i { width: 0.5rem; height: 0.5rem; border-radius: var(--im-radius-full); background: var(--im-success); }
+}
+.im-chcard-thread { display: flex; flex-direction: column; gap: var(--im-space-2); padding: var(--im-space-3); min-height: 7.5rem; }
+.im-chcard-msg {
+  max-width: 88%;
+  padding: var(--im-space-2) var(--im-space-3);
+  border-radius: var(--im-radius-lg);
+  font-size: var(--im-text-sm); line-height: 1.55;
+  p { margin: 0; }
+  &--user { align-self: flex-end; background: var(--im-ink); color: var(--im-canvas); border-bottom-right-radius: var(--im-radius-xs); }
+  &--bot  { align-self: flex-start; background: var(--im-surface); border-bottom-left-radius: var(--im-radius-xs); }
+}
+.im-chcard-typing {
+  display: inline-flex; gap: 4px; padding: 0.15rem 0;
+  i { width: 6px; height: 6px; border-radius: var(--im-radius-full); background: var(--im-faint); }
+  @media (prefers-reduced-motion: no-preference) {
+    i { animation: im-typing 1.2s ease-in-out infinite; }
+    i:nth-child(2) { animation-delay: 0.15s; }
+    i:nth-child(3) { animation-delay: 0.3s; }
+  }
+}
+@keyframes im-typing { 0%, 60%, 100% { transform: translateY(0); opacity: 0.5; } 30% { transform: translateY(-4px); opacity: 1; } }
+.im-chcard-body { @extend %im-cardbody; gap: var(--im-space-2); }
+.im-chcard-title { @extend %im-cardtitle; }
+.im-chcard:is(:hover, :focus-within) .im-chcard-title a { color: var(--im-accent); }
+.im-chcard-excerpt { @extend %im-cardexcerpt; -webkit-line-clamp: 2; }
+.im-chcard-foot { @extend %im-cardfoot; }
+
+// ---- Portfolio filter sidebar -----------------------------------------
+.im-listing { align-items: start; }
+.im-filter-sticky {
+  @include mq($bp-lg) {
+    position: sticky;
+    top: calc(var(--im-navbar-height) + var(--im-space-4));
+  }
+}
+.im-filter-head {
+  display: flex; align-items: center; justify-content: space-between; gap: var(--im-space-2);
+  margin-bottom: var(--im-space-3);
+  font-size: var(--im-text-xs); color: var(--im-muted);
+}
+.im-filter-count { font-variant-numeric: tabular-nums; }
+.im-filter-clear {
+  display: inline-flex; align-items: center; gap: var(--im-space-1);
+  padding: 0.15rem var(--im-space-2);
+  border: 0; border-radius: var(--im-radius-full);
+  box-shadow: inset 0 0 0 1px var(--im-line);
+  background: transparent; color: var(--im-ink);
+  font-size: var(--im-text-xs); cursor: pointer;
+  transition: background-color var(--im-duration-instant);
+  &:hover { background: var(--im-hover-bg); }
+}
+.im-filter-group { margin-bottom: var(--im-space-4); }
+.im-filter-title {
+  margin: 0 0 var(--im-space-2);
+  font-size: var(--im-text-xs); font-weight: var(--im-weight-semibold);
+  letter-spacing: var(--im-tracking-wide); text-transform: uppercase; color: var(--im-faint);
+}
+.im-filter-chips { display: flex; flex-wrap: wrap; gap: var(--im-space-2); }
+// A chip has THREE steps and they are the system's three: a hairline at
+// rest, the hover fill when it is pointed at, the current fill with a bolder
+// label when it is the one chosen. Filled at rest there would be nowhere
+// left for the other two to go, and a sharpening border is not a step.
+.im-filter-chip {
+  display: inline-flex; align-items: center; gap: var(--im-space-2);
+  min-height: 1.75rem;
+  padding: 0 var(--im-space-3);
+  border: 0; border-radius: var(--im-radius-full);
+  box-shadow: inset 0 0 0 1px var(--im-line);
+  background: transparent; color: var(--im-ink);
+  font-size: var(--im-text-xs); font-weight: var(--im-weight-medium); text-transform: capitalize;
+  cursor: pointer;
+  transition: background-color var(--im-duration-instant), color var(--im-duration-instant);
+  &:hover { background: var(--im-hover-bg); color: var(--im-ink); }
+  &.is-active {
+    background: var(--im-current-bg);
+    color: var(--im-current-fg);
+    font-weight: var(--im-current-weight);
+    box-shadow: none;
+  }
+  .im-filter-n { font-variant-numeric: tabular-nums; color: var(--im-muted); }
+}
+// Below lg the sidebar sits above the grid as horizontally scrolling chip rows.
+@include mq-down($bp-lg) {
+  .im-filter { margin-bottom: var(--im-space-4); }
+  .im-filter-chips { flex-wrap: nowrap; overflow-x: auto; padding-bottom: var(--im-space-1); scrollbar-width: thin; }
+  .im-filter-chip { flex: 0 0 auto; }
+}
+// Two-up grid next to the sidebar (three would be too tight in 9 columns).
+.im-cards--2 { @include mq($bp-lg) { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+
+// ---- /videos/ background-video band -----------------------------------
+
+// ---- Single project: GitHub-style header ------------------------------
+.im-repo-head {
+  display: flex; flex-direction: column; gap: var(--im-space-3);
+  margin: 0 0 var(--im-space-5);
+  padding: 1.375rem;
+  border-radius: var(--im-radius-lg);
+  box-shadow: inset 0 0 0 1px var(--im-line);
+}
+.im-repo-head-row { display: flex; align-items: center; flex-wrap: wrap; gap: var(--im-space-2); font-size: var(--im-text-base); color: var(--im-muted); }
+.im-repo-head-row .im-rcard-kind { margin-left: 0; }
+.im-repo-year { font-size: var(--im-text-xs); color: var(--im-muted); }
+.im-repo-summary { margin: 0; font-size: var(--im-text-lg); color: var(--im-body); }
+.im-repo-actions { display: flex; flex-wrap: wrap; gap: var(--im-space-2); margin-top: var(--im-space-2); }

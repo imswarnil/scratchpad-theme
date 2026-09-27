@@ -1,0 +1,50 @@
+{%- comment -%} Builds the TOC for desktop sidebar (#im-toc-list) and mobile (#im-toc-mobile-list) {%- endcomment -%}
+<script>
+(function () {
+  var prose = document.querySelector('.im-prose');
+  if (!prose) return;
+  var heads = prose.querySelectorAll('h2, h3');
+  if (heads.length < 2) return;
+
+  function slug(t) { return String(t || '').toLowerCase().trim().replace(/[^\w]+/g, '-').replace(/^-+|-+$/g, ''); }
+  var items = [];
+  heads.forEach(function (h) {
+    if (!h.id) h.id = slug(h.textContent);
+    items.push({ id: h.id, text: h.textContent, lvl: h.tagName === 'H3' ? 'sub' : 'top' });
+  });
+
+  function fill(ul) {
+    if (!ul) return;
+    ul.innerHTML = items.map(function (it) {
+      return '<li class="im-toc-' + it.lvl + '"><a href="#' + it.id + '" data-toc="' + it.id + '">' + it.text + '</a></li>';
+    }).join('');
+  }
+  var deskWrap = document.getElementById('im-toc');
+  var mobWrap  = document.getElementById('im-toc-mobile');
+  fill(document.getElementById('im-toc-list'));
+  fill(document.getElementById('im-toc-mobile-list'));
+  if (deskWrap) deskWrap.hidden = false;
+  if (mobWrap)  mobWrap.hidden = false;
+
+  // Active-section highlight
+  var links = Array.prototype.slice.call(document.querySelectorAll('[data-toc]'));
+  if ('IntersectionObserver' in window) {
+    var seen = {};
+    var obs = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) { seen[e.target.id] = e.isIntersecting; });
+      var current = items.filter(function (it) { return seen[it.id]; })[0];
+      if (current) {
+        links.forEach(function (a) { a.classList.toggle('active', a.getAttribute('data-toc') === current.id); });
+      }
+    }, { rootMargin: '-80px 0px -70% 0px' });
+    heads.forEach(function (h) { obs.observe(h); });
+  }
+  // Close the mobile <details> after picking a link
+  links.forEach(function (a) {
+    a.addEventListener('click', function () {
+      var d = document.getElementById('im-toc-mobile');
+      if (d && d.tagName === 'DETAILS') d.open = false;
+    });
+  });
+})();
+</script>

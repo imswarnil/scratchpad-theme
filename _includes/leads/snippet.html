@@ -1,0 +1,20 @@
+{%- comment -%}
+  A snippet's lead is the file it came from: a window with its name, its
+  language and a copy button, drawn in the system's --im-code-* colours.
+  The code itself is `code` in front matter (fenced content stays in the
+  body for anything longer).
+{%- endcomment -%}
+{%- if page.code -%}
+{%- assign lang = page.lang | default: "text" -%}
+<figure class="im-editor">
+  <div class="im-editor-bar">
+    <span class="im-editor-dots" aria-hidden="true"><i></i><i></i><i></i></span>
+    <span class="im-editor-tab"><i class="ph-bold ph-file-code" aria-hidden="true"></i> {{ page.filename | default: page.title | slugify }}.{{ page.ext | default: lang | downcase }}</span>
+    <span class="im-editor-lang">{{ lang }}</span>
+    <button class="im-editor-copy" type="button" data-im-copy="{{ page.code | escape }}" aria-label="Copy snippet"><i class="ph-bold ph-copy" aria-hidden="true"></i> Copy</button>
+  </div>
+  <pre class="im-editor-code"><code>{{ page.code | strip }}</code></pre>
+</figure>
+{%- elsif page.lang -%}
+<p class="im-snippet-lang"><i class="ph-bold ph-code" aria-hidden="true"></i> {{ page.lang }}</p>
+{%- endif -%}

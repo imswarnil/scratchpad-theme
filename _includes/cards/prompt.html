@@ -1,0 +1,30 @@
+{%- comment -%}
+  Chat-window card. Reads: title, model, prompt, excerpt/description, date, tags.
+{%- endcomment -%}
+{%- assign it = include.item -%}
+{%- assign p = it.prompt | default: it.excerpt | default: "" | strip -%}
+<article class="im-chcard" style="--im-c-this: var(--im-c-{{ it.collection }}, var(--im-accent));">
+  <a class="im-chcard-window" href="{{ it.url | relative_url }}" tabindex="-1" aria-hidden="true">
+    <div class="im-chcard-head">
+      <span class="im-chcard-avatar"><i class="ph-bold ph-sparkle" aria-hidden="true"></i></span>
+      <span class="im-chcard-name">{{ it.model | default: "Assistant" }}</span>
+      <span class="im-chcard-status"><i></i> online</span>
+    </div>
+    <div class="im-chcard-thread">
+      <div class="im-chcard-msg im-chcard-msg--user"><p>{{ p | strip_html | truncate: 140 }}</p></div>
+      <div class="im-chcard-msg im-chcard-msg--bot"><span class="im-chcard-typing" aria-label="typing"><i></i><i></i><i></i></span></div>
+    </div>
+  </a>
+  <div class="im-chcard-body">
+    <h3 class="im-chcard-title"><a href="{{ it.url | relative_url }}">{{ it.title }}</a></h3>
+    {%- assign snip = it.excerpt | default: it.description -%}
+    {%- if snip and it.prompt %}<p class="im-chcard-excerpt">{{ snip | strip_html | truncate: 110 }}</p>{% endif -%}
+    <div class="im-chcard-foot">
+      <span class="im-chcard-badge"><i class="ph-bold ph-robot" aria-hidden="true"></i> {{ it.model | default: "Any model" }}{% if it.date %} · {{ it.date | date: "%b %Y" }}{% endif %}</span>
+      <span class="im-chcard-actions">
+        <button class="im-btn im-btn-sm im-btn-ghost" type="button" data-im-copy="{{ p | escape }}" aria-label="Copy prompt"><i class="ph-bold ph-copy" aria-hidden="true"></i> Copy</button>
+        <a class="im-card-cta" href="{{ it.url | relative_url }}">Use prompt <i class="ph-bold ph-arrow-right" aria-hidden="true"></i></a>
+      </span>
+    </div>
+  </div>
+</article>

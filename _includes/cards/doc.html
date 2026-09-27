@@ -1,0 +1,11 @@
+{%- assign it = include.item -%}
+<article class="im-doccard">
+  <a class="im-doccard-link" href="{{ it.url | relative_url }}">
+    <span class="im-doccard-icon" aria-hidden="true"><i class="ph-bold ph-{{ it.icon | default: 'file-text' }}"></i></span>
+    <span class="im-doccard-body">
+      <span class="im-doccard-title">{{ it.title }}</span>
+      {%- if it.description %}<span class="im-doccard-text">{{ it.description }}</span>{% endif -%}
+    </span>
+    <i class="ph-bold ph-arrow-right im-doccard-go" aria-hidden="true"></i>
+  </a>
+</article>

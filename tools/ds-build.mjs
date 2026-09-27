@@ -39,11 +39,12 @@ const css = fs.readFileSync(built, 'utf8');
 
 /* ── the banner ───────────────────────────────────────────────────────── */
 const commit = git('rev-parse', '--short', 'HEAD');
-const dirty = git('status', '--porcelain') ? ' (uncommitted changes)' : '';
-const stamp = new Date().toISOString().slice(0, 10);
+/* The banner carries no commit and no date on purpose: either one would make
+ * dist/ differ on every build and fill the history with diffs that mean
+ * nothing. manifest.json records both, which is where a consumer should look. */
 const banner = `/*!
  * Scratchpad CSS ${pkg.version} — the design behind Scratchpad, a dev portfolio theme.
- * ${pkg.homepage}  ·  MIT  ·  built ${stamp} from ${commit ?? 'unknown'}${dirty}
+ * ${pkg.homepage}  ·  MIT
  *
  * Generated. Authored in _sass/scratchpad/ and taken from the stylesheet the
  * demo site serves, so this file and the site can never disagree.
@@ -132,7 +133,9 @@ const manifest = {
   name: 'scratchpad-css',
   version: pkg.version,
   license: 'MIT',
-  built: stamp,
+  /* The commit, and nothing more time-varying than that. A date or a dirty
+   * flag here would change on every build and dirty the tree just by looking
+   * at it, which is how a generated file starts lying. */
   commit,
   source: '_sass/scratchpad/',
   bytes: { css: plain.length, min: min.length },

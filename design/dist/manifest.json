@@ -2,12 +2,11 @@
   "name": "scratchpad-css",
   "version": "1.0.0",
   "license": "MIT",
-  "built": "2026-09-27",
-  "commit": "ccc4008",
+  "commit": "35f84ee",
   "source": "_sass/scratchpad/",
   "bytes": {
-    "css": 311047,
-    "min": 270158
+    "css": 310991,
+    "min": 270102
   },
   "rules": 2260,
   "tokens": {
